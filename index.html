@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>C++小游戏大全</title>
+  <title>C++小游戏大全官网</title>
   <!-- Supabase 客户端库 -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
@@ -403,10 +403,10 @@
   </style>
 </head>
 <body>
-
 <div class="app">
   <header class="header">
-    <h1>C++小游戏大全</h1>
+    <h1>🎮C++小游戏大全</h1>
+    <h3>luogu.com.cn/team/121453</h3>
     <div class="auth-area" id="authArea">
       <!-- 由 js 动态渲染 -->
     </div>
@@ -748,7 +748,19 @@
     }
 
     // ---------- 数据获取 ----------
-    
+    async function fetchGames() {
+      const { data, error } = await supabase
+        .from('games')
+        .select('*')
+        .order('created_at', { ascending: false });
+      if (error) {
+        showToast('获取游戏列表失败');
+        return;
+      }
+      games = data || [];
+      renderGameList();
+    }
+
     async function fetchUserGames() {
       if (!currentUser) { userGames = []; return; }
       const { data, error } = await supabase
@@ -777,10 +789,7 @@
       const desc = gameDescInput.value.trim() || '无介绍';
       const fileName = selectedFile.name;
       // 1. 上传到 storage
-
-
-const safeFileName = fileName.replace(/[^a-zA-Z0-9._-]/g, '_'); // 把中文和空格替换成下划线
-const filePath = `games/${Date.now()}_${safeFileName}`;
+      const filePath = `games/${Date.now()}_${fileName}`;
       const { data: storageData, error: uploadError } = await supabase.storage
         .from('games')
         .upload(filePath, selectedFile);

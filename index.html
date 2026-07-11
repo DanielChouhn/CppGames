@@ -3,104 +3,169 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>C++小游戏大全官网</title>
+  <title>C++小游戏大全 · 深色科技</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    /* 你的原有 CSS 保持不变，我在下面新增了登录弹窗的样式 */
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
-    body { background: #f4f7fb; min-height: 100vh; padding: 2rem 1.5rem; display: flex; justify-content: center; }
+    /* ---------- 重置 & 基础 ---------- */
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+    body { background: #0b121f; min-height: 100vh; padding: 2rem 1.5rem; display: flex; justify-content: center; }
     .app { max-width: 1300px; width: 100%; }
-    
-    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; }
-    .header h1 { font-size: 2rem; font-weight: 600; color: #0a2540; letter-spacing: -0.5px; }
-    .auth-area { display: flex; gap: 0.75rem; align-items: center; }
-    .auth-area button { background: white; border: 1px solid #d0d9e8; padding: 0.5rem 1.2rem; border-radius: 30px; font-weight: 500; cursor: pointer; transition: 0.2s; color: #1a2b3e; }
-    .auth-area button:hover { background: #eef3fc; border-color: #8aa0c0; }
-    .auth-area .user-badge { background: #e6edf6; border-radius: 30px; padding: 0.3rem 1rem 0.3rem 1.5rem; display: flex; align-items: center; gap: 0.8rem; }
-    .auth-area .user-badge span { font-weight: 500; color: #0f2b44; }
-    
+
+    /* ---------- 头部 ---------- */
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem; flex-wrap: wrap; gap: 1rem; }
+    .header h1 { font-size: 2.2rem; font-weight: 700; color: #e6f0ff; letter-spacing: -0.02em; display: flex; align-items: center; gap: 0.5rem; text-shadow: 0 2px 10px rgba(0, 160, 255, 0.15); }
+    .header h1 span { background: linear-gradient(135deg, #66d0ff, #2a7fff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .header h3 { font-weight: 400; font-size: 0.95rem; color: #7f9bc0; background: rgba(255,255,255,0.04); padding: 0.3rem 1.2rem; border-radius: 40px; border: 1px solid rgba(255,255,255,0.06); letter-spacing: 0.3px; backdrop-filter: blur(4px); }
+
+    /* ---------- 认证区 ---------- */
+    .auth-area { display: flex; gap: 0.6rem; align-items: center; }
+    .auth-area button { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); padding: 0.5rem 1.4rem; border-radius: 60px; font-weight: 500; font-size: 0.9rem; cursor: pointer; transition: 0.25s; color: #c8dcf5; backdrop-filter: blur(4px); }
+    .auth-area button:hover { background: rgba(42, 127, 255, 0.15); border-color: rgba(42, 127, 255, 0.3); color: white; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0, 80, 200, 0.15); }
+    .auth-area .user-badge { background: rgba(255,255,255,0.04); backdrop-filter: blur(4px); border-radius: 60px; padding: 0.25rem 1rem 0.25rem 1.8rem; display: flex; align-items: center; gap: 0.9rem; border: 1px solid rgba(255,255,255,0.06); }
+    .auth-area .user-badge span { font-weight: 600; color: #e6f0ff; }
+    .auth-area .user-badge button { background: transparent; border: none; color: #7f9bc0; cursor: pointer; font-size: 0.85rem; padding: 0.2rem 0.6rem; border-radius: 40px; transition: 0.15s; }
+    .auth-area .user-badge button:hover { background: rgba(255,255,255,0.06); color: white; }
+
+    /* ---------- 两栏布局 ---------- */
     .dashboard { display: grid; grid-template-columns: 1fr 340px; gap: 2rem; }
     @media (max-width: 780px) { .dashboard { grid-template-columns: 1fr; } }
-    
-    .game-list-section { background: white; border-radius: 24px; padding: 1.8rem 1.5rem; box-shadow: 0 8px 24px rgba(0, 20, 50, 0.04); }
-    .list-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
-    .list-header h2 { font-weight: 600; color: #1a2b3e; }
-    .upload-trigger-btn { background: #1a2b3e; color: white; border: none; padding: 0.5rem 1.5rem; border-radius: 40px; font-weight: 500; font-size: 0.95rem; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 0.4rem; }
-    .upload-trigger-btn:hover { background: #2c4058; transform: scale(1.01); }
-    .game-item { border-bottom: 1px solid #edf2f9; padding: 1.2rem 0; display: flex; flex-direction: column; gap: 0.3rem; }
+
+    /* ---------- 游戏列表 ---------- */
+    .game-list-section { background: rgba(18, 30, 50, 0.6); backdrop-filter: blur(8px); border-radius: 28px; padding: 1.8rem 1.8rem; border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 20px 40px -12px rgba(0,0,0,0.6); }
+    .list-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.8rem; flex-wrap: wrap; gap: 0.8rem; }
+    .list-header h2 { font-weight: 600; font-size: 1.5rem; color: #e6f0ff; letter-spacing: -0.3px; }
+    .list-header-right { display: flex; gap: 0.8rem; align-items: center; flex-wrap: wrap; }
+    .upload-trigger-btn { background: linear-gradient(135deg, #2a7fff, #1a5fcf); color: white; border: none; padding: 0.6rem 1.8rem; border-radius: 60px; font-weight: 500; font-size: 0.95rem; cursor: pointer; transition: 0.25s; display: flex; align-items: center; gap: 0.5rem; box-shadow: 0 6px 18px rgba(42, 127, 255, 0.25); }
+    .upload-trigger-btn:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 12px 28px rgba(42, 127, 255, 0.35); }
+
+    .game-item {
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      padding: 1.4rem 1rem;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      border-radius: 12px;
+      margin-bottom: 2px;
+      position: relative;
+    }
     .game-item:last-child { border-bottom: none; }
-    .game-title { font-weight: 600; font-size: 1.2rem; color: #0a1f33; }
-    .game-desc { color: #3d556e; font-size: 0.95rem; word-break: break-word; }
-    .game-meta { display: flex; justify-content: space-between; align-items: center; margin-top: 0.25rem; font-size: 0.85rem; color: #5b738c; flex-wrap: wrap; }
-    .game-meta .date { background: #f0f4fc; padding: 0.15rem 0.7rem; border-radius: 30px; }
-    .download-btn { background: #eef3fc; border: none; padding: 0.25rem 1.2rem; border-radius: 40px; font-weight: 500; color: #1a2b3e; cursor: pointer; transition: 0.15s; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 0.3rem; }
-    .download-btn:hover { background: #d7e2f2; }
-    
-    .user-panel { background: white; border-radius: 24px; padding: 1.8rem 1.5rem; box-shadow: 0 8px 24px rgba(0, 20, 50, 0.04); display: flex; flex-direction: column; gap: 1.8rem; }
-    .user-info-block { display: flex; flex-direction: column; gap: 0.5rem; }
+    .game-item:hover {
+      background: rgba(255,255,255,0.03);
+    }
+    .game-item.selected {
+      background: rgba(42, 127, 255, 0.12);
+      border: 1px solid rgba(42, 127, 255, 0.25);
+      box-shadow: 0 0 20px rgba(42, 127, 255, 0.08);
+    }
+    .game-item.selected .game-title {
+      color: #66d0ff;
+    }
+    .game-item .select-indicator {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #2a7fff;
+      font-size: 1.2rem;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+    .game-item.selected .select-indicator {
+      opacity: 1;
+    }
+    .game-title { font-weight: 650; font-size: 1.25rem; color: #e6f0ff; letter-spacing: -0.2px; }
+    .game-desc { color: #9bb5d8; font-size: 0.95rem; margin-top: 0.2rem; word-break: break-word; line-height: 1.5; }
+    .game-meta { display: flex; justify-content: space-between; align-items: center; margin-top: 0.7rem; font-size: 0.85rem; color: #7f9bc0; flex-wrap: wrap; gap: 0.5rem; }
+    .game-meta .date { background: rgba(255,255,255,0.04); padding: 0.15rem 1rem; border-radius: 40px; font-size: 0.8rem; border: 1px solid rgba(255,255,255,0.04); }
+    .download-btn { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); padding: 0.25rem 1.4rem; border-radius: 40px; font-weight: 500; color: #c8dcf5; cursor: pointer; transition: 0.2s; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 0.4rem; }
+    .download-btn:hover { background: rgba(42, 127, 255, 0.15); border-color: rgba(42, 127, 255, 0.3); color: white; transform: translateY(-1px); }
+
+    /* ---------- 用户面板 ---------- */
+    .user-panel { background: rgba(18, 30, 50, 0.6); backdrop-filter: blur(8px); border-radius: 28px; padding: 2rem 1.8rem; border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 20px 40px -12px rgba(0,0,0,0.6); display: flex; flex-direction: column; gap: 2rem; }
+    .user-info-block { display: flex; flex-direction: column; gap: 0.6rem; }
     .user-row { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; }
-    .username { font-size: 1.5rem; font-weight: 600; color: #0a1f33; }
-    .honor-title { background: #f6e9d7; color: #8b6f4c; font-size: 0.75rem; padding: 0.1rem 0.7rem; border-radius: 40px; font-weight: 500; }
-    .level-badge { background: #1a2b3e; color: white; border-radius: 40px; padding: 0.1rem 0.9rem; font-size: 0.75rem; font-weight: 500; }
-    .exp-bar { margin-top: 0.3rem; background: #eaf0f8; height: 6px; border-radius: 8px; width: 100%; overflow: hidden; }
-    .exp-fill { height: 100%; background: #1a2b3e; width: 0%; transition: width 0.2s; }
-    .exp-label { font-size: 0.75rem; color: #4b6885; margin-top: 0.15rem; }
-    .game-count-wrap { margin-top: 0.5rem; cursor: default; }
-    .game-count-badge { background: #eef3fc; padding: 0.3rem 1rem; border-radius: 40px; display: inline-block; font-size: 0.9rem; color: #1a2b3e; transition: 0.15s; position: relative; }
-    .game-count-badge:hover { background: #dae4f0; }
-    
-    .hover-game-list { background: white; border-radius: 16px; box-shadow: 0 12px 32px rgba(0,0,0,0.08); padding: 0.7rem 1rem; margin-top: 0.4rem; max-height: 150px; overflow-y: auto; display: none; border: 1px solid #eaf0f8; }
+    .username { font-size: 1.7rem; font-weight: 700; color: #e6f0ff; letter-spacing: -0.3px; }
+    .honor-title { background: rgba(255, 215, 100, 0.12); color: #f5d78a; font-size: 0.7rem; padding: 0.2rem 0.9rem; border-radius: 40px; font-weight: 600; border: 1px solid rgba(255, 215, 100, 0.15); }
+    .level-badge { background: linear-gradient(135deg, #2a7fff, #1a5fcf); color: white; border-radius: 40px; padding: 0.1rem 1rem; font-size: 0.75rem; font-weight: 600; border: none; }
+    .exp-bar { margin-top: 0.4rem; background: rgba(255,255,255,0.06); height: 8px; border-radius: 20px; width: 100%; overflow: hidden; border: 1px solid rgba(255,255,255,0.04); }
+    .exp-fill { height: 100%; background: linear-gradient(90deg, #2a7fff, #66d0ff); width: 0%; transition: width 0.3s ease; border-radius: 20px; }
+    .exp-label { font-size: 0.75rem; color: #7f9bc0; margin-top: 0.2rem; font-weight: 450; }
+
+    .game-count-wrap { margin-top: 0.5rem; }
+    .game-count-badge { background: rgba(255,255,255,0.04); padding: 0.3rem 1.2rem; border-radius: 40px; display: inline-block; font-size: 0.9rem; font-weight: 500; color: #c8dcf5; transition: 0.15s; cursor: default; border: 1px solid rgba(255,255,255,0.06); }
+    .game-count-badge:hover { background: rgba(255,255,255,0.08); }
+
+    .hover-game-list { background: rgba(10, 20, 35, 0.7); backdrop-filter: blur(8px); border-radius: 20px; padding: 0.6rem 1.2rem; margin-top: 0.5rem; max-height: 150px; overflow-y: auto; display: none; border: 1px solid rgba(255,255,255,0.06); }
     .hover-game-list.show { display: block; }
-    .hover-game-list li { list-style: none; padding: 0.2rem 0; font-size: 0.9rem; color: #1f3a57; border-bottom: 1px solid #f0f5fe; }
+    .hover-game-list li { list-style: none; padding: 0.25rem 0; font-size: 0.9rem; color: #b0cae5; border-bottom: 1px solid rgba(255,255,255,0.04); }
     .hover-game-list li:last-child { border-bottom: none; }
-    
-    .weekly-area { border-top: 1px solid #e6eefa; padding-top: 1.5rem; margin-top: 0.2rem; }
-    .weekly-title { font-weight: 500; color: #1a2b3e; margin-bottom: 0.8rem; }
-    .weekly-submit-btn { background: #1a2b3e; color: white; border: none; padding: 0.4rem 1.4rem; border-radius: 40px; font-weight: 500; cursor: pointer; transition: 0.15s; margin-bottom: 0.8rem; }
-    .weekly-submit-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-    .weekly-submit-btn:hover:not(:disabled) { background: #2c4058; }
-    .submitted-list { background: #f8faff; border-radius: 16px; padding: 0.5rem 1rem; font-size: 0.9rem; color: #1d344d; max-height: 120px; overflow-y: auto; }
-    .submitted-list div { padding: 0.2rem 0; border-bottom: 1px dashed #e0eaf5; }
+
+    .weekly-area { border-top: 1px solid rgba(255,255,255,0.06); padding-top: 1.8rem; margin-top: 0.2rem; }
+    .weekly-title { font-weight: 600; color: #e6f0ff; margin-bottom: 0.8rem; font-size: 1rem; }
+    .weekly-submit-btn { background: linear-gradient(135deg, #2a7fff, #1a5fcf); color: white; border: none; padding: 0.5rem 1.8rem; border-radius: 60px; font-weight: 500; cursor: pointer; transition: 0.25s; margin-bottom: 1rem; box-shadow: 0 6px 18px rgba(42, 127, 255, 0.2); width: 100%; }
+    .weekly-submit-btn:disabled { opacity: 0.3; cursor: not-allowed; box-shadow: none; }
+    .weekly-submit-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(42, 127, 255, 0.3); }
+    .submitted-list { background: rgba(255,255,255,0.02); border-radius: 20px; padding: 0.6rem 1.2rem; font-size: 0.9rem; color: #b0cae5; max-height: 120px; overflow-y: auto; border: 1px solid rgba(255,255,255,0.04); }
+    .submitted-list div { padding: 0.25rem 0; border-bottom: 1px dashed rgba(255,255,255,0.04); }
     .submitted-list div:last-child { border-bottom: none; }
-    
-    /* ------- 新增样式: 登录/注册弹窗 ------- */
-    .auth-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.25); backdrop-filter: blur(2px); justify-content: center; align-items: center; z-index: 1000; }
-    .auth-overlay.open { display: flex; }
-    .auth-card { background: white; padding: 2.2rem; border-radius: 32px; max-width: 400px; width: 90%; box-shadow: 0 30px 60px rgba(0,0,0,0.2); }
-    .auth-card h3 { margin-bottom: 1.5rem; font-weight: 600; text-align: center; }
-    .auth-input { width: 100%; padding: 0.8rem 1rem; border: 1px solid #d7e1ed; border-radius: 16px; margin-bottom: 1rem; font-size: 0.95rem; }
-    .auth-input:focus { outline: none; border-color: #1a2b3e; }
+
+    /* ---------- 弹窗 (深色玻璃) ---------- */
+    .auth-overlay, .upload-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(12px); justify-content: center; align-items: center; z-index: 1000; }
+    .auth-overlay.open, .upload-overlay.open { display: flex; }
+    .auth-card, .upload-card { background: rgba(16, 28, 48, 0.85); backdrop-filter: blur(16px); padding: 2.4rem; border-radius: 32px; max-width: 420px; width: 90%; box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6); border: 1px solid rgba(255,255,255,0.06); }
+    .auth-card h3, .upload-card h3 { margin-bottom: 1.8rem; font-weight: 700; text-align: center; font-size: 1.6rem; color: #e6f0ff; letter-spacing: -0.3px; }
+    .auth-input { width: 100%; padding: 0.9rem 1.2rem; border: 1px solid rgba(255,255,255,0.06); border-radius: 60px; margin-bottom: 1.2rem; font-size: 0.95rem; background: rgba(255,255,255,0.04); color: #e6f0ff; transition: 0.2s; }
+    .auth-input::placeholder { color: #5a7a9f; }
+    .auth-input:focus { outline: none; border-color: #2a7fff; box-shadow: 0 0 0 4px rgba(42, 127, 255, 0.1); background: rgba(255,255,255,0.06); }
     .auth-actions { display: flex; gap: 0.8rem; justify-content: space-between; align-items: center; flex-wrap: wrap; }
-    .auth-switch { font-size: 0.9rem; color: #1a2b3e; cursor: pointer; background: none; border: none; text-decoration: underline; }
-    .auth-switch:hover { color: #2c4058; }
-    .auth-btn { padding: 0.6rem 1.8rem; border-radius: 40px; border: none; font-weight: 500; cursor: pointer; background: #1a2b3e; color: white; flex: 1; }
-    .auth-btn:hover { background: #2c4058; }
-    .auth-btn:disabled { opacity: 0.6; cursor: not-allowed; }
-    
-    /* 上传弹窗 (不变) */
-    .upload-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.25); backdrop-filter: blur(2px); justify-content: center; align-items: center; z-index: 1000; }
-    .upload-overlay.open { display: flex; }
-    .upload-card { background: white; padding: 2rem 2.2rem; border-radius: 32px; max-width: 420px; width: 90%; box-shadow: 0 30px 60px rgba(0,0,0,0.2); }
-    .upload-card h3 { margin-bottom: 1.2rem; font-weight: 600; }
-    .upload-card .file-name { background: #f4f8fe; padding: 0.5rem 1rem; border-radius: 40px; margin: 0.6rem 0; font-size: 0.9rem; }
-    .upload-card textarea { width: 100%; padding: 0.6rem 1rem; border: 1px solid #d7e1ed; border-radius: 20px; resize: vertical; font-family: inherit; margin: 0.5rem 0 1rem; }
+    .auth-switch { font-size: 0.9rem; color: #7f9bc0; cursor: pointer; background: none; border: none; text-decoration: underline; font-weight: 500; transition: 0.15s; padding: 0.3rem 0.5rem; border-radius: 40px; }
+    .auth-switch:hover { color: #c8dcf5; background: rgba(255,255,255,0.04); }
+    .auth-btn { padding: 0.7rem 2rem; border-radius: 60px; border: none; font-weight: 600; cursor: pointer; background: linear-gradient(135deg, #2a7fff, #1a5fcf); color: white; flex: 1; transition: 0.25s; font-size: 0.95rem; box-shadow: 0 6px 18px rgba(42, 127, 255, 0.2); }
+    .auth-btn:hover { transform: scale(1.02); box-shadow: 0 10px 28px rgba(42, 127, 255, 0.3); }
+    .auth-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .upload-card .file-name { background: rgba(255,255,255,0.04); padding: 0.6rem 1.2rem; border-radius: 60px; margin: 0.8rem 0; font-size: 0.9rem; border: 1px solid rgba(255,255,255,0.06); color: #b0cae5; }
+    .upload-card textarea { width: 100%; padding: 0.8rem 1.2rem; border: 1px solid rgba(255,255,255,0.06); border-radius: 24px; resize: vertical; font-family: inherit; margin: 0.5rem 0 1.2rem; background: rgba(255,255,255,0.04); color: #e6f0ff; transition: 0.2s; }
+    .upload-card textarea::placeholder { color: #5a7a9f; }
+    .upload-card textarea:focus { outline: none; border-color: #2a7fff; background: rgba(255,255,255,0.06); }
     .upload-card .actions { display: flex; gap: 0.8rem; justify-content: flex-end; }
-    .upload-card .actions button { padding: 0.4rem 1.6rem; border-radius: 40px; border: none; font-weight: 500; cursor: pointer; }
-    
-    .btn-primary { background: #1a2b3e; color: white; }
-    .btn-secondary { background: #eef3fc; color: #1a2b3e; }
-    .toast-message { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); background: #1a2b3e; color: white; padding: 0.5rem 1.5rem; border-radius: 60px; font-size: 0.95rem; opacity: 0; transition: opacity 0.25s; pointer-events: none; z-index: 999; }
+    .upload-card .actions button { padding: 0.5rem 1.8rem; border-radius: 60px; border: 1px solid rgba(255,255,255,0.06); font-weight: 500; cursor: pointer; transition: 0.2s; background: rgba(255,255,255,0.04); color: #c8dcf5; }
+    .btn-primary { background: linear-gradient(135deg, #2a7fff, #1a5fcf) !important; color: white !important; border: none !important; box-shadow: 0 6px 18px rgba(42, 127, 255, 0.2); }
+    .btn-primary:hover { transform: scale(1.02); box-shadow: 0 10px 28px rgba(42, 127, 255, 0.3); }
+    .btn-secondary { background: rgba(255,255,255,0.04) !important; border: 1px solid rgba(255,255,255,0.06) !important; }
+    .btn-secondary:hover { background: rgba(255,255,255,0.08) !important; }
+
+    .toast-message { position: fixed; bottom: 2.5rem; left: 50%; transform: translateX(-50%); background: rgba(10, 20, 35, 0.85); backdrop-filter: blur(12px); color: #e6f0ff; padding: 0.7rem 2rem; border-radius: 60px; font-size: 0.95rem; opacity: 0; transition: opacity 0.3s ease; pointer-events: none; z-index: 999; border: 1px solid rgba(255,255,255,0.06); box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4); }
     .toast-message.show { opacity: 1; }
-    .empty-state { color: #6e8aa8; padding: 1rem 0; font-style: italic; }
-    .loading-spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid #f3f3f3; border-top: 2px solid #1a2b3e; border-radius: 50%; animation: spin 0.8s linear infinite; margin-right: 8px; vertical-align: middle; }
+    .empty-state { color: #7f9bc0; padding: 1.5rem 0; font-style: italic; text-align: center; }
+    .loading-spinner { display: inline-block; width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.2); border-top: 2px solid white; border-radius: 50%; animation: spin 0.8s linear infinite; margin-right: 8px; vertical-align: middle; }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+    .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .auth-cancel-wrap { margin-top: 0.6rem; text-align: center; }
+    #authCancelBtn { background: none; border: none; color: #7f9bc0; cursor: pointer; font-size: 0.9rem; padding: 0.3rem 1rem; border-radius: 40px; transition: 0.15s; }
+    #authCancelBtn:hover { background: rgba(255,255,255,0.04); color: #c8dcf5; }
+
+    /* 滚动条美化 */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(42, 127, 255, 0.3); border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(42, 127, 255, 0.5); }
+
+    /* 选中状态提示 */
+    .selected-hint {
+      color: #66d0ff;
+      font-size: 0.85rem;
+      background: rgba(42, 127, 255, 0.08);
+      padding: 0.2rem 1rem;
+      border-radius: 40px;
+      border: 1px solid rgba(42, 127, 255, 0.15);
+    }
   </style>
 </head>
 <body>
 <div class="app">
   <header class="header">
-    <h1>🎮C++小游戏大全</h1>
+    <h1>⚡ <span>C++小游戏大全</span></h1>
     <h3>luogu.com.cn/team/121453</h3>
     <div class="auth-area" id="authArea"></div>
   </header>
@@ -109,7 +174,10 @@
     <section class="game-list-section">
       <div class="list-header">
         <h2>📂 游戏库</h2>
-        <button class="upload-trigger-btn" id="openUploadBtn">＋ 上传游戏</button>
+        <div class="list-header-right">
+          <span id="selectedHint" class="selected-hint" style="display:none;">✅ 已选中</span>
+          <button class="upload-trigger-btn" id="openUploadBtn">＋ 上传游戏</button>
+        </div>
       </div>
       <div id="gameListContainer"></div>
     </section>
@@ -117,17 +185,17 @@
   </div>
 </div>
 
-<!-- 登录/注册 表单弹窗 -->
+<!-- 登录/注册 弹窗 -->
 <div class="auth-overlay" id="authOverlay">
   <div class="auth-card">
     <h3 id="authTitle">登录</h3>
-    <input type="text" id="authUsername" class="auth-input" placeholder="请输入用户名" autocomplete="off">
-    <input type="password" id="authPassword" class="auth-input" placeholder="请输入密码 (至少6位)">
+    <input type="text" id="authUsername" class="auth-input" placeholder="用户名" autocomplete="off">
+    <input type="password" id="authPassword" class="auth-input" placeholder="密码 (至少6位)">
     <div class="auth-actions">
       <button class="auth-switch" id="authSwitchBtn">没有账号？去注册</button>
       <button class="auth-btn" id="authConfirmBtn">登录</button>
     </div>
-    <button class="auth-switch" id="authCancelBtn" style="display:block;width:100%;text-align:center;margin-top:10px;color:#5b738c;">取消</button>
+    <div class="auth-cancel-wrap"><button id="authCancelBtn">取消</button></div>
   </div>
 </div>
 
@@ -137,7 +205,7 @@
     <h3>📤 上传 .cpp 游戏</h3>
     <div class="file-name" id="selectedFileName">未选择文件</div>
     <input type="file" id="fileInput" accept=".cpp" style="display:none" />
-    <button class="btn-secondary" id="chooseFileBtn" style="width:100%;margin-bottom:0.5rem;">选择 .cpp 文件</button>
+    <button class="btn-secondary" id="chooseFileBtn" style="width:100%;margin-bottom:0.6rem;">选择 .cpp 文件</button>
     <textarea id="gameDescInput" rows="2" placeholder="游戏介绍（选填）"></textarea>
     <div class="actions">
       <button class="btn-secondary" id="cancelUploadBtn">取消</button>
@@ -158,18 +226,17 @@
     let games = [];
     let userGames = [];
     let weeklySubmissions = [];
+    let selectedGameId = null;
 
-    // 上传临时变量
     let selectedFile = null;
     let isUploading = false;
-    let isAuthLoginMode = true; // 默认是登录模式
+    let isAuthLoginMode = true;
 
-    // DOM 引用
     const gameListContainer = document.getElementById('gameListContainer');
     const userPanel = document.getElementById('userPanel');
     const authArea = document.getElementById('authArea');
+    const selectedHint = document.getElementById('selectedHint');
     
-    // Auth Modal
     const authOverlay = document.getElementById('authOverlay');
     const authTitle = document.getElementById('authTitle');
     const authUsername = document.getElementById('authUsername');
@@ -178,7 +245,6 @@
     const authSwitchBtn = document.getElementById('authSwitchBtn');
     const authCancelBtn = document.getElementById('authCancelBtn');
 
-    // Upload Modal
     const uploadOverlay = document.getElementById('uploadOverlay');
     const fileInput = document.getElementById('fileInput');
     const selectedFileNameEl = document.getElementById('selectedFileName');
@@ -187,14 +253,13 @@
 
     const toastEl = document.getElementById('toast');
 
-    function showToast(msg, duration = 2500) {
+    function showToast(msg, duration = 2800) {
       toastEl.textContent = msg;
       toastEl.classList.add('show');
       clearTimeout(toastEl._timer);
       toastEl._timer = setTimeout(() => toastEl.classList.remove('show'), duration);
     }
 
-    // 检查登录状态
     async function checkAuth() {
       const { data: { session } } = await supabase.auth.getSession();
       if (session?.user) {
@@ -207,36 +272,30 @@
       renderUserPanel();
     }
 
-    // 同步用户扩展信息 (使用用户名)
     async function syncUserProfile(userId) {
       const { data, error } = await supabase
         .from('profiles')
-        .select('username, honor, level, exp') // 增加了 username
+        .select('username, honor, level, exp')
         .eq('id', userId)
         .maybeSingle();
-      
-      if (error) {
-        console.warn('获取profile失败', error);
-        return;
-      }
-      
+      if (error) { console.warn('获取profile失败', error); return; }
       if (data) {
         currentUser.user_metadata = {
           ...currentUser.user_metadata,
-          username: data.username || '玩家', // 从表里读 username
+          username: data.username || '玩家',
           honor: data.honor || '玩家',
           level: data.level || 1,
           exp: data.exp || 0,
         };
       } else {
-        // 如果 profile 没找到，创建一个默认的
+        const fallbackUsername = currentUser.user_metadata?.username || '玩家';
         const { error: insertError } = await supabase
           .from('profiles')
-          .insert([{ id: userId, username: '玩家', honor: '玩家', level: 1, exp: 0 }]);
+          .insert([{ id: userId, username: fallbackUsername, honor: '玩家', level: 1, exp: 0 }]);
         if (insertError) console.warn('创建profile失败', insertError);
         currentUser.user_metadata = {
           ...currentUser.user_metadata,
-          username: '玩家',
+          username: fallbackUsername,
           honor: '玩家',
           level: 1,
           exp: 0,
@@ -244,51 +303,42 @@
       }
     }
 
-    // 更新用户经验
     async function updateUserExp(userId, deltaExp = 100) {
       const { data, error } = await supabase
         .from('profiles')
         .select('exp, level')
         .eq('id', userId)
         .maybeSingle();
-      if (error || !data) {
-        showToast('更新经验失败');
-        return;
-      }
+      if (error || !data) { showToast('更新经验失败'); return; }
       let newExp = data.exp + deltaExp;
       let newLevel = data.level;
-      while (newExp >= 1000) {
-        newExp -= 1000;
-        newLevel += 1;
-      }
+      while (newExp >= 1000) { newExp -= 1000; newLevel += 1; }
       const { error: updateErr } = await supabase
         .from('profiles')
         .update({ exp: newExp, level: newLevel })
         .eq('id', userId);
-      if (updateErr) {
-        showToast('经验更新失败');
-        return;
-      }
+      if (updateErr) { showToast('经验更新失败'); return; }
       currentUser.user_metadata.exp = newExp;
       currentUser.user_metadata.level = newLevel;
       renderUserPanel();
     }
 
-    // ---------- 渲染函数 ----------
     function renderAuthArea() {
       if (currentUser) {
         const username = currentUser.user_metadata?.username || currentUser.email || '用户';
         authArea.innerHTML = `
           <div class="user-badge">
             <span>👤 ${username}</span>
-            <button id="logoutBtn" style="background:transparent;border:none;color:#5b738c;cursor:pointer;">退出</button>
+            <button id="logoutBtn">退出</button>
           </div>
         `;
         document.getElementById('logoutBtn')?.addEventListener('click', async () => {
           await supabase.auth.signOut();
           currentUser = null;
+          selectedGameId = null;
           renderAuthArea();
           renderUserPanel();
+          fetchGames();
           showToast('已退出');
         });
       } else {
@@ -301,53 +351,270 @@
       }
     }
 
-    // 渲染游戏列表
-    function renderGameList() {
-      if (!games.length) {
-        gameListContainer.innerHTML = `<div class="empty-state">暂无游戏，快来上传第一个吧 🚀</div>`;
+    function selectGame(gameId) {
+      selectedGameId = gameId;
+      
+      document.querySelectorAll('.game-item').forEach(item => {
+        const id = item.dataset.gameId;
+        if (id === gameId) {
+          item.classList.add('selected');
+        } else {
+          item.classList.remove('selected');
+        }
+      });
+      
+      if (selectedGameId) {
+        const selectedGame = games.find(g => g.id === selectedGameId);
+        if (selectedGame) {
+          selectedHint.textContent = `✅ 已选中: ${selectedGame.title || '未命名'}`;
+          selectedHint.style.display = 'inline-block';
+        }
+      } else {
+        selectedHint.style.display = 'none';
+      }
+      
+      updateWeeklySubmitBtn();
+    }
+
+    function clearSelection() {
+      selectedGameId = null;
+      document.querySelectorAll('.game-item').forEach(item => {
+        item.classList.remove('selected');
+      });
+      selectedHint.style.display = 'none';
+      updateWeeklySubmitBtn();
+    }
+
+    function updateWeeklySubmitBtn() {
+      const btn = document.getElementById('weeklySubmitBtn');
+      if (!btn) return;
+      
+      if (!currentUser) {
+        btn.disabled = true;
+        btn.textContent = '🔒 请先登录';
         return;
       }
+      
+      if (!selectedGameId) {
+        btn.disabled = true;
+        btn.textContent = '📮 请先选择一个游戏';
+        return;
+      }
+      
+      const selectedGame = games.find(g => g.id === selectedGameId);
+      if (!selectedGame) {
+        btn.disabled = true;
+        btn.textContent = '📮 请选择有效游戏';
+        return;
+      }
+      
+      // 检查是否已在 weekcompetition 表中投稿
+      if (weeklySubmissions.some(sub => sub.id === selectedGameId)) {
+        btn.disabled = true;
+        btn.textContent = `✅ 已投稿: ${selectedGame.title}`;
+        return;
+      }
+      
+      btn.disabled = false;
+      btn.textContent = `📮 投稿 "${selectedGame.title}"`;
+    }
+
+    // 从 weekcompetition 表获取投稿列表
+    async function fetchWeeklySubmissions() {
+      if (!currentUser) return;
+      
+      try {
+        const { data, error } = await supabase
+          .from('weekcompetition')
+          .select('id, name, game_id, submitted_by, created_at')
+          .eq('submitted_by', currentUser.id)
+          .order('created_at', { ascending: false });
+        
+        if (error) {
+          console.warn('获取投稿列表失败:', error);
+          return;
+        }
+        
+        weeklySubmissions = data || [];
+        // 更新localStorage作为缓存
+        localStorage.setItem(`weekly_${currentUser.id}`, JSON.stringify(weeklySubmissions));
+        renderUserPanel();
+        updateWeeklySubmitBtn();
+      } catch (err) {
+        console.warn('获取投稿列表异常:', err);
+      }
+    }
+
+    // 从 weekcompetition 表获取所有投稿（用于显示在列表中）
+    async function fetchAllWeeklySubmissions() {
+      try {
+        const { data, error } = await supabase
+          .from('weekcompetition')
+          .select('id, name, game_id, submitted_by, created_at, profiles(username)')
+          .order('created_at', { ascending: false });
+        
+        if (error) {
+          console.warn('获取所有投稿失败:', error);
+          return [];
+        }
+        return data || [];
+      } catch (err) {
+        console.warn('获取所有投稿异常:', err);
+        return [];
+      }
+    }
+
+    // 投稿到 weekcompetition 表
+    async function submitToWeekCompetition(gameId, gameName) {
+      if (!currentUser) {
+        showToast('请先登录');
+        return false;
+      }
+      
+      // 检查是否已投稿
+      const { data: existing, error: checkError } = await supabase
+        .from('weekcompetition')
+        .select('id')
+        .eq('game_id', gameId)
+        .eq('submitted_by', currentUser.id)
+        .maybeSingle();
+      
+      if (checkError) {
+        console.warn('检查投稿状态失败:', checkError);
+      }
+      
+      if (existing) {
+        showToast('该游戏已投稿');
+        return false;
+      }
+      
+      // 插入新投稿
+      const { data, error } = await supabase
+        .from('weekcompetition')
+        .insert([
+          {
+            game_id: gameId,
+            name: gameName,
+            submitted_by: currentUser.id
+          }
+        ])
+        .select()
+        .single();
+      
+      if (error) {
+        console.error('投稿失败:', error);
+        showToast('❌ 投稿失败: ' + error.message);
+        return false;
+      }
+      
+      showToast(`✅ 投稿成功: ${gameName}`);
+      return true;
+    }
+
+    function renderGameList() {
+      if (!games.length) {
+        gameListContainer.innerHTML = `<div class="empty-state">✨ 暂无游戏，快来上传第一个吧</div>`;
+        return;
+      }
+      
       let html = '';
       games.forEach(g => {
         const date = g.created_at ? new Date(g.created_at).toLocaleDateString('zh-CN') : '未知';
+        const isSelected = g.id === selectedGameId;
         html += `
-          <div class="game-item">
+          <div class="game-item ${isSelected ? 'selected' : ''}" data-game-id="${g.id}">
             <div class="game-title">${g.title || '未命名'}</div>
             <div class="game-desc">${g.description || '无介绍'}</div>
             <div class="game-meta">
               <span class="date">📅 ${date}</span>
               <button class="download-btn" data-id="${g.id}" data-url="${g.file_url || '#'}">⬇ 下载 (${g.download_count || 0})</button>
             </div>
+            <span class="select-indicator">✅</span>
           </div>
         `;
       });
       gameListContainer.innerHTML = html;
+
+      document.querySelectorAll('.game-item').forEach(item => {
+        item.addEventListener('click', function(e) {
+          if (e.target.closest('.download-btn')) return;
+          const gameId = this.dataset.gameId;
+          if (selectedGameId === gameId) {
+            clearSelection();
+          } else {
+            selectGame(gameId);
+          }
+        });
+      });
+
       document.querySelectorAll('.download-btn').forEach(btn => {
         btn.addEventListener('click', async (e) => {
           e.stopPropagation();
           const url = btn.dataset.url;
           const id = btn.dataset.id;
-          if (!url || url === '#') { showToast('文件链接无效'); return; }
+          const gameItem = btn.closest('.game-item');
+          const title = gameItem?.querySelector('.game-title')?.textContent || 'game.cpp';
           
-          // 更新下载次数
-          const { data: gData } = await supabase.from('games').select('download_count').eq('id', id).single();
-          if (gData) {
-            await supabase.from('games').update({ download_count: (gData.download_count || 0) + 1 }).eq('id', id);
+          if (!url || url === '#') { 
+            showToast('文件链接无效'); 
+            return; 
           }
           
-          window.open(url, '_blank');
-          showToast('开始下载');
-          await fetchGames();
+          try {
+            const { data: gData } = await supabase
+              .from('games')
+              .select('download_count')
+              .eq('id', id)
+              .single();
+            if (gData) {
+              await supabase
+                .from('games')
+                .update({ download_count: (gData.download_count || 0) + 1 })
+                .eq('id', id);
+            }
+          } catch (err) {
+            console.warn('更新下载次数失败', err);
+          }
+          
+          try {
+            const response = await fetch(url);
+            if (!response.ok) throw new Error('网络响应失败');
+            const blob = await response.blob();
+            const downloadUrl = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            const fileName = title.endsWith('.cpp') ? title : title + '.cpp';
+            a.href = downloadUrl;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            setTimeout(() => URL.revokeObjectURL(downloadUrl), 1000);
+            showToast('✅ 开始下载');
+          } catch (error) {
+            console.error('下载失败:', error);
+            showToast('❌ 下载失败，请重试');
+          }
         });
       });
+
+      if (selectedGameId) {
+        const selectedGame = games.find(g => g.id === selectedGameId);
+        if (selectedGame) {
+          selectedHint.textContent = `✅ 已选中: ${selectedGame.title || '未命名'}`;
+          selectedHint.style.display = 'inline-block';
+        } else {
+          selectedHint.style.display = 'none';
+        }
+      } else {
+        selectedHint.style.display = 'none';
+      }
     }
 
-    // 渲染用户面板 (关键修改: 显示用户名)
     function renderUserPanel() {
       if (!currentUser) {
         userPanel.innerHTML = `
-          <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:200px;color:#6e8aa8;">
-            <div style="font-size:3rem;margin-bottom:0.5rem;">🔒</div>
+          <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:200px;color:#7f9bc0;">
+            <div style="font-size:3rem;margin-bottom:0.5rem;opacity:0.6;">🔒</div>
             <p>请登录以查看个人信息</p>
           </div>
         `;
@@ -365,7 +632,17 @@
       if (userGames.length) {
         hoverListHtml = `<ul class="hover-game-list" id="hoverGameList">${userGames.map(g => `<li>${g.title}</li>`).join('')}</ul>`;
       } else {
-        hoverListHtml = `<div class="hover-game-list" id="hoverGameList" style="display:block;color:#6e8aa8;">暂无上传</div>`;
+        hoverListHtml = `<div class="hover-game-list" id="hoverGameList" style="display:block;color:#7f9bc0;text-align:center;padding:0.6rem;">暂无上传</div>`;
+      }
+
+      // 构建投稿列表 - 显示所有投稿
+      let submittedListHtml = '';
+      if (weeklySubmissions.length) {
+        submittedListHtml = weeklySubmissions.map(sub => 
+          `<div>📝 ${sub.name} (${sub.created_at ? new Date(sub.created_at).toLocaleDateString('zh-CN') : '未知'})</div>`
+        ).join('');
+      } else {
+        submittedListHtml = '<div style="color:#7f9bc0;">暂无投稿</div>';
       }
 
       userPanel.innerHTML = `
@@ -376,7 +653,7 @@
           </div>
           <div class="user-row">
             <span class="level-badge">Lv.${level}</span>
-            <span style="font-size:0.9rem;color:#3d5a77;">经验 ${exp}/1000</span>
+            <span style="font-size:0.9rem;color:#7f9bc0;">经验 ${exp}/1000</span>
           </div>
           <div class="exp-bar"><div class="exp-fill" style="width:${Math.min(expPercent, 100)}%;"></div></div>
           <div class="game-count-wrap">
@@ -386,14 +663,13 @@
         </div>
         <div class="weekly-area">
           <div class="weekly-title">🏆 周赛投稿</div>
-          <button class="weekly-submit-btn" id="weeklySubmitBtn">📮 投稿参赛</button>
+          <button class="weekly-submit-btn" id="weeklySubmitBtn">📮 请先选择一个游戏</button>
           <div class="submitted-list" id="submittedList">
-            ${weeklySubmissions.length ? weeklySubmissions.map(name => `<div>${name}</div>`).join('') : '<div style="color:#6e8aa8;">暂无投稿</div>'}
+            ${submittedListHtml}
           </div>
         </div>
       `;
 
-      // 悬浮显示列表
       const badge = document.getElementById('gameCountBadge');
       const hoverList = document.getElementById('hoverGameList');
       if (badge && hoverList) {
@@ -403,34 +679,59 @@
 
       document.getElementById('weeklySubmitBtn')?.addEventListener('click', async () => {
         if (!currentUser) { showToast('请先登录'); return; }
-        if (userGames.length === 0) { showToast('你还没有上传游戏，无法投稿'); return; }
-        const gameName = userGames[0]?.title || '未命名游戏';
-        if (weeklySubmissions.includes(gameName)) {
+        
+        if (!selectedGameId) {
+          showToast('请先在游戏列表中点击选中一个游戏');
+          return;
+        }
+        
+        const selectedGame = games.find(g => g.id === selectedGameId);
+        if (!selectedGame) {
+          showToast('选中的游戏不存在');
+          return;
+        }
+        
+        // 检查是否已投稿
+        if (weeklySubmissions.some(sub => sub.game_id === selectedGameId)) {
           showToast('该游戏已投稿');
           return;
         }
-        weeklySubmissions.push(gameName);
-        localStorage.setItem(`weekly_${currentUser.id}`, JSON.stringify(weeklySubmissions));
-        renderUserPanel();
-        showToast(`已投稿: ${gameName}`);
+        
+        // 执行投稿
+        const success = await submitToWeekCompetition(selectedGameId, selectedGame.title);
+        
+        if (success) {
+          // 重新获取投稿列表
+          await fetchWeeklySubmissions();
+          // 更新按钮状态
+          updateWeeklySubmitBtn();
+          // 可选：自动取消选中
+          // clearSelection();
+        }
       });
 
+      // 从缓存加载投稿列表
       const cached = localStorage.getItem(`weekly_${currentUser.id}`);
-      if (cached) {
-        try { weeklySubmissions = JSON.parse(cached); } catch(e) { weeklySubmissions = []; }
+      if (cached && weeklySubmissions.length === 0) {
+        try { 
+          const parsed = JSON.parse(cached);
+          if (parsed.length > 0) {
+            weeklySubmissions = parsed;
+          }
+        } catch(e) { 
+          weeklySubmissions = []; 
+        }
       }
+      
+      updateWeeklySubmitBtn();
     }
 
-    // ---------- 数据获取 ----------
     async function fetchGames() {
       const { data, error } = await supabase
         .from('games')
         .select('*')
         .order('created_at', { ascending: false });
-      if (error) {
-        showToast('获取游戏列表失败');
-        return;
-      }
+      if (error) { showToast('获取游戏列表失败'); return; }
       games = data || [];
       renderGameList();
     }
@@ -441,16 +742,11 @@
         .from('games')
         .select('id, title')
         .eq('uploader_id', currentUser.id);
-      if (error) {
-        console.warn('获取用户游戏失败', error);
-        userGames = [];
-        return;
-      }
+      if (error) { console.warn('获取用户游戏失败', error); userGames = []; return; }
       userGames = data || [];
       renderUserPanel();
     }
 
-    // ---------- 核心新功能: 用户名+密码 登录注册 ----------
     function openAuthModal(isLoginMode) {
       isAuthLoginMode = isLoginMode;
       authTitle.textContent = isLoginMode ? '登录' : '注册';
@@ -461,143 +757,109 @@
       authOverlay.classList.add('open');
     }
 
-    function closeAuthModal() {
-      authOverlay.classList.remove('open');
-    }
+    function closeAuthModal() { authOverlay.classList.remove('open'); }
 
-    // 点击取消关闭弹窗
     authCancelBtn.addEventListener('click', closeAuthModal);
-    authOverlay.addEventListener('click', (e) => {
-      if (e.target === authOverlay) closeAuthModal();
-    });
+    authOverlay.addEventListener('click', (e) => { if (e.target === authOverlay) closeAuthModal(); });
+    authSwitchBtn.addEventListener('click', () => { openAuthModal(!isAuthLoginMode); });
 
-    // 切换登录/注册模式
-    authSwitchBtn.addEventListener('click', () => {
-      openAuthModal(!isAuthLoginMode);
-    });
-
-    // 处理登录/注册操作
     authConfirmBtn.addEventListener('click', async () => {
       const username = authUsername.value.trim();
       const password = authPassword.value.trim();
-
       if (!username) { showToast('请输入用户名'); return; }
       if (!password || password.length < 6) { showToast('密码至少需要6位'); return; }
-
       authConfirmBtn.disabled = true;
       authConfirmBtn.textContent = '处理中...';
 
       try {
         if (isAuthLoginMode) {
-          // ========= 登录流程 =========
-          // 注意：Supabase Auth 底层登录还是需要 email 格式。
-          // 我们构造一个虚拟邮箱：username@mygame.com
-          const email = `${username}@mygame.com`; 
-          
-          const { data, error } = await supabase.auth.signInWithPassword({
-            email: email,
-            password: password
-          });
-
-          if (error) {
-            // 如果登录失败，可能是用户用用户名注册了但不记得邮箱，或者完全没注册
-            showToast('登录失败: ' + error.message);
-          } else {
-            showToast('🎉 登录成功!');
-            closeAuthModal();
-            await checkAuth(); // 刷新状态
-            await fetchUserGames();
+          const email = `${username}@mygame.com`;
+          const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+          if (error) { showToast('登录失败: ' + error.message); } 
+          else { 
+            showToast('🎉 登录成功!'); 
+            closeAuthModal(); 
+            await checkAuth(); 
+            await fetchUserGames(); 
             await fetchGames();
+            await fetchWeeklySubmissions();
           }
-
         } else {
-          // ========= 注册流程 =========
-          // 1. 检查用户名是否被占用 (在 profiles 表中检查)
           const { data: existingUser, error: checkError } = await supabase
             .from('profiles')
             .select('username')
             .eq('username', username)
             .maybeSingle();
+          if (checkError) { showToast('验证用户名失败: ' + checkError.message); return; }
+          if (existingUser) { showToast('❌ 用户名已被使用'); return; }
 
-          if (checkError) {
-            showToast('验证用户名失败: ' + checkError.message);
-            return;
-          }
-          if (existingUser) {
-            showToast('❌ 用户名已被使用，请换一个');
-            return;
-          }
-
-          // 2. 使用虚拟邮箱注册 Auth 账户
-          // 因为我们只想让用户用用户名登录，不真的发邮件，所以强制格式为 username@mygame.com
-          const email = `${username}@mygame.com`; 
-
-          const { data, error: signUpError } = await supabase.auth.signUp({
+          const email = `${username}@mygame.com`;
+          const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
             email: email,
             password: password,
             options: {
-              data: {
-                username: username // 存入 auth 元数据
-              }
+              data: { username: username }
             }
           });
-
-          if (signUpError) {
-            showToast('注册失败: ' + signUpError.message);
-            return;
+          
+          if (signUpError) { 
+            showToast('注册失败: ' + signUpError.message); 
+            return; 
           }
-
-          if (data.user) {
-            // 3. 注册成功后，必须将 username 写入到 profiles 表中
-            // 因为 auth.users 注册后会触发 trigger 生成 profiles，但我们需要更新这个 username
+          
+          if (signUpData.user) {
             const { error: profileError } = await supabase
               .from('profiles')
-              .update({ username: username }) // 更新刚才生成的 profile 行
-              .eq('id', data.user.id);
-
-            if (profileError) {
-              // 如果更新 profiles 失败，自动删除刚才创建的 auth 用户 (需要管理权限，建议手动处理)
-              showToast('⚠️ 账号创建成功，但保存用户名失败，请联系管理员');
-              console.error('Profile更新失败:', profileError);
-              return;
+              .upsert([
+                { 
+                  id: signUpData.user.id, 
+                  username: username, 
+                  honor: '玩家', 
+                  level: 1, 
+                  exp: 0 
+                }
+              ], { onConflict: 'id' });
+            
+            if (profileError) { 
+              showToast('⚠️ 账号创建成功，但保存用户名失败: ' + profileError.message);
+              console.error('Profile插入失败:', profileError);
             }
-
-            // 4. 注册成功后，直接当前用户登录
-            currentUser = data.user;
-            currentUser.user_metadata = { username: username };
+            
+            currentUser = signUpData.user;
+            currentUser.user_metadata = {
+              ...currentUser.user_metadata,
+              username: username,
+              honor: '玩家',
+              level: 1,
+              exp: 0
+            };
             
             closeAuthModal();
             showToast('🎉 注册成功! 欢迎 ' + username);
-            await checkAuth();
-            await fetchUserGames();
+            
+            renderAuthArea();
+            renderUserPanel();
             await fetchGames();
+            await fetchUserGames();
+            await fetchWeeklySubmissions();
           }
         }
-      } catch (e) {
-        showToast('发生错误: ' + e.message);
-      } finally {
-        authConfirmBtn.disabled = false;
-        authConfirmBtn.textContent = isAuthLoginMode ? '登录' : '注册';
+      } catch (e) { 
+        showToast('发生错误: ' + e.message); 
+      } finally { 
+        authConfirmBtn.disabled = false; 
+        authConfirmBtn.textContent = isAuthLoginMode ? '登录' : '注册'; 
       }
     });
 
-
-    // ---------- 上传流程 (不变) ----------
+    // 上传
     async function handleUpload() {
-      if (!currentUser) {
-        showToast('请先登录');
-        return;
-      }
-      if (!selectedFile) {
-        showToast('请选择一个 .cpp 文件');
-        return;
-      }
+      if (!currentUser) { showToast('请先登录'); return; }
+      if (!selectedFile) { showToast('请选择 .cpp 文件'); return; }
       if (isUploading) return;
-
       const desc = gameDescInput.value.trim() || '无介绍';
       const originalFileName = selectedFile.name;
       const fileExtension = originalFileName.includes('.') ? originalFileName.substring(originalFileName.lastIndexOf('.')) : '.cpp';
-      
       isUploading = true;
       confirmUploadBtn.disabled = true;
       confirmUploadBtn.innerHTML = '<span class="loading-spinner"></span>上传中...';
@@ -605,64 +867,27 @@
       try {
         const { data: insertedData, error: insertError } = await supabase
           .from('games')
-          .insert([{
-            title: originalFileName,
-            description: desc,
-            file_url: '', 
-            download_count: 0,
-            uploader_id: currentUser.id,
-          }])
+          .insert([{ title: originalFileName, description: desc, file_url: '', download_count: 0, uploader_id: currentUser.id }])
           .select()
           .single();
-
-        if (insertError) throw new Error('保存游戏信息失败: ' + insertError.message);
-
+        if (insertError) throw new Error('保存失败: ' + insertError.message);
         const gameId = insertedData.id;
         const storageFileName = `${gameId}${fileExtension}`;
         const filePath = `games/${storageFileName}`;
-
-        const { error: uploadError } = await supabase.storage
-          .from('games')
-          .upload(filePath, selectedFile, { cacheControl: '3600', upsert: false });
-
-        if (uploadError) {
-          await supabase.from('games').delete().eq('id', gameId);
-          throw new Error('文件上传失败: ' + uploadError.message);
-        }
-
+        const { error: uploadError } = await supabase.storage.from('games').upload(filePath, selectedFile, { cacheControl: '3600', upsert: false });
+        if (uploadError) { await supabase.from('games').delete().eq('id', gameId); throw new Error('文件上传失败: ' + uploadError.message); }
         const { data: urlData } = supabase.storage.from('games').getPublicUrl(filePath);
         const fileUrl = urlData?.publicUrl || '';
-        
-        if (!fileUrl) {
-          await supabase.from('games').delete().eq('id', gameId);
-          await supabase.storage.from('games').remove([filePath]);
-          throw new Error('获取文件链接失败');
-        }
-
-        const { error: updateError } = await supabase
-          .from('games')
-          .update({ file_url: fileUrl })
-          .eq('id', gameId);
-
-        if (updateError) {
-          await supabase.from('games').delete().eq('id', gameId);
-          await supabase.storage.from('games').remove([filePath]);
-          throw new Error('更新文件链接失败: ' + updateError.message);
-        }
-
+        if (!fileUrl) { await supabase.from('games').delete().eq('id', gameId); await supabase.storage.from('games').remove([filePath]); throw new Error('获取链接失败'); }
+        const { error: updateError } = await supabase.from('games').update({ file_url: fileUrl }).eq('id', gameId);
+        if (updateError) { await supabase.from('games').delete().eq('id', gameId); await supabase.storage.from('games').remove([filePath]); throw new Error('更新链接失败: ' + updateError.message); }
         await updateUserExp(currentUser.id, 100);
         await fetchGames();
         await fetchUserGames();
         closeUploadModal();
-        showToast(`✅ 上传成功！经验 +100`);
-
-      } catch (error) {
-        showToast('❌ ' + error.message);
-      } finally {
-        isUploading = false;
-        confirmUploadBtn.disabled = false;
-        confirmUploadBtn.textContent = '确认上传';
-      }
+        showToast('✅ 上传成功！经验 +100');
+      } catch (error) { showToast('❌ ' + error.message); } 
+      finally { isUploading = false; confirmUploadBtn.disabled = false; confirmUploadBtn.textContent = '确认上传'; }
     }
 
     function openUploadModal() {
@@ -675,7 +900,6 @@
       confirmUploadBtn.disabled = false;
       confirmUploadBtn.textContent = '确认上传';
     }
-
     function closeUploadModal() { uploadOverlay.classList.remove('open'); isUploading = false; }
 
     document.getElementById('openUploadBtn')?.addEventListener('click', openUploadModal);
@@ -683,30 +907,36 @@
     document.getElementById('confirmUploadBtn')?.addEventListener('click', handleUpload);
     document.getElementById('chooseFileBtn')?.addEventListener('click', () => fileInput.click());
     fileInput?.addEventListener('change', (e) => {
-      if (e.target.files.length) {
-        selectedFile = e.target.files[0];
-        selectedFileNameEl.textContent = selectedFile.name;
-      } else {
-        selectedFile = null;
-        selectedFileNameEl.textContent = '未选择文件';
-      }
+      if (e.target.files.length) { selectedFile = e.target.files[0]; selectedFileNameEl.textContent = selectedFile.name; } 
+      else { selectedFile = null; selectedFileNameEl.textContent = '未选择文件'; }
     });
     uploadOverlay?.addEventListener('click', (e) => { if (e.target === uploadOverlay) closeUploadModal(); });
 
     async function init() {
       await checkAuth();
       await fetchGames();
-      if (currentUser) await fetchUserGames();
-      
+      if (currentUser) {
+        await fetchUserGames();
+        await fetchWeeklySubmissions();
+      }
       supabase.auth.onAuthStateChange((event, session) => {
         if (event === 'SIGNED_IN' && session?.user) {
           currentUser = session.user;
-          syncUserProfile(currentUser.id).then(() => {
-            renderAuthArea(); renderUserPanel(); fetchUserGames(); fetchGames();
+          syncUserProfile(currentUser.id).then(() => { 
+            renderAuthArea(); 
+            renderUserPanel(); 
+            fetchUserGames(); 
+            fetchGames();
+            fetchWeeklySubmissions();
           });
         } else if (event === 'SIGNED_OUT') {
-          currentUser = null; userGames = []; weeklySubmissions = [];
-          renderAuthArea(); renderUserPanel(); fetchGames();
+          currentUser = null; 
+          userGames = []; 
+          weeklySubmissions = []; 
+          selectedGameId = null;
+          renderAuthArea(); 
+          renderUserPanel(); 
+          fetchGames();
         }
       });
     }

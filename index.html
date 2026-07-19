@@ -26,9 +26,102 @@
     .auth-area .user-badge button { background: transparent; border: none; color: #7f9bc0; cursor: pointer; font-size: 0.85rem; padding: 0.2rem 0.6rem; border-radius: 40px; transition: 0.15s; }
     .auth-area .user-badge button:hover { background: rgba(255,255,255,0.06); color: white; }
 
-    /* ---------- 两栏布局 ---------- */
+    /* ---------- 三栏布局（新增公告栏） ---------- */
     .dashboard { display: grid; grid-template-columns: 1fr 340px; gap: 2rem; }
     @media (max-width: 780px) { .dashboard { grid-template-columns: 1fr; } }
+
+    /* ---------- 公告栏 ---------- */
+    .announcement-section {
+      background: rgba(18, 30, 50, 0.6);
+      backdrop-filter: blur(8px);
+      border-radius: 28px;
+      padding: 1.8rem 1.8rem;
+      border: 1px solid rgba(255,255,255,0.05);
+      box-shadow: 0 20px 40px -12px rgba(0,0,0,0.6);
+      margin-bottom: 2rem;
+      grid-column: 1 / -1;
+    }
+    .announcement-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.8rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .announcement-header h2 {
+      font-weight: 600;
+      font-size: 1.2rem;
+      color: #e6f0ff;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .announcement-header .badge {
+      background: rgba(255, 215, 100, 0.15);
+      color: #f5d78a;
+      font-size: 0.65rem;
+      padding: 0.15rem 0.8rem;
+      border-radius: 40px;
+      border: 1px solid rgba(255, 215, 100, 0.15);
+      font-weight: 500;
+    }
+    .announcement-content {
+      background: rgba(255,255,255,0.02);
+      border-radius: 20px;
+      padding: 1.2rem 1.5rem;
+      border: 1px solid rgba(255,255,255,0.04);
+      color: #c8dcf5;
+      font-size: 0.95rem;
+      line-height: 1.8;
+      min-height: 60px;
+      max-height: 200px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .announcement-content .empty {
+      color: #7f9bc0;
+      font-style: italic;
+    }
+    .announcement-content a {
+      color: #66d0ff;
+      text-decoration: none;
+      border-bottom: 1px dashed rgba(102, 208, 255, 0.3);
+    }
+    .announcement-content a:hover {
+      border-bottom-color: #66d0ff;
+    }
+    .announcement-content code {
+      background: rgba(255,255,255,0.06);
+      padding: 0.1rem 0.5rem;
+      border-radius: 6px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.85rem;
+      color: #b0cae5;
+    }
+    .announcement-content ul, .announcement-content ol {
+      padding-left: 1.5rem;
+      margin: 0.3rem 0;
+    }
+    .announcement-content h1, .announcement-content h2, .announcement-content h3 {
+      color: #e6f0ff;
+      margin: 0.5rem 0 0.2rem 0;
+    }
+    .announcement-refresh {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      color: #7f9bc0;
+      padding: 0.2rem 1rem;
+      border-radius: 40px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      transition: 0.2s;
+    }
+    .announcement-refresh:hover {
+      background: rgba(255,255,255,0.08);
+      color: #c8dcf5;
+    }
 
     /* ---------- 游戏列表 ---------- */
     .game-list-section { background: rgba(18, 30, 50, 0.6); backdrop-filter: blur(8px); border-radius: 28px; padding: 1.8rem 1.8rem; border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 20px 40px -12px rgba(0,0,0,0.6); }
@@ -78,6 +171,50 @@
     .game-meta .date { background: rgba(255,255,255,0.04); padding: 0.15rem 1rem; border-radius: 40px; font-size: 0.8rem; border: 1px solid rgba(255,255,255,0.04); }
     .download-btn { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); padding: 0.25rem 1.4rem; border-radius: 40px; font-weight: 500; color: #c8dcf5; cursor: pointer; transition: 0.2s; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 0.4rem; }
     .download-btn:hover { background: rgba(42, 127, 255, 0.15); border-color: rgba(42, 127, 255, 0.3); color: white; transform: translateY(-1px); }
+
+    /* ---------- 分页 ---------- */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1.2rem 0 0.3rem 0;
+      flex-wrap: wrap;
+      border-top: 1px solid rgba(255,255,255,0.04);
+      margin-top: 0.8rem;
+    }
+    .pagination button {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      color: #c8dcf5;
+      padding: 0.4rem 1rem;
+      border-radius: 40px;
+      cursor: pointer;
+      transition: 0.2s;
+      font-size: 0.85rem;
+      font-weight: 500;
+      min-width: 40px;
+    }
+    .pagination button:hover:not(:disabled) {
+      background: rgba(42, 127, 255, 0.15);
+      border-color: rgba(42, 127, 255, 0.3);
+      color: white;
+    }
+    .pagination button:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+    .pagination button.active {
+      background: linear-gradient(135deg, #2a7fff, #1a5fcf);
+      border-color: #2a7fff;
+      color: white;
+      box-shadow: 0 4px 14px rgba(42, 127, 255, 0.25);
+    }
+    .pagination .page-info {
+      color: #7f9bc0;
+      font-size: 0.85rem;
+      padding: 0 0.5rem;
+    }
 
     /* ---------- 用户面板 ---------- */
     .user-panel { background: rgba(18, 30, 50, 0.6); backdrop-filter: blur(8px); border-radius: 28px; padding: 2rem 1.8rem; border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 20px 40px -12px rgba(0,0,0,0.6); display: flex; flex-direction: column; gap: 2rem; }
@@ -151,7 +288,6 @@
     ::-webkit-scrollbar-thumb { background: rgba(42, 127, 255, 0.3); border-radius: 10px; }
     ::-webkit-scrollbar-thumb:hover { background: rgba(42, 127, 255, 0.5); }
 
-    /* 选中状态提示 */
     .selected-hint {
       color: #66d0ff;
       font-size: 0.85rem;
@@ -159,6 +295,21 @@
       padding: 0.2rem 1rem;
       border-radius: 40px;
       border: 1px solid rgba(42, 127, 255, 0.15);
+    }
+
+    /* 公告栏中的简单Markdown样式 */
+    .announcement-content strong { color: #e6f0ff; }
+    .announcement-content em { color: #9bb5d8; }
+    .announcement-content blockquote {
+      border-left: 3px solid #2a7fff;
+      padding-left: 1rem;
+      margin: 0.3rem 0;
+      color: #7f9bc0;
+    }
+    .announcement-content hr {
+      border: none;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      margin: 0.5rem 0;
     }
   </style>
 </head>
@@ -170,6 +321,17 @@
     <div class="auth-area" id="authArea"></div>
   </header>
 
+  <!-- ====== 公告栏 ====== -->
+  <div class="announcement-section" id="announcementSection">
+    <div class="announcement-header">
+      <h2>📢 公告栏 <span class="badge">动态</span></h2>
+      <button class="announcement-refresh" id="refreshAnnouncementBtn">⟳ 刷新</button>
+    </div>
+    <div class="announcement-content" id="announcementContent">
+      <div class="empty">⏳ 加载公告中...</div>
+    </div>
+  </div>
+
   <div class="dashboard">
     <section class="game-list-section">
       <div class="list-header">
@@ -180,6 +342,12 @@
         </div>
       </div>
       <div id="gameListContainer"></div>
+      <!-- ====== 分页组件 ====== -->
+      <div class="pagination" id="paginationContainer">
+        <button id="prevPageBtn" disabled>‹ 上一页</button>
+        <span class="page-info" id="pageInfo">第 1 / 1 页</span>
+        <button id="nextPageBtn" disabled>下一页 ›</button>
+      </div>
     </section>
     <aside class="user-panel" id="userPanel"></aside>
   </div>
@@ -228,10 +396,16 @@
     let weeklySubmissions = [];
     let selectedGameId = null;
 
+    // ---------- 分页相关 ----------
+    const PAGE_SIZE = 8;
+    let currentPage = 1;
+    let totalPages = 1;
+
     let selectedFile = null;
     let isUploading = false;
     let isAuthLoginMode = true;
 
+    // ---------- DOM 引用 ----------
     const gameListContainer = document.getElementById('gameListContainer');
     const userPanel = document.getElementById('userPanel');
     const authArea = document.getElementById('authArea');
@@ -253,6 +427,16 @@
 
     const toastEl = document.getElementById('toast');
 
+    // 分页按钮
+    const prevPageBtn = document.getElementById('prevPageBtn');
+    const nextPageBtn = document.getElementById('nextPageBtn');
+    const pageInfo = document.getElementById('pageInfo');
+
+    // 公告栏
+    const announcementContent = document.getElementById('announcementContent');
+    const refreshAnnouncementBtn = document.getElementById('refreshAnnouncementBtn');
+
+    // ---------- 工具函数 ----------
     function showToast(msg, duration = 2800) {
       toastEl.textContent = msg;
       toastEl.classList.add('show');
@@ -260,6 +444,81 @@
       toastEl._timer = setTimeout(() => toastEl.classList.remove('show'), duration);
     }
 
+    // 简单的 Markdown 渲染（支持常见语法）
+    function renderMarkdown(text) {
+      if (!text) return '<span class="empty">📭 暂无公告</span>';
+      
+      let html = text;
+      
+      // 标题
+      html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>');
+      html = html.replace(/^## (.+)$/gm, '<h2>$1</h2>');
+      html = html.replace(/^# (.+)$/gm, '<h1>$1</h1>');
+      
+      // 粗体
+      html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+      // 斜体
+      html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
+      // 行内代码
+      html = html.replace(/`(.+?)`/g, '<code>$1</code>');
+      
+      // 链接
+      html = html.replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2" target="_blank">$1</a>');
+      
+      // 无序列表
+      html = html.replace(/^[\-\*] (.+)$/gm, '<li>$1</li>');
+      html = html.replace(/(<li>.*<\/li>\s*)+/g, (match) => {
+        return `<ul>${match}</ul>`;
+      });
+      
+      // 有序列表
+      html = html.replace(/^\d+\. (.+)$/gm, '<li>$1</li>');
+      html = html.replace(/(<li>.*<\/li>\s*)+/g, (match) => {
+        return `<ol>${match}</ol>`;
+      });
+      
+      // 引用
+      html = html.replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>');
+      
+      // 分隔线
+      html = html.replace(/^---$/gm, '<hr>');
+      
+      // 换行
+      html = html.replace(/\n/g, '<br>');
+      
+      return html;
+    }
+
+    // ---------- 公告栏功能 ----------
+    async function loadAnnouncement() {
+      try {
+        announcementContent.innerHTML = '<div class="empty">⏳ 加载公告中...</div>';
+        
+        // 从 storage bucket 'announcements' 中获取 announcement.md
+        const { data, error } = await supabase.storage
+          .from('announcements')
+          .download('announcement.md');
+        
+        if (error) {
+          // 如果文件不存在，显示默认消息
+          if (error.message.includes('not found')) {
+            announcementContent.innerHTML = '<span class="empty">📭 暂无公告，管理员可上传 announcement.md</span>';
+            return;
+          }
+          throw error;
+        }
+        
+        const text = await data.text();
+        const rendered = renderMarkdown(text);
+        announcementContent.innerHTML = rendered;
+        
+      } catch (err) {
+        console.warn('加载公告失败:', err);
+        announcementContent.innerHTML = '<span class="empty">⚠️ 公告加载失败，请稍后刷新</span>';
+      }
+    }
+
+    // ---------- 认证相关 ----------
     async function checkAuth() {
       const { data: { session } } = await supabase.auth.getSession();
       if (session?.user) {
@@ -351,6 +610,7 @@
       }
     }
 
+    // ---------- 游戏选择 ----------
     function selectGame(gameId) {
       selectedGameId = gameId;
       
@@ -408,8 +668,7 @@
         return;
       }
       
-      // 检查是否已在 weekcompetition 表中投稿
-      if (weeklySubmissions.some(sub => sub.id === selectedGameId)) {
+      if (weeklySubmissions.some(sub => sub.game_id === selectedGameId)) {
         btn.disabled = true;
         btn.textContent = `✅ 已投稿: ${selectedGame.title}`;
         return;
@@ -419,7 +678,7 @@
       btn.textContent = `📮 投稿 "${selectedGame.title}"`;
     }
 
-    // 从 weekcompetition 表获取投稿列表
+    // ---------- 周赛投稿 ----------
     async function fetchWeeklySubmissions() {
       if (!currentUser) return;
       
@@ -436,7 +695,6 @@
         }
         
         weeklySubmissions = data || [];
-        // 更新localStorage作为缓存
         localStorage.setItem(`weekly_${currentUser.id}`, JSON.stringify(weeklySubmissions));
         renderUserPanel();
         updateWeeklySubmitBtn();
@@ -445,33 +703,12 @@
       }
     }
 
-    // 从 weekcompetition 表获取所有投稿（用于显示在列表中）
-    async function fetchAllWeeklySubmissions() {
-      try {
-        const { data, error } = await supabase
-          .from('weekcompetition')
-          .select('id, name, game_id, submitted_by, created_at, profiles(username)')
-          .order('created_at', { ascending: false });
-        
-        if (error) {
-          console.warn('获取所有投稿失败:', error);
-          return [];
-        }
-        return data || [];
-      } catch (err) {
-        console.warn('获取所有投稿异常:', err);
-        return [];
-      }
-    }
-
-    // 投稿到 weekcompetition 表
     async function submitToWeekCompetition(gameId, gameName) {
       if (!currentUser) {
         showToast('请先登录');
         return false;
       }
       
-      // 检查是否已投稿
       const { data: existing, error: checkError } = await supabase
         .from('weekcompetition')
         .select('id')
@@ -488,7 +725,6 @@
         return false;
       }
       
-      // 插入新投稿
       const { data, error } = await supabase
         .from('weekcompetition')
         .insert([
@@ -511,14 +747,27 @@
       return true;
     }
 
+    // ---------- 游戏列表渲染（分页） ----------
     function renderGameList() {
+      const totalGames = games.length;
+      totalPages = Math.max(1, Math.ceil(totalGames / PAGE_SIZE));
+      
+      // 确保当前页在有效范围内
+      if (currentPage > totalPages) currentPage = totalPages;
+      if (currentPage < 1) currentPage = 1;
+      
+      const start = (currentPage - 1) * PAGE_SIZE;
+      const end = Math.min(start + PAGE_SIZE, totalGames);
+      const pageGames = games.slice(start, end);
+      
       if (!games.length) {
         gameListContainer.innerHTML = `<div class="empty-state">✨ 暂无游戏，快来上传第一个吧</div>`;
+        updatePagination();
         return;
       }
       
       let html = '';
-      games.forEach(g => {
+      pageGames.forEach(g => {
         const date = g.created_at ? new Date(g.created_at).toLocaleDateString('zh-CN') : '未知';
         const isSelected = g.id === selectedGameId;
         html += `
@@ -535,6 +784,7 @@
       });
       gameListContainer.innerHTML = html;
 
+      // 事件绑定
       document.querySelectorAll('.game-item').forEach(item => {
         item.addEventListener('click', function(e) {
           if (e.target.closest('.download-btn')) return;
@@ -608,8 +858,34 @@
       } else {
         selectedHint.style.display = 'none';
       }
+
+      updatePagination();
     }
 
+    // ---------- 分页控制 ----------
+    function updatePagination() {
+      const total = games.length;
+      const totalPagesCalc = Math.max(1, Math.ceil(total / PAGE_SIZE));
+      totalPages = totalPagesCalc;
+      
+      pageInfo.textContent = `第 ${currentPage} / ${totalPages} 页 (共 ${total} 个游戏)`;
+      
+      prevPageBtn.disabled = currentPage <= 1;
+      nextPageBtn.disabled = currentPage >= totalPages;
+    }
+
+    function goToPage(page) {
+      const total = games.length;
+      const maxPage = Math.max(1, Math.ceil(total / PAGE_SIZE));
+      const newPage = Math.max(1, Math.min(page, maxPage));
+      if (newPage === currentPage) return;
+      currentPage = newPage;
+      renderGameList();
+      // 滚动到列表顶部
+      document.querySelector('.game-list-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // ---------- 用户面板 ----------
     function renderUserPanel() {
       if (!currentUser) {
         userPanel.innerHTML = `
@@ -635,7 +911,6 @@
         hoverListHtml = `<div class="hover-game-list" id="hoverGameList" style="display:block;color:#7f9bc0;text-align:center;padding:0.6rem;">暂无上传</div>`;
       }
 
-      // 构建投稿列表 - 显示所有投稿
       let submittedListHtml = '';
       if (weeklySubmissions.length) {
         submittedListHtml = weeklySubmissions.map(sub => 
@@ -691,26 +966,19 @@
           return;
         }
         
-        // 检查是否已投稿
         if (weeklySubmissions.some(sub => sub.game_id === selectedGameId)) {
           showToast('该游戏已投稿');
           return;
         }
         
-        // 执行投稿
         const success = await submitToWeekCompetition(selectedGameId, selectedGame.title);
         
         if (success) {
-          // 重新获取投稿列表
           await fetchWeeklySubmissions();
-          // 更新按钮状态
           updateWeeklySubmitBtn();
-          // 可选：自动取消选中
-          // clearSelection();
         }
       });
 
-      // 从缓存加载投稿列表
       const cached = localStorage.getItem(`weekly_${currentUser.id}`);
       if (cached && weeklySubmissions.length === 0) {
         try { 
@@ -726,6 +994,7 @@
       updateWeeklySubmitBtn();
     }
 
+    // ---------- 数据获取 ----------
     async function fetchGames() {
       const { data, error } = await supabase
         .from('games')
@@ -733,6 +1002,8 @@
         .order('created_at', { ascending: false });
       if (error) { showToast('获取游戏列表失败'); return; }
       games = data || [];
+      // 重置到第一页
+      currentPage = 1;
       renderGameList();
     }
 
@@ -747,6 +1018,7 @@
       renderUserPanel();
     }
 
+    // ---------- 弹窗控制 ----------
     function openAuthModal(isLoginMode) {
       isAuthLoginMode = isLoginMode;
       authTitle.textContent = isLoginMode ? '登录' : '注册';
@@ -852,7 +1124,7 @@
       }
     });
 
-    // 上传
+    // ---------- 上传功能 ----------
     async function handleUpload() {
       if (!currentUser) { showToast('请先登录'); return; }
       if (!selectedFile) { showToast('请选择 .cpp 文件'); return; }
@@ -912,13 +1184,28 @@
     });
     uploadOverlay?.addEventListener('click', (e) => { if (e.target === uploadOverlay) closeUploadModal(); });
 
+    // ---------- 分页事件绑定 ----------
+    prevPageBtn.addEventListener('click', () => goToPage(currentPage - 1));
+    nextPageBtn.addEventListener('click', () => goToPage(currentPage + 1));
+
+    // ---------- 公告刷新 ----------
+    refreshAnnouncementBtn.addEventListener('click', () => {
+      loadAnnouncement();
+      showToast('🔄 公告已刷新');
+    });
+
+    // ---------- 初始化 ----------
     async function init() {
+      // 加载公告
+      await loadAnnouncement();
+      
       await checkAuth();
       await fetchGames();
       if (currentUser) {
         await fetchUserGames();
         await fetchWeeklySubmissions();
       }
+      
       supabase.auth.onAuthStateChange((event, session) => {
         if (event === 'SIGNED_IN' && session?.user) {
           currentUser = session.user;

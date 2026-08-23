@@ -494,6 +494,168 @@
       flex-direction: column;
       gap: 2rem;
     }
+
+    /* ---------- 排行榜 ---------- */
+    .rank-panel {
+      background: rgba(18, 30, 50, 0.6);
+      backdrop-filter: blur(8px);
+      border-radius: 28px;
+      padding: 1.5rem 1.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.6);
+      margin-bottom: 2rem;
+    }
+    .rank-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .rank-header h2 {
+      font-weight: 600;
+      font-size: 1.2rem;
+      color: #e6f0ff;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .rank-header .refresh-btn {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      color: #7f9bc0;
+      padding: 0.2rem 1rem;
+      border-radius: 40px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      transition: 0.2s;
+    }
+    .rank-header .refresh-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #c8dcf5;
+    }
+    .rank-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      max-height: 320px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    .rank-item {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 0.5rem 0.8rem;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      transition: 0.2s;
+      cursor: default;
+    }
+    .rank-item:hover {
+      background: rgba(255, 255, 255, 0.06);
+    }
+    .rank-item.current-user {
+      border-color: rgba(42, 127, 255, 0.3);
+      background: rgba(42, 127, 255, 0.08);
+    }
+    .rank-number {
+      font-weight: 700;
+      font-size: 1rem;
+      min-width: 32px;
+      color: #7f9bc0;
+      text-align: center;
+    }
+    .rank-number.gold {
+      color: #ffd700;
+    }
+    .rank-number.silver {
+      color: #c0c0c0;
+    }
+    .rank-number.bronze {
+      color: #cd7f32;
+    }
+    .rank-avatar {
+      font-size: 1.4rem;
+      line-height: 1;
+      width: 32px;
+      text-align: center;
+    }
+    .rank-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .rank-name {
+      font-weight: 600;
+      color: #e6f0ff;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
+    .rank-name .admin-tag {
+      background: linear-gradient(135deg, #f5a623, #f7c948);
+      color: #1a1a2e;
+      font-size: 0.55rem;
+      padding: 0.05rem 0.5rem;
+      border-radius: 40px;
+      font-weight: 700;
+    }
+    .rank-name .me-tag {
+      background: rgba(42, 127, 255, 0.2);
+      color: #66d0ff;
+      font-size: 0.55rem;
+      padding: 0.05rem 0.5rem;
+      border-radius: 40px;
+      font-weight: 600;
+      border: 1px solid rgba(42, 127, 255, 0.2);
+    }
+    .rank-stats {
+      display: flex;
+      gap: 1rem;
+      font-size: 0.75rem;
+      color: #7f9bc0;
+    }
+    .rank-stats span {
+      display: flex;
+      align-items: center;
+      gap: 0.2rem;
+    }
+    .rank-exp-bar {
+      width: 80px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 4px;
+      overflow: hidden;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .rank-exp-bar .fill {
+      height: 100%;
+      background: linear-gradient(90deg, #2a7fff, #66d0ff);
+      border-radius: 4px;
+      transition: width 0.5s ease;
+    }
+    .rank-level-badge {
+      background: linear-gradient(135deg, #2a7fff, #1a5fcf);
+      color: white;
+      border-radius: 40px;
+      padding: 0.05rem 0.7rem;
+      font-size: 0.7rem;
+      font-weight: 600;
+      border: none;
+    }
+    .rank-empty {
+      color: #7f9bc0;
+      text-align: center;
+      padding: 1rem 0;
+      font-style: italic;
+    }
+
     .user-info-block {
       display: flex;
       flex-direction: column;
@@ -980,6 +1142,17 @@
       </div>
     </div>
 
+    <!-- 排行榜 -->
+    <div class="rank-panel" id="rankPanel">
+      <div class="rank-header">
+        <h2>🏆 等级排行榜</h2>
+        <button class="refresh-btn" id="refreshRankBtn">⟳ 刷新</button>
+      </div>
+      <div class="rank-list" id="rankList">
+        <div class="rank-empty">⏳ 加载排行中...</div>
+      </div>
+    </div>
+
     <div class="dashboard">
       <section class="game-list-section">
         <div class="list-header">
@@ -1068,6 +1241,7 @@
       let weeklySubmissions = [];
       let selectedGameId = null;
       let uploaderNames = {};
+      let rankData = [];
 
       const PAGE_SIZE = 8;
       let currentPage = 1;
@@ -1083,6 +1257,7 @@
       const userPanel = document.getElementById('userPanel');
       const authArea = document.getElementById('authArea');
       const selectedHint = document.getElementById('selectedHint');
+      const rankList = document.getElementById('rankList');
 
       const authOverlay = document.getElementById('authOverlay');
       const authTitle = document.getElementById('authTitle');
@@ -1110,6 +1285,7 @@
 
       const announcementContent = document.getElementById('announcementContent');
       const refreshAnnouncementBtn = document.getElementById('refreshAnnouncementBtn');
+      const refreshRankBtn = document.getElementById('refreshRankBtn');
 
       // 下载进度 DOM
       const downloadProgress = document.getElementById('downloadProgress');
@@ -1187,11 +1363,9 @@
             }
           }
 
-          // 完成
           fillEl.style.width = '100%';
           textEl.textContent = '100%';
 
-          // 合并所有 chunk
           const blob = new Blob(chunks);
           const downloadUrl = URL.createObjectURL(blob);
 
@@ -1243,6 +1417,125 @@
         return uploaderNames[uploaderId] || '加载中...';
       }
 
+      // ============ 排行榜功能 ============
+      async function fetchRankData() {
+        try {
+          rankList.innerHTML = '<div class="rank-empty">⏳ 加载排行中...</div>';
+
+          // 获取所有用户资料
+          const { data: profiles, error: profilesError } = await supabase
+            .from('profiles')
+            .select('id, username, honor, level, exp');
+
+          if (profilesError) {
+            console.warn('获取用户资料失败:', profilesError);
+            rankList.innerHTML = '<div class="rank-empty">⚠️ 加载排行榜失败</div>';
+            return;
+          }
+
+          if (!profiles || profiles.length === 0) {
+            rankList.innerHTML = '<div class="rank-empty">📭 暂无用户数据</div>';
+            return;
+          }
+
+          // 获取每个用户的上传游戏数量
+          const userIds = profiles.map(p => p.id);
+          const { data: gameCounts, error: gameCountsError } = await supabase
+            .from('games')
+            .select('uploader_id')
+            .in('uploader_id', userIds);
+
+          if (gameCountsError) {
+            console.warn('获取游戏数量失败:', gameCountsError);
+          }
+
+          // 统计每个用户的上传数量
+          const countMap = {};
+          (gameCounts || []).forEach(g => {
+            countMap[g.uploader_id] = (countMap[g.uploader_id] || 0) + 1;
+          });
+
+          // 构建排行榜数据
+          rankData = profiles.map(p => {
+            const exp = p.exp || 0;
+            const level = p.level || 1;
+            return {
+              id: p.id,
+              username: p.username || '未知用户',
+              honor: p.honor || '玩家',
+              level: level,
+              exp: exp,
+              expToNext: 1000 - (exp % 1000),
+              gameCount: countMap[p.id] || 0,
+              isAdmin: p.username === ADMIN_USERNAME
+            };
+          });
+
+          // 排序：按等级降序，经验降序
+          rankData.sort((a, b) => {
+            if (b.level !== a.level) return b.level - a.level;
+            return b.exp - a.exp;
+          });
+
+          renderRankList();
+
+        } catch (err) {
+          console.error('获取排行榜失败:', err);
+          rankList.innerHTML = '<div class="rank-empty">⚠️ 加载排行榜失败</div>';
+        }
+      }
+
+      function renderRankList() {
+        if (!rankData || rankData.length === 0) {
+          rankList.innerHTML = '<div class="rank-empty">📭 暂无用户数据</div>';
+          return;
+        }
+
+        const currentUserId = currentUser?.id;
+
+        let html = '';
+        rankData.forEach((user, index) => {
+          const rank = index + 1;
+          let rankClass = 'rank-number';
+          let medal = '';
+          if (rank === 1) { rankClass += ' gold';
+            medal = '🥇'; } else if (rank === 2) { rankClass += ' silver';
+            medal = '🥈'; } else if (rank === 3) { rankClass += ' bronze';
+            medal = '🥉'; }
+
+          const isCurrentUser = user.id === currentUserId;
+          const expPercent = (user.exp % 1000) / 1000 * 100;
+
+          // 随机头像
+          const avatars = ['🧑‍💻', '👨‍💻', '👩‍💻', '🧙', '🦊', '🐱', '🐉', '⚡', '🌟', '🎮'];
+          const avatar = avatars[user.id.charCodeAt(user.id.length - 1) % avatars.length];
+
+          html += `
+            <div class="rank-item ${isCurrentUser ? 'current-user' : ''}">
+              <span class="${rankClass}">${medal || rank}</span>
+              <span class="rank-avatar">${avatar}</span>
+              <div class="rank-info">
+                <div class="rank-name">
+                  ${user.username}
+                  ${user.isAdmin ? '<span class="admin-tag">👑 管理员</span>' : ''}
+                  ${isCurrentUser ? '<span class="me-tag">我</span>' : ''}
+                  <span class="rank-level-badge">Lv.${user.level}</span>
+                </div>
+                <div class="rank-stats">
+                  <span>⭐ ${user.exp % 1000}/1000</span>
+                  <span>
+                    <span class="rank-exp-bar"><span class="fill" style="width:${expPercent}%"></span></span>
+                  </span>
+                  <span>📦 ${user.gameCount} 个游戏</span>
+                </div>
+              </div>
+            </div>
+          `;
+        });
+
+        rankList.innerHTML = html;
+      }
+
       // ============ 公告栏功能 ============
       async function loadAnnouncement() {
         try {
@@ -1277,6 +1570,7 @@
         }
         renderAuthArea();
         renderUserPanel();
+        await fetchRankData();
       }
 
       async function syncUserProfile(userId) {
@@ -1329,6 +1623,7 @@
         currentUser.user_metadata.exp = newExp;
         currentUser.user_metadata.level = newLevel;
         renderUserPanel();
+        await fetchRankData();
       }
 
       function renderAuthArea() {
@@ -1348,6 +1643,7 @@
             renderAuthArea();
             renderUserPanel();
             fetchGames();
+            fetchRankData();
             showToast('已退出');
           });
         } else {
@@ -1593,7 +1889,6 @@
         });
         gameListContainer.innerHTML = html;
 
-        // 点击游戏项
         document.querySelectorAll('.game-item').forEach(item => {
           item.addEventListener('click', function(e) {
             if (e.target.closest('.download-btn') || e.target.closest('.delete-btn')) return;
@@ -1606,12 +1901,10 @@
           });
         });
 
-        // 下载按钮 - 使用流式下载
         document.querySelectorAll('.download-btn').forEach(btn => {
           btn.addEventListener('click', async (e) => {
             e.stopPropagation();
 
-            // 防止重复点击
             if (btn.classList.contains('downloading')) return;
 
             const url = btn.dataset.url;
@@ -1623,13 +1916,11 @@
               return;
             }
 
-            // 标记下载中
             btn.classList.add('downloading');
             const originalText = btn.innerHTML;
             btn.innerHTML = '⏳ 下载中...';
 
             try {
-              // 更新下载次数（异步，不影响下载）
               const { data: gData } = await supabase
                 .from('games')
                 .select('download_count')
@@ -1645,9 +1936,7 @@
               console.warn('更新下载次数失败', err);
             }
 
-            // 提取文件名
             let fileName = title;
-            // 如果标题有扩展名则保留，否则根据URL推断
             if (!fileName.includes('.')) {
               const urlParts = url.split('/');
               const lastPart = urlParts[urlParts.length - 1];
@@ -1658,16 +1947,13 @@
               }
             }
 
-            // 开始流式下载
             await downloadFileStream(url, fileName);
 
-            // 恢复按钮
             btn.classList.remove('downloading');
             btn.innerHTML = originalText;
           });
         });
 
-        // 删除按钮（仅管理员可见）
         document.querySelectorAll('.delete-btn').forEach(btn => {
           btn.addEventListener('click', function(e) {
             e.stopPropagation();
@@ -1752,6 +2038,13 @@
           submittedListHtml = '<div style="color:#7f9bc0;">暂无投稿</div>';
         }
 
+        // 获取用户排名
+        let userRank = '-';
+        const rankIndex = rankData.findIndex(u => u.id === currentUser.id);
+        if (rankIndex !== -1) {
+          userRank = `#${rankIndex + 1}`;
+        }
+
         userPanel.innerHTML = `
           <div class="user-info-block">
             <div class="user-row">
@@ -1763,8 +2056,12 @@
               <span style="font-size:0.9rem;color:#7f9bc0;">经验 ${exp}/1000</span>
             </div>
             <div class="exp-bar"><div class="exp-fill" style="width:${Math.min(expPercent, 100)}%;"></div></div>
+            <div class="user-row" style="margin-top:0.3rem;">
+              <span style="font-size:0.85rem;color:#7f9bc0;">🏆 排名 ${userRank}</span>
+              <span style="font-size:0.85rem;color:#7f9bc0;">📦 ${totalGames} 个游戏</span>
+            </div>
             <div class="game-count-wrap">
-              <span class="game-count-badge" id="gameCountBadge">📦 我上传的游戏 (${totalGames})</span>
+              <span class="game-count-badge" id="gameCountBadge">📂 我上传的游戏 (${totalGames})</span>
               ${hoverListHtml}
             </div>
           </div>
@@ -1880,6 +2177,7 @@
               await fetchUserGames();
               await fetchGames();
               await fetchWeeklySubmissions();
+              await fetchRankData();
             }
           } else {
             const { data: existingUser, error: checkError } = await supabase
@@ -1939,6 +2237,7 @@
               await fetchGames();
               await fetchUserGames();
               await fetchWeeklySubmissions();
+              await fetchRankData();
             }
           }
         } catch (e) {
@@ -1987,6 +2286,7 @@
           await updateUserExp(currentUser.id, 100);
           await fetchGames();
           await fetchUserGames();
+          await fetchRankData();
           closeUploadModal();
           showToast('✅ 上传成功！经验 +100');
         } catch (error) { showToast('❌ ' + error.message); } finally {
@@ -2041,6 +2341,7 @@
         confirmDeleteBtn.textContent = '确认删除';
         deleteOverlay.classList.remove('open');
         deleteTargetId = null;
+        await fetchRankData();
       });
 
       // ============ 分页事件绑定 ============
@@ -2051,6 +2352,12 @@
       refreshAnnouncementBtn.addEventListener('click', () => {
         loadAnnouncement();
         showToast('🔄 公告已刷新');
+      });
+
+      // ============ 排行榜刷新 ============
+      refreshRankBtn.addEventListener('click', () => {
+        fetchRankData();
+        showToast('🔄 排行榜已刷新');
       });
 
       // ============ 初始化 ============
@@ -2072,6 +2379,7 @@
               fetchUserGames();
               fetchGames();
               fetchWeeklySubmissions();
+              fetchRankData();
             });
           } else if (event === 'SIGNED_OUT') {
             currentUser = null;
@@ -2081,6 +2389,7 @@
             renderAuthArea();
             renderUserPanel();
             fetchGames();
+            fetchRankData();
           }
         });
       }

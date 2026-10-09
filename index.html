@@ -4,8 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>C++小游戏大全 · 由Daniel_Chou_hn创立的C++小游戏社群</title>
-  <script src="https://unpkg.com/@supabase/supabase-js@2">
-  </script>
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <style>
     /* ---------- 重置 & 基础 ---------- */
     * {
@@ -20,10 +19,294 @@
       padding: 2rem 1.5rem;
       display: flex;
       justify-content: center;
+      transition: background 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .app {
       max-width: 1300px;
       width: 100%;
+    }
+
+    /* ============================================
+       学术伪装模式（白色主题）
+       ============================================ */
+    body.academic-mode {
+      background: #f5f7fa;
+    }
+
+    body.academic-mode .header h1,
+    body.academic-mode .header h1 span {
+      color: #1a2b4a;
+      background: none;
+      -webkit-text-fill-color: #1a2b4a;
+      text-shadow: none;
+    }
+
+    body.academic-mode .header h3 {
+      color: #5a6a7f;
+      background: rgba(0, 0, 0, 0.03);
+      border-color: rgba(0, 0, 0, 0.06);
+    }
+
+    body.academic-mode .auth-area button {
+      background: rgba(0, 0, 0, 0.03);
+      border-color: rgba(0, 0, 0, 0.08);
+      color: #2a3a4f;
+    }
+
+    body.academic-mode .auth-area button:hover {
+      background: rgba(42, 127, 255, 0.1);
+      border-color: rgba(42, 127, 255, 0.3);
+      color: #1a5fcf;
+    }
+
+    body.academic-mode .auth-area .user-badge {
+      background: rgba(0, 0, 0, 0.03);
+      border-color: rgba(0, 0, 0, 0.06);
+    }
+
+    body.academic-mode .auth-area .user-badge span {
+      color: #1a2b4a;
+    }
+
+    body.academic-mode .auth-area .user-badge button {
+      color: #5a6a7f;
+    }
+
+    /* 隐藏排行榜和公告 */
+    body.academic-mode .announcement-section,
+    body.academic-mode .rank-panel {
+      opacity: 0;
+      max-height: 0;
+      padding: 0;
+      margin: 0;
+      border: 0;
+      overflow: hidden;
+      pointer-events: none;
+      transform: translateY(-20px);
+    }
+
+    body.academic-mode .announcement-section,
+    body.academic-mode .rank-panel {
+      transition: opacity 0.5s ease,
+                  max-height 0.5s ease,
+                  padding 0.5s ease,
+                  margin 0.5s ease,
+                  transform 0.5s ease;
+    }
+
+    /* 卡片背景变白 */
+    body.academic-mode .game-list-section {
+      background: #ffffff;
+      border-color: rgba(0, 0, 0, 0.06);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    body.academic-mode .list-header h2 {
+      color: #1a2b4a;
+    }
+
+    body.academic-mode .upload-trigger-btn {
+      background: linear-gradient(135deg, #4a7fff, #2a5fcf);
+      box-shadow: 0 4px 12px rgba(42, 127, 255, 0.2);
+    }
+
+    /* 游戏项变白 */
+    body.academic-mode .game-item {
+      border-bottom-color: rgba(0, 0, 0, 0.06);
+    }
+
+    body.academic-mode .game-item:hover {
+      background: rgba(0, 0, 0, 0.02);
+    }
+
+    body.academic-mode .game-item.selected {
+      background: rgba(42, 127, 255, 0.06);
+      border-color: rgba(42, 127, 255, 0.2);
+    }
+
+    body.academic-mode .game-title {
+      color: #1a2b4a;
+    }
+
+    body.academic-mode .game-item.selected .game-title {
+      color: #2a5fcf;
+    }
+
+    body.academic-mode .game-desc {
+      color: #5a6a7f;
+    }
+
+    body.academic-mode .game-meta {
+      color: #8a9ab0;
+    }
+
+    body.academic-mode .game-meta .uploader,
+    body.academic-mode .game-meta .date {
+      background: rgba(0, 0, 0, 0.03);
+      border-color: rgba(0, 0, 0, 0.05);
+      color: #5a6a7f;
+    }
+
+    body.academic-mode .download-btn {
+      background: rgba(0, 0, 0, 0.03);
+      border-color: rgba(0, 0, 0, 0.08);
+      color: #2a3a4f;
+    }
+
+    body.academic-mode .download-btn:hover {
+      background: rgba(42, 127, 255, 0.1);
+      border-color: rgba(42, 127, 255, 0.3);
+      color: #1a5fcf;
+    }
+
+    body.academic-mode .delete-btn {
+      background: rgba(255, 50, 50, 0.06);
+      border-color: rgba(255, 50, 50, 0.12);
+    }
+
+    /* 分页变白 */
+    body.academic-mode .pagination {
+      border-top-color: rgba(0, 0, 0, 0.06);
+    }
+
+    body.academic-mode .pagination button {
+      background: rgba(0, 0, 0, 0.03);
+      border-color: rgba(0, 0, 0, 0.06);
+      color: #2a3a4f;
+    }
+
+    body.academic-mode .pagination button:hover:not(:disabled) {
+      background: rgba(42, 127, 255, 0.1);
+      border-color: rgba(42, 127, 255, 0.3);
+      color: #1a5fcf;
+    }
+
+    body.academic-mode .pagination .page-info {
+      color: #8a9ab0;
+    }
+
+    /* 用户面板变白 */
+    body.academic-mode .user-panel {
+      background: #ffffff;
+      border-color: rgba(0, 0, 0, 0.06);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    body.academic-mode .username {
+      color: #1a2b4a;
+    }
+
+    body.academic-mode .honor-title {
+      background: rgba(255, 180, 50, 0.1);
+      color: #b8860b;
+      border-color: rgba(255, 180, 50, 0.2);
+    }
+
+    body.academic-mode .exp-bar {
+      background: rgba(0, 0, 0, 0.06);
+      border-color: rgba(0, 0, 0, 0.04);
+    }
+
+    body.academic-mode .exp-label,
+    body.academic-mode .user-row span {
+      color: #5a6a7f;
+    }
+
+    body.academic-mode .game-count-badge {
+      background: rgba(0, 0, 0, 0.03);
+      border-color: rgba(0, 0, 0, 0.06);
+      color: #2a3a4f;
+    }
+
+    body.academic-mode .game-count-badge:hover {
+      background: rgba(0, 0, 0, 0.05);
+    }
+
+    body.academic-mode .hover-game-list {
+      background: #f8f9fb;
+      border-color: rgba(0, 0, 0, 0.06);
+    }
+
+    body.academic-mode .hover-game-list li {
+      color: #2a3a4f;
+      border-bottom-color: rgba(0, 0, 0, 0.04);
+    }
+
+    body.academic-mode .weekly-area {
+      border-top-color: rgba(0, 0, 0, 0.06);
+    }
+
+    body.academic-mode .weekly-title {
+      color: #1a2b4a;
+    }
+
+    body.academic-mode .weekly-hint {
+      background: rgba(42, 127, 255, 0.04);
+      border-color: rgba(42, 127, 255, 0.1);
+      color: #5a6a7f;
+    }
+
+    body.academic-mode .submitted-list {
+      background: rgba(0, 0, 0, 0.02);
+      border-color: rgba(0, 0, 0, 0.04);
+      color: #5a6a7f;
+    }
+
+    body.academic-mode .submitted-list div {
+      border-bottom-color: rgba(0, 0, 0, 0.04);
+    }
+
+    /* 通知 */
+    body.academic-mode .toast-message {
+      background: rgba(255, 255, 255, 0.95);
+      color: #1a2b4a;
+      border-color: rgba(0, 0, 0, 0.08);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+    }
+
+    /* 学术伪装按钮 */
+    .academic-toggle-btn {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      z-index: 1002;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.7rem 1.5rem;
+      border-radius: 60px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(18, 30, 50, 0.85);
+      backdrop-filter: blur(12px);
+      color: #c8dcf5;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      font-family: inherit;
+    }
+    .academic-toggle-btn:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+      background: rgba(42, 127, 255, 0.3);
+      border-color: rgba(42, 127, 255, 0.5);
+      color: #fff;
+    }
+    .academic-toggle-btn .icon {
+      font-size: 1.1rem;
+    }
+    body.academic-mode .academic-toggle-btn {
+      background: rgba(255, 255, 255, 0.95);
+      border-color: rgba(0, 0, 0, 0.1);
+      color: #1a2b4a;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    }
+    body.academic-mode .academic-toggle-btn:hover {
+      background: #fff;
+      border-color: rgba(42, 127, 255, 0.4);
+      color: #1a5fcf;
+      box-shadow: 0 12px 32px rgba(42, 127, 255, 0.15);
     }
 
     /* ---------- 头部 ---------- */
@@ -34,6 +317,7 @@
       margin-bottom: 2.5rem;
       flex-wrap: wrap;
       gap: 1rem;
+      transition: all 0.5s ease;
     }
     .header h1 {
       font-size: 2.2rem;
@@ -44,12 +328,14 @@
       align-items: center;
       gap: 0.5rem;
       text-shadow: 0 2px 10px rgba(0, 160, 255, 0.15);
+      transition: all 0.5s ease;
     }
     .header h1 span {
       background: linear-gradient(135deg, #66d0ff, #2a7fff);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+      transition: all 0.5s ease;
     }
     .header h3 {
       font-weight: 400;
@@ -61,6 +347,7 @@
       border: 1px solid rgba(255, 255, 255, 0.06);
       letter-spacing: 0.3px;
       backdrop-filter: blur(4px);
+      transition: all 0.5s ease;
     }
 
     /* ---------- 认证区 ---------- */
@@ -92,11 +379,12 @@
       background: rgba(255, 255, 255, 0.04);
       backdrop-filter: blur(4px);
       border-radius: 60px;
-      padding: 0.25rem 1rem 0.25rem 1.8rem;
+      padding: 0.25rem 1rem 0.25rem 0.5rem;
       display: flex;
       align-items: center;
       gap: 0.9rem;
       border: 1px solid rgba(255, 255, 255, 0.06);
+      transition: all 0.5s ease;
     }
     .auth-area .user-badge span {
       font-weight: 600;
@@ -125,6 +413,99 @@
       background: rgba(255, 255, 255, 0.06);
       color: white;
     }
+    #profileBtn {
+      cursor: pointer;
+      padding: 0.2rem 0.4rem;
+      border-radius: 8px;
+      transition: 0.2s;
+      position: relative;
+    }
+    #profileBtn:hover {
+      background: rgba(102, 208, 255, 0.1);
+      color: #66d0ff;
+    }
+    #profileBtn .luogu-verified-dot {
+      color: #66e8a0;
+      font-size: 0.7rem;
+      margin-left: 0.2rem;
+    }
+
+    /* ---------- 头像（圆形） ---------- */
+    .avatar {
+      border-radius: 50%;
+      background: linear-gradient(135deg, #2a7fff, #66d0ff);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 700;
+      flex-shrink: 0;
+      overflow: hidden;
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.25s ease;
+      user-select: none;
+      position: relative;
+      line-height: 1;
+    }
+    .avatar img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      border-radius: 50%;
+    }
+    .avatar::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+      pointer-events: none;
+      z-index: 1;
+    }
+    .avatar-sm { width: 32px; height: 32px; font-size: 0.8rem; }
+    .avatar-md { width: 44px; height: 44px; font-size: 1rem; }
+    .avatar-lg {
+      width: 84px;
+      height: 84px;
+      font-size: 2rem;
+      border-width: 3px;
+      border-color: rgba(102, 208, 255, 0.25);
+      box-shadow: 0 8px 24px -6px rgba(42, 127, 255, 0.4);
+    }
+    .avatar-clickable { cursor: pointer; }
+    .avatar-clickable:hover {
+      transform: scale(1.05);
+      border-color: rgba(102, 208, 255, 0.5);
+      box-shadow: 0 0 0 4px rgba(42, 127, 255, 0.15);
+    }
+    .avatar-clickable .avatar-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.55);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+      color: #fff;
+      font-size: 1.4rem;
+      z-index: 2;
+    }
+    .avatar-clickable:hover .avatar-overlay { opacity: 1; }
+    .avatar-uploading {
+      position: absolute;
+      inset: -3px;
+      border-radius: 50%;
+      border: 3px solid transparent;
+      border-top-color: #66d0ff;
+      border-right-color: #66d0ff;
+      animation: spin 0.8s linear infinite;
+      z-index: 3;
+    }
 
     /* ---------- 公告栏 ---------- */
     .announcement-section {
@@ -136,6 +517,11 @@
       box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.6);
       margin-bottom: 2rem;
       grid-column: 1 / -1;
+      transition: opacity 0.5s ease, max-height 0.5s ease,
+                  padding 0.5s ease, margin 0.5s ease,
+                  transform 0.5s ease, background 0.5s ease;
+      max-height: 500px;
+      opacity: 1;
     }
     .announcement-header {
       display: flex;
@@ -185,9 +571,7 @@
       text-decoration: none;
       border-bottom: 1px dashed rgba(102, 208, 255, 0.3);
     }
-    .announcement-content a:hover {
-      border-bottom-color: #66d0ff;
-    }
+    .announcement-content a:hover { border-bottom-color: #66d0ff; }
     .announcement-content code {
       background: rgba(255, 255, 255, 0.06);
       padding: 0.1rem 0.5rem;
@@ -197,22 +581,12 @@
       color: #b0cae5;
     }
     .announcement-content ul,
-    .announcement-content ol {
-      padding-left: 1.5rem;
-      margin: 0.3rem 0;
-    }
+    .announcement-content ol { padding-left: 1.5rem; margin: 0.3rem 0; }
     .announcement-content h1,
     .announcement-content h2,
-    .announcement-content h3 {
-      color: #e6f0ff;
-      margin: 0.5rem 0 0.2rem 0;
-    }
-    .announcement-content strong {
-      color: #e6f0ff;
-    }
-    .announcement-content em {
-      color: #9bb5d8;
-    }
+    .announcement-content h3 { color: #e6f0ff; margin: 0.5rem 0 0.2rem 0; }
+    .announcement-content strong { color: #e6f0ff; }
+    .announcement-content em { color: #9bb5d8; }
     .announcement-content blockquote {
       border-left: 3px solid #2a7fff;
       padding-left: 1rem;
@@ -244,11 +618,10 @@
       display: grid;
       grid-template-columns: 1fr 340px;
       gap: 2rem;
+      transition: all 0.5s ease;
     }
     @media (max-width: 780px) {
-      .dashboard {
-        grid-template-columns: 1fr;
-      }
+      .dashboard { grid-template-columns: 1fr; }
     }
 
     /* ---------- 游戏列表 ---------- */
@@ -259,6 +632,7 @@
       padding: 1.8rem 1.8rem;
       border: 1px solid rgba(255, 255, 255, 0.05);
       box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.6);
+      transition: background 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;
     }
     .list-header {
       display: flex;
@@ -273,6 +647,7 @@
       font-size: 1.5rem;
       color: #e6f0ff;
       letter-spacing: -0.3px;
+      transition: color 0.5s ease;
     }
     .list-header-right {
       display: flex;
@@ -300,29 +675,70 @@
       box-shadow: 0 12px 28px rgba(42, 127, 255, 0.35);
     }
 
+    /* 批量操作栏 */
+    .batch-bar {
+      display: none;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 0.8rem 1.2rem;
+      background: rgba(42, 127, 255, 0.1);
+      border: 1px solid rgba(42, 127, 255, 0.25);
+      border-radius: 16px;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+    .batch-bar.show { display: flex; }
+    .batch-bar .batch-info {
+      color: #66d0ff;
+      font-size: 0.9rem;
+      font-weight: 600;
+      flex: 1;
+      min-width: 150px;
+    }
+    .batch-bar button {
+      padding: 0.4rem 1.2rem;
+      border-radius: 40px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: 0.2s;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.04);
+      color: #c8dcf5;
+    }
+    .batch-bar button:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+    .batch-bar .batch-delete-btn {
+      background: rgba(255, 50, 50, 0.15);
+      border-color: rgba(255, 50, 50, 0.25);
+      color: #ff6b6b;
+    }
+    .batch-bar .batch-delete-btn:hover {
+      background: rgba(255, 50, 50, 0.25);
+      border-color: rgba(255, 50, 50, 0.4);
+    }
+
     .game-item {
       border-bottom: 1px solid rgba(255, 255, 255, 0.04);
       padding: 1.4rem 1rem;
-      transition: all 0.2s ease;
+      transition: background 0.4s ease, border-color 0.4s ease;
       cursor: pointer;
       border-radius: 12px;
       margin-bottom: 2px;
       position: relative;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.8rem;
     }
-    .game-item:last-child {
-      border-bottom: none;
-    }
-    .game-item:hover {
-      background: rgba(255, 255, 255, 0.03);
-    }
+    .game-item:last-child { border-bottom: none; }
+    .game-item:hover { background: rgba(255, 255, 255, 0.03); }
     .game-item.selected {
       background: rgba(42, 127, 255, 0.12);
       border: 1px solid rgba(42, 127, 255, 0.25);
       box-shadow: 0 0 20px rgba(42, 127, 255, 0.08);
     }
-    .game-item.selected .game-title {
-      color: #66d0ff;
-    }
+    .game-item.selected .game-title { color: #66d0ff; }
     .game-item .select-indicator {
       position: absolute;
       right: 12px;
@@ -333,14 +749,51 @@
       opacity: 0;
       transition: opacity 0.2s ease;
     }
-    .game-item.selected .select-indicator {
-      opacity: 1;
+    .game-item.selected .select-indicator { opacity: 1; }
+
+    /* 复选框 */
+    .game-checkbox {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      border-radius: 6px;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.04);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      margin-top: 0.2rem;
+      position: relative;
     }
+    .game-checkbox:hover {
+      border-color: rgba(102, 208, 255, 0.5);
+      background: rgba(102, 208, 255, 0.08);
+    }
+    .game-checkbox.checked {
+      background: linear-gradient(135deg, #2a7fff, #1a5fcf);
+      border-color: #2a7fff;
+      box-shadow: 0 0 12px rgba(42, 127, 255, 0.4);
+    }
+    .game-checkbox.checked::after {
+      content: '✓';
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+    .game-content {
+      flex: 1;
+      min-width: 0;
+    }
+
     .game-title {
       font-weight: 650;
       font-size: 1.25rem;
       color: #e6f0ff;
       letter-spacing: -0.2px;
+      transition: color 0.4s ease;
     }
     .game-desc {
       color: #9bb5d8;
@@ -348,6 +801,7 @@
       margin-top: 0.2rem;
       word-break: break-word;
       line-height: 1.5;
+      transition: color 0.4s ease;
     }
     .game-meta {
       display: flex;
@@ -358,14 +812,19 @@
       color: #7f9bc0;
       flex-wrap: wrap;
       gap: 0.5rem;
+      transition: color 0.4s ease;
     }
     .game-meta .uploader {
       color: #9bb5d8;
       font-size: 0.8rem;
       background: rgba(255, 255, 255, 0.04);
-      padding: 0.1rem 0.8rem;
+      padding: 0.15rem 0.9rem 0.15rem 0.2rem;
       border-radius: 40px;
       border: 1px solid rgba(255, 255, 255, 0.04);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: background 0.4s ease, color 0.4s ease, border-color 0.4s ease;
     }
     .game-meta .uploader .admin-tag {
       color: #f5a623;
@@ -378,6 +837,7 @@
       border-radius: 40px;
       font-size: 0.8rem;
       border: 1px solid rgba(255, 255, 255, 0.04);
+      transition: background 0.4s ease, color 0.4s ease, border-color 0.4s ease;
     }
     .game-actions {
       display: flex;
@@ -411,7 +871,6 @@
       pointer-events: none;
     }
 
-    /* 删除按钮 - 仅管理员可见 */
     .delete-btn {
       background: rgba(255, 50, 50, 0.08);
       border: 1px solid rgba(255, 50, 50, 0.15);
@@ -448,6 +907,7 @@
       flex-wrap: wrap;
       border-top: 1px solid rgba(255, 255, 255, 0.04);
       margin-top: 0.8rem;
+      transition: border-color 0.5s ease;
     }
     .pagination button {
       background: rgba(255, 255, 255, 0.04);
@@ -493,6 +953,7 @@
       display: flex;
       flex-direction: column;
       gap: 2rem;
+      transition: background 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;
     }
 
     /* ---------- 排行榜 ---------- */
@@ -504,6 +965,11 @@
       border: 1px solid rgba(255, 255, 255, 0.05);
       box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.6);
       margin-bottom: 2rem;
+      transition: opacity 0.5s ease, max-height 0.5s ease,
+                  padding 0.5s ease, margin 0.5s ease,
+                  transform 0.5s ease, background 0.5s ease;
+      max-height: 500px;
+      opacity: 1;
     }
     .rank-header {
       display: flex;
@@ -554,9 +1020,7 @@
       transition: 0.2s;
       cursor: default;
     }
-    .rank-item:hover {
-      background: rgba(255, 255, 255, 0.06);
-    }
+    .rank-item:hover { background: rgba(255, 255, 255, 0.06); }
     .rank-item.current-user {
       border-color: rgba(42, 127, 255, 0.3);
       background: rgba(42, 127, 255, 0.08);
@@ -568,21 +1032,9 @@
       color: #7f9bc0;
       text-align: center;
     }
-    .rank-number.gold {
-      color: #ffd700;
-    }
-    .rank-number.silver {
-      color: #c0c0c0;
-    }
-    .rank-number.bronze {
-      color: #cd7f32;
-    }
-    .rank-avatar {
-      font-size: 1.4rem;
-      line-height: 1;
-      width: 32px;
-      text-align: center;
-    }
+    .rank-number.gold { color: #ffd700; }
+    .rank-number.silver { color: #c0c0c0; }
+    .rank-number.bronze { color: #cd7f32; }
     .rank-info {
       flex: 1;
       display: flex;
@@ -613,6 +1065,15 @@
       border-radius: 40px;
       font-weight: 600;
       border: 1px solid rgba(42, 127, 255, 0.2);
+    }
+    .rank-name .luogu-tag {
+      background: rgba(0, 200, 100, 0.12);
+      color: #66e8a0;
+      font-size: 0.55rem;
+      padding: 0.05rem 0.5rem;
+      border-radius: 40px;
+      font-weight: 600;
+      border: 1px solid rgba(0, 200, 100, 0.2);
     }
     .rank-stats {
       display: flex;
@@ -672,6 +1133,7 @@
       font-weight: 700;
       color: #e6f0ff;
       letter-spacing: -0.3px;
+      transition: color 0.5s ease;
     }
     .honor-title {
       background: rgba(255, 215, 100, 0.12);
@@ -681,6 +1143,7 @@
       border-radius: 40px;
       font-weight: 600;
       border: 1px solid rgba(255, 215, 100, 0.15);
+      transition: all 0.5s ease;
     }
     .level-badge {
       background: linear-gradient(135deg, #2a7fff, #1a5fcf);
@@ -699,6 +1162,7 @@
       width: 100%;
       overflow: hidden;
       border: 1px solid rgba(255, 255, 255, 0.04);
+      transition: background 0.5s ease, border-color 0.5s ease;
     }
     .exp-fill {
       height: 100%;
@@ -712,10 +1176,9 @@
       color: #7f9bc0;
       margin-top: 0.2rem;
       font-weight: 450;
+      transition: color 0.5s ease;
     }
-    .game-count-wrap {
-      margin-top: 0.5rem;
-    }
+    .game-count-wrap { margin-top: 0.5rem; }
     .game-count-badge {
       background: rgba(255, 255, 255, 0.04);
       padding: 0.3rem 1.2rem;
@@ -728,9 +1191,7 @@
       cursor: default;
       border: 1px solid rgba(255, 255, 255, 0.06);
     }
-    .game-count-badge:hover {
-      background: rgba(255, 255, 255, 0.08);
-    }
+    .game-count-badge:hover { background: rgba(255, 255, 255, 0.08); }
     .hover-game-list {
       background: rgba(10, 20, 35, 0.7);
       backdrop-filter: blur(8px);
@@ -741,30 +1202,30 @@
       overflow-y: auto;
       display: none;
       border: 1px solid rgba(255, 255, 255, 0.06);
+      transition: background 0.5s ease, border-color 0.5s ease;
     }
-    .hover-game-list.show {
-      display: block;
-    }
+    .hover-game-list.show { display: block; }
     .hover-game-list li {
       list-style: none;
       padding: 0.25rem 0;
       font-size: 0.9rem;
       color: #b0cae5;
       border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      transition: color 0.5s ease, border-color 0.5s ease;
     }
-    .hover-game-list li:last-child {
-      border-bottom: none;
-    }
+    .hover-game-list li:last-child { border-bottom: none; }
     .weekly-area {
       border-top: 1px solid rgba(255, 255, 255, 0.06);
       padding-top: 1.8rem;
       margin-top: 0.2rem;
+      transition: border-color 0.5s ease;
     }
     .weekly-title {
       font-weight: 600;
       color: #e6f0ff;
       margin-bottom: 0.8rem;
       font-size: 1rem;
+      transition: color 0.5s ease;
     }
     .weekly-submit-btn {
       background: linear-gradient(135deg, #2a7fff, #1a5fcf);
@@ -788,6 +1249,17 @@
       transform: translateY(-2px);
       box-shadow: 0 10px 24px rgba(42, 127, 255, 0.3);
     }
+    .weekly-hint {
+      font-size: 0.75rem;
+      color: #7f9bc0;
+      margin-bottom: 0.8rem;
+      line-height: 1.5;
+      background: rgba(102, 208, 255, 0.04);
+      padding: 0.5rem 0.8rem;
+      border-radius: 10px;
+      border: 1px solid rgba(102, 208, 255, 0.1);
+      transition: all 0.5s ease;
+    }
     .submitted-list {
       background: rgba(255, 255, 255, 0.02);
       border-radius: 20px;
@@ -797,19 +1269,22 @@
       max-height: 120px;
       overflow-y: auto;
       border: 1px solid rgba(255, 255, 255, 0.04);
+      transition: background 0.5s ease, border-color 0.5s ease;
     }
     .submitted-list div {
       padding: 0.25rem 0;
       border-bottom: 1px dashed rgba(255, 255, 255, 0.04);
+      transition: border-color 0.5s ease;
     }
-    .submitted-list div:last-child {
-      border-bottom: none;
-    }
+    .submitted-list div:last-child { border-bottom: none; }
 
-    /* ---------- 弹窗 ---------- */
+    /* ---------- 弹窗通用 ---------- */
     .auth-overlay,
     .upload-overlay,
-    .delete-overlay {
+    .delete-overlay,
+    .avatar-overlay-modal,
+    .profile-overlay,
+    .batch-delete-overlay {
       display: none;
       position: fixed;
       top: 0;
@@ -821,27 +1296,42 @@
       justify-content: center;
       align-items: center;
       z-index: 1000;
+      overflow-y: auto;
+      padding: 2rem 1rem;
     }
     .auth-overlay.open,
     .upload-overlay.open,
-    .delete-overlay.open {
-      display: flex;
-    }
+    .delete-overlay.open,
+    .avatar-overlay-modal.open,
+    .profile-overlay.open,
+    .batch-delete-overlay.open { display: flex; }
+
     .auth-card,
     .upload-card,
-    .delete-card {
-      background: rgba(16, 28, 48, 0.85);
+    .delete-card,
+    .avatar-card,
+    .profile-card,
+    .batch-delete-card {
+      background: rgba(16, 28, 48, 0.9);
       backdrop-filter: blur(16px);
       padding: 2.4rem;
       border-radius: 32px;
       max-width: 420px;
-      width: 90%;
+      width: 100%;
       box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6);
       border: 1px solid rgba(255, 255, 255, 0.06);
+      color: #e6f0ff;
+      margin: auto;
     }
+    .profile-card { max-width: 520px; }
+    .batch-delete-card { max-width: 500px; }
+
     .auth-card h3,
     .upload-card h3,
-    .delete-card h3 {
+    .delete-card h3,
+    .avatar-card h3,
+    .profile-card h3,
+    .batch-delete-card h3 {
       margin-bottom: 1.8rem;
       font-weight: 700;
       text-align: center;
@@ -849,6 +1339,32 @@
       color: #e6f0ff;
       letter-spacing: -0.3px;
     }
+
+    .batch-game-list {
+      max-height: 240px;
+      overflow-y: auto;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 16px;
+      padding: 0.8rem 1rem;
+      margin: 1rem 0;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .batch-game-list li {
+      list-style: none;
+      padding: 0.4rem 0;
+      font-size: 0.9rem;
+      color: #c8dcf5;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .batch-game-list li:last-child { border-bottom: none; }
+    .batch-game-list li .bullet {
+      color: #ff6b6b;
+      flex-shrink: 0;
+    }
+
     .auth-input {
       width: 100%;
       padding: 0.9rem 1.2rem;
@@ -860,9 +1376,7 @@
       color: #e6f0ff;
       transition: 0.2s;
     }
-    .auth-input::placeholder {
-      color: #5a7a9f;
-    }
+    .auth-input::placeholder { color: #5a7a9f; }
     .auth-input:focus {
       outline: none;
       border-color: #2a7fff;
@@ -909,10 +1423,7 @@
       transform: scale(1.02);
       box-shadow: 0 10px 28px rgba(42, 127, 255, 0.3);
     }
-    .auth-btn:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-    }
+    .auth-btn:disabled { opacity: 0.4; cursor: not-allowed; }
     .upload-card .file-name {
       background: rgba(255, 255, 255, 0.04);
       padding: 0.6rem 1.2rem;
@@ -934,22 +1445,26 @@
       color: #e6f0ff;
       transition: 0.2s;
     }
-    .upload-card textarea::placeholder {
-      color: #5a7a9f;
-    }
+    .upload-card textarea::placeholder { color: #5a7a9f; }
     .upload-card textarea:focus {
       outline: none;
       border-color: #2a7fff;
       background: rgba(255, 255, 255, 0.06);
     }
     .upload-card .actions,
-    .delete-card .actions {
+    .delete-card .actions,
+    .avatar-card .actions,
+    .profile-card .actions,
+    .batch-delete-card .actions {
       display: flex;
       gap: 0.8rem;
       justify-content: flex-end;
     }
     .upload-card .actions button,
-    .delete-card .actions button {
+    .delete-card .actions button,
+    .avatar-card .actions button,
+    .profile-card .actions button,
+    .batch-delete-card .actions button {
       padding: 0.5rem 1.8rem;
       border-radius: 60px;
       border: 1px solid rgba(255, 255, 255, 0.06);
@@ -973,9 +1488,7 @@
       background: rgba(255, 255, 255, 0.04) !important;
       border: 1px solid rgba(255, 255, 255, 0.06) !important;
     }
-    .btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.08) !important;
-    }
+    .btn-secondary:hover { background: rgba(255, 255, 255, 0.08) !important; }
     .btn-danger {
       background: rgba(255, 50, 50, 0.15) !important;
       border: 1px solid rgba(255, 50, 50, 0.2) !important;
@@ -1015,15 +1528,13 @@
       border-radius: 60px;
       font-size: 0.95rem;
       opacity: 0;
-      transition: opacity 0.3s ease;
+      transition: opacity 0.3s ease, background 0.5s ease, color 0.5s ease;
       pointer-events: none;
       z-index: 999;
       border: 1px solid rgba(255, 255, 255, 0.06);
       box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
     }
-    .toast-message.show {
-      opacity: 1;
-    }
+    .toast-message.show { opacity: 1; }
     .empty-state {
       color: #7f9bc0;
       padding: 1.5rem 0;
@@ -1042,12 +1553,8 @@
       vertical-align: middle;
     }
     @keyframes spin {
-      0% {
-        transform: rotate(0deg);
-      }
-      100% {
-        transform: rotate(360deg);
-      }
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
     .btn-primary:disabled {
       opacity: 0.4;
@@ -1062,20 +1569,189 @@
       border: 1px solid rgba(42, 127, 255, 0.15);
     }
 
+    /* ---------- 头像弹窗 ---------- */
+    .avatar-preview-wrap {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+    .avatar-drop-zone {
+      border: 2px dashed rgba(102, 208, 255, 0.3);
+      border-radius: 24px;
+      padding: 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: rgba(102, 208, 255, 0.03);
+      width: 100%;
+    }
+    .avatar-drop-zone:hover,
+    .avatar-drop-zone.dragover {
+      border-color: rgba(102, 208, 255, 0.7);
+      background: rgba(102, 208, 255, 0.08);
+    }
+    .avatar-drop-zone .hint {
+      color: #7f9bc0;
+      font-size: 0.85rem;
+      margin-top: 0.6rem;
+    }
+    .avatar-hint-text {
+      text-align: center;
+      color: #7f9bc0;
+      font-size: 0.78rem;
+      margin-top: 0.6rem;
+      line-height: 1.6;
+    }
+
+    /* ---------- 个人空间弹窗 ---------- */
+    .profile-section {
+      margin-bottom: 1.5rem;
+      padding: 1.2rem;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .profile-section h4 {
+      font-size: 0.9rem;
+      color: #7f9bc0;
+      margin-bottom: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .profile-info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.4rem 0;
+      font-size: 0.9rem;
+      color: #c8dcf5;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .profile-info-row .label { color: #7f9bc0; }
+    .profile-info-row .value { color: #e6f0ff; font-weight: 600; }
+    .luogu-status {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+    .luogu-status .verified-badge {
+      background: rgba(0, 200, 100, 0.15);
+      color: #66e8a0;
+      padding: 0.25rem 0.9rem;
+      border-radius: 40px;
+      font-size: 0.78rem;
+      border: 1px solid rgba(0, 200, 100, 0.25);
+      font-weight: 600;
+    }
+    .luogu-status .unverified-badge {
+      background: rgba(255, 215, 100, 0.12);
+      color: #f5d78a;
+      padding: 0.25rem 0.9rem;
+      border-radius: 40px;
+      font-size: 0.78rem;
+      border: 1px solid rgba(255, 215, 100, 0.2);
+      font-weight: 600;
+    }
+    .luogu-status .luogu-name {
+      color: #e6f0ff;
+      font-weight: 700;
+      font-size: 1rem;
+    }
+    .luogu-input {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      color: #e6f0ff;
+      font-size: 0.9rem;
+      margin-bottom: 0.8rem;
+      outline: none;
+      transition: 0.2s;
+      font-family: 'Fira Code', monospace;
+    }
+    .luogu-input:focus {
+      border-color: #2a7fff;
+      box-shadow: 0 0 0 3px rgba(42, 127, 255, 0.15);
+      background: rgba(255, 255, 255, 0.06);
+    }
+    .luogu-input::placeholder { color: #5a7a9f; font-family: 'Inter', sans-serif; }
+    .privacy-note {
+      font-size: 0.78rem;
+      color: #66d0ff;
+      background: rgba(102, 208, 255, 0.06);
+      padding: 0.7rem 1rem;
+      border-radius: 12px;
+      border: 1px solid rgba(102, 208, 255, 0.15);
+      line-height: 1.6;
+      margin-bottom: 1rem;
+      display: flex;
+      gap: 0.5rem;
+      align-items: flex-start;
+    }
+    .privacy-note .lock-icon {
+      flex-shrink: 0;
+      font-size: 1rem;
+      line-height: 1.4;
+    }
+    .verify-btn {
+      width: 100%;
+      padding: 0.85rem;
+      background: linear-gradient(135deg, #2a7fff, #1a5fcf);
+      border: none;
+      border-radius: 12px;
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: 0.25s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    .verify-btn:hover:not(:disabled) {
+      transform: scale(1.02);
+      box-shadow: 0 8px 24px rgba(42, 127, 255, 0.3);
+    }
+    .verify-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .profile-close-btn {
+      width: 100%;
+      padding: 0.7rem;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      color: #c8dcf5;
+      font-weight: 500;
+      cursor: pointer;
+      margin-top: 0.8rem;
+      transition: 0.2s;
+      font-size: 0.9rem;
+    }
+    .profile-close-btn:hover { background: rgba(255, 255, 255, 0.08); }
+    .help-text {
+      font-size: 0.75rem;
+      color: #7f9bc0;
+      margin-top: 0.6rem;
+      line-height: 1.6;
+    }
+    .help-text a {
+      color: #66d0ff;
+      text-decoration: none;
+    }
+    .help-text a:hover { text-decoration: underline; }
+
     /* 滚动条美化 */
-    ::-webkit-scrollbar {
-      width: 4px;
-    }
-    ::-webkit-scrollbar-track {
-      background: transparent;
-    }
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb {
       background: rgba(42, 127, 255, 0.3);
       border-radius: 10px;
     }
-    ::-webkit-scrollbar-thumb:hover {
-      background: rgba(42, 127, 255, 0.5);
-    }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(42, 127, 255, 0.5); }
 
     /* 下载进度条 */
     .download-progress {
@@ -1097,9 +1773,7 @@
       gap: 1rem;
       min-width: 200px;
     }
-    .download-progress.show {
-      display: flex;
-    }
+    .download-progress.show { display: flex; }
     .download-progress .progress-bar {
       flex: 1;
       height: 4px;
@@ -1121,13 +1795,24 @@
       min-width: 50px;
       text-align: right;
     }
+
+    @media (max-width: 480px) {
+      .profile-card, .batch-delete-card { padding: 1.8rem 1.3rem; }
+      .auth-card, .upload-card, .delete-card, .avatar-card { padding: 1.8rem 1.3rem; }
+      .academic-toggle-btn {
+        bottom: 1.2rem;
+        right: 1.2rem;
+        padding: 0.6rem 1.2rem;
+        font-size: 0.8rem;
+      }
+    }
   </style>
 </head>
 <body>
   <div class="app">
     <header class="header">
-      <h1>⚡ <span>C++小游戏大全</span></h1>
-      <h3>luogu.com.cn/team/121453</h3>
+      <h1>⚡ <span id="siteTitle">C++小游戏大全</span></h1>
+      <h3 id="siteSubtitle">luogu.com.cn/team/121453</h3>
       <div class="auth-area" id="authArea"></div>
     </header>
 
@@ -1156,12 +1841,21 @@
     <div class="dashboard">
       <section class="game-list-section">
         <div class="list-header">
-          <h2>📂 游戏库</h2>
+          <h2 id="libraryTitle">📂 游戏库</h2>
           <div class="list-header-right">
             <span id="selectedHint" class="selected-hint" style="display:none;">✅ 已选中</span>
             <button class="upload-trigger-btn" id="openUploadBtn">＋ 上传游戏</button>
           </div>
         </div>
+
+        <!-- 批量操作栏 -->
+        <div class="batch-bar" id="batchBar">
+          <span class="batch-info" id="batchInfo">已选中 0 个游戏</span>
+          <button id="batchSelectAllBtn">全选本页</button>
+          <button id="batchClearBtn">取消选择</button>
+          <button class="batch-delete-btn" id="batchDeleteBtn">🗑️ 批量删除</button>
+        </div>
+
         <div id="gameListContainer"></div>
         <div class="pagination" id="paginationContainer">
           <button id="prevPageBtn" disabled>‹ 上一页</button>
@@ -1172,6 +1866,12 @@
       <aside class="user-panel" id="userPanel"></aside>
     </div>
   </div>
+
+  <!-- 学术伪装模式切换按钮 -->
+  <button class="academic-toggle-btn" id="academicToggleBtn" title="切换学术伪装模式">
+    <span class="icon" id="academicIcon">📚</span>
+    <span id="academicText">学术模式</span>
+  </button>
 
   <!-- 登录/注册 弹窗 -->
   <div class="auth-overlay" id="authOverlay">
@@ -1214,6 +1914,102 @@
     </div>
   </div>
 
+  <!-- 批量删除确认弹窗 -->
+  <div class="batch-delete-overlay" id="batchDeleteOverlay">
+    <div class="batch-delete-card">
+      <h3>🗑️ 批量删除确认</h3>
+      <p style="color:#c8dcf5;margin-bottom:0.8rem;text-align:center;">
+        确定要删除以下 <span id="batchDeleteCount" style="color:#ff6b6b;font-weight:700;">0</span> 个游戏吗？此操作不可恢复！
+      </p>
+      <ul class="batch-game-list" id="batchDeleteList"></ul>
+      <div class="actions">
+        <button class="btn-secondary" id="cancelBatchDeleteBtn">取消</button>
+        <button class="btn-danger" id="confirmBatchDeleteBtn">确认删除</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 头像上传弹窗 -->
+  <div class="avatar-overlay-modal" id="avatarModal">
+    <div class="avatar-card">
+      <h3>🖼️ 修改头像</h3>
+      <div class="avatar-preview-wrap">
+        <div class="avatar avatar-lg avatar-clickable" id="avatarPreviewInModal">
+          <img id="avatarPreviewImg" src="" alt="" style="display:none;">
+          <span id="avatarPreviewChar">?</span>
+          <div class="avatar-overlay" id="avatarPreviewOverlay">🖼️</div>
+        </div>
+      </div>
+      <div class="avatar-drop-zone" id="avatarDropZone">
+        <div style="color:#66d0ff;font-size:0.95rem;font-weight:600;">点击选择图片</div>
+        <div class="hint">支持 JPG / PNG / GIF / WebP，最大 5MB</div>
+      </div>
+      <input type="file" id="avatarFileInput" accept="image/*" style="display:none">
+      <div class="avatar-hint-text">
+        选择图片后将立即上传，替换您当前的头像
+      </div>
+      <div class="actions" style="margin-top:1.2rem;">
+        <button class="btn-secondary" id="avatarRemoveBtn" style="margin-right:auto;">移除头像</button>
+        <button class="btn-secondary" id="avatarCancelBtn">关闭</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 个人空间弹窗 -->
+  <div class="profile-overlay" id="profileOverlay">
+    <div class="profile-card">
+      <h3>👤 个人空间</h3>
+
+      <div class="profile-section">
+        <h4>基本信息</h4>
+        <div class="profile-info-row">
+          <span class="label">用户名</span>
+          <span class="value" id="profileUsername">-</span>
+        </div>
+        <div class="profile-info-row">
+          <span class="label">等级</span>
+          <span class="value" id="profileLevel">-</span>
+        </div>
+        <div class="profile-info-row">
+          <span class="label">经验</span>
+          <span class="value" id="profileExp">-</span>
+        </div>
+        <div class="profile-info-row">
+          <span class="label">身份</span>
+          <span class="value" id="profileHonor">-</span>
+        </div>
+      </div>
+
+      <div class="profile-section">
+        <h4>洛谷认证</h4>
+        <div class="luogu-status" id="luoguStatus">
+          <span class="unverified-badge">未认证</span>
+        </div>
+
+        <div id="luoguVerifyForm">
+          <div class="privacy-note">
+            <span class="lock-icon">🔒</span>
+            <span>放心，我们不会 JC 你，所有输入的 cookie 都会在认证成功后销毁</span>
+          </div>
+          <input type="text" class="luogu-input" id="luoguUid" placeholder="洛谷 _uid (例如: 646208)" autocomplete="off">
+          <input type="text" class="luogu-input" id="luoguClientId" placeholder="洛谷 __client_id" autocomplete="off">
+          <button class="verify-btn" id="verifyLuoguBtn">
+            <span id="verifyBtnText">验证洛谷账号</span>
+          </button>
+          <div class="help-text">
+            💡 如何获取 cookie？登录洛谷后，按 F12 打开开发者工具 → Application → Cookies → 找到 <code>_uid</code> 和 <code>__client_id</code>
+          </div>
+        </div>
+
+        <div id="luoguVerifiedActions" style="display:none;">
+          <button class="btn-secondary" id="unverifyLuoguBtn" style="width:100%;margin-top:0.5rem;padding:0.6rem;border-radius:12px;">取消洛谷认证</button>
+        </div>
+      </div>
+
+      <button class="profile-close-btn" id="closeProfileBtn">关闭</button>
+    </div>
+  </div>
+
   <!-- 下载进度条 -->
   <div class="download-progress" id="downloadProgress">
     <span>⬇️ 下载中</span>
@@ -1227,20 +2023,78 @@
 
   <script>
     (function() {
+      // ============ Supabase 配置 ============
       const SUPABASE_URL = 'https://rihfowjielhukozkrzoq.supabase.co/';
       const SUPABASE_ANON_KEY =
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJpaGZvd2ppZWxodWtvemtyem9xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMzODY5MjksImV4cCI6MjA5ODk2MjkyOX0.xGximEvs6ZORcXjjWcJftu-fRvQkkpIZI0tWzixnYD0';
+
+      const IMAGE_SUPABASE_URL = 'https://secjxmrribmllhhxpgjw.supabase.co';
+      const IMAGE_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNlY2p4bXJyaWJtbGxoaHhwZ2p3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEzNjEwODYsImV4cCI6MjEwNjkzNzA4Nn0.f25E2_XU3wvWNfKGMF4pt8MSPkfY370DDeJ1Jnwb2eI';
+      const STORAGE_BUCKET = 'ap-images';
+
+      const LUOGU_PROXY_URL = 'https://rihfowjielhukozkrzoq.supabase.co/functions/v1/luogu-verify';
+
       const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      const imageSupabase = window.supabase.createClient(IMAGE_SUPABASE_URL, IMAGE_SUPABASE_ANON_KEY);
 
       // ============ 管理员配置 ============
       const ADMIN_USERNAME = 'Daniel_Chou_hn';
+      const LUOGU_ADMINS = ['Daniel_Chou_hn', 'DQ_123', 'Vector_Gun', 'yyz_sc03'];
+      const MAX_AVATAR_SIZE = 5 * 1024 * 1024;
+
+      // ============ 学术伪装模板名称池 ============
+      const ACADEMIC_TEMPLATES = [
+        'DP模板',
+        'LCA模板',
+        '倍增模板',
+        'BFS模板',
+        'DFS模板',
+        'Dijkstra模板',
+        'SPFA模板',
+        '线段树模板',
+        '树状数组模板',
+        '并查集模板',
+        'KMP模板',
+        'AC自动机模板',
+        '快速幂模板',
+        '矩阵快速幂模板',
+        '01背包模板',
+        '完全背包模板',
+        '多重背包模板',
+        '二分查找模板',
+        '三分查找模板',
+        '拓扑排序模板',
+        'Kruskal模板',
+        'Prim模板',
+        'Tarjan模板',
+        '匈牙利算法模板',
+        '网络流模板',
+        '费用流模板',
+        'Manacher模板',
+        '后缀数组模板',
+        '主席树模板',
+        'Treap模板',
+        'Splay模板',
+        '莫队算法模板',
+        '分块模板',
+        '高斯消元模板',
+        '扩展欧几里得模板',
+        '中国剩余定理模板',
+        '欧拉函数模板',
+        'Miller-Rabin模板',
+        'Pollard-Rho模板',
+        'FFT模板',
+        'NTT模板'
+      ];
 
       let currentUser = null;
       let games = [];
       let userGames = [];
       let weeklySubmissions = [];
       let selectedGameId = null;
+      let selectedForBatch = new Set();
       let uploaderNames = {};
+      let uploaderAvatars = {};
       let rankData = [];
 
       const PAGE_SIZE = 8;
@@ -1251,6 +2105,10 @@
       let isUploading = false;
       let isAuthLoginMode = true;
       let deleteTargetId = null;
+      let isUploadingAvatar = false;
+      let isVerifyingLuogu = false;
+      let isBatchDeleting = false;
+      let isAcademicMode = false;
 
       // DOM 引用
       const gameListContainer = document.getElementById('gameListContainer');
@@ -1258,6 +2116,25 @@
       const authArea = document.getElementById('authArea');
       const selectedHint = document.getElementById('selectedHint');
       const rankList = document.getElementById('rankList');
+
+      const siteTitle = document.getElementById('siteTitle');
+      const siteSubtitle = document.getElementById('siteSubtitle');
+      const libraryTitle = document.getElementById('libraryTitle');
+      const academicToggleBtn = document.getElementById('academicToggleBtn');
+      const academicIcon = document.getElementById('academicIcon');
+      const academicText = document.getElementById('academicText');
+
+      const batchBar = document.getElementById('batchBar');
+      const batchInfo = document.getElementById('batchInfo');
+      const batchSelectAllBtn = document.getElementById('batchSelectAllBtn');
+      const batchClearBtn = document.getElementById('batchClearBtn');
+      const batchDeleteBtn = document.getElementById('batchDeleteBtn');
+
+      const batchDeleteOverlay = document.getElementById('batchDeleteOverlay');
+      const batchDeleteCount = document.getElementById('batchDeleteCount');
+      const batchDeleteList = document.getElementById('batchDeleteList');
+      const cancelBatchDeleteBtn = document.getElementById('cancelBatchDeleteBtn');
+      const confirmBatchDeleteBtn = document.getElementById('confirmBatchDeleteBtn');
 
       const authOverlay = document.getElementById('authOverlay');
       const authTitle = document.getElementById('authTitle');
@@ -1278,6 +2155,30 @@
       const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
       const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
 
+      const avatarModal = document.getElementById('avatarModal');
+      const avatarPreviewInModal = document.getElementById('avatarPreviewInModal');
+      const avatarPreviewImg = document.getElementById('avatarPreviewImg');
+      const avatarPreviewChar = document.getElementById('avatarPreviewChar');
+      const avatarDropZone = document.getElementById('avatarDropZone');
+      const avatarFileInput = document.getElementById('avatarFileInput');
+      const avatarRemoveBtn = document.getElementById('avatarRemoveBtn');
+      const avatarCancelBtn = document.getElementById('avatarCancelBtn');
+
+      const profileOverlay = document.getElementById('profileOverlay');
+      const profileUsername = document.getElementById('profileUsername');
+      const profileLevel = document.getElementById('profileLevel');
+      const profileExp = document.getElementById('profileExp');
+      const profileHonor = document.getElementById('profileHonor');
+      const luoguStatus = document.getElementById('luoguStatus');
+      const luoguVerifyForm = document.getElementById('luoguVerifyForm');
+      const luoguVerifiedActions = document.getElementById('luoguVerifiedActions');
+      const luoguUidInput = document.getElementById('luoguUid');
+      const luoguClientIdInput = document.getElementById('luoguClientId');
+      const verifyLuoguBtn = document.getElementById('verifyLuoguBtn');
+      const verifyBtnText = document.getElementById('verifyBtnText');
+      const unverifyLuoguBtn = document.getElementById('unverifyLuoguBtn');
+      const closeProfileBtn = document.getElementById('closeProfileBtn');
+
       const toastEl = document.getElementById('toast');
       const prevPageBtn = document.getElementById('prevPageBtn');
       const nextPageBtn = document.getElementById('nextPageBtn');
@@ -1287,7 +2188,6 @@
       const refreshAnnouncementBtn = document.getElementById('refreshAnnouncementBtn');
       const refreshRankBtn = document.getElementById('refreshRankBtn');
 
-      // 下载进度 DOM
       const downloadProgress = document.getElementById('downloadProgress');
       const progressFill = document.getElementById('progressFill');
       const progressText = document.getElementById('progressText');
@@ -1300,10 +2200,50 @@
         toastEl._timer = setTimeout(() => toastEl.classList.remove('show'), duration);
       }
 
+      function escapeHtml(str) {
+        if (!str) return '';
+        return String(str).replace(/[&<>"']/g, (m) => ({
+          '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+        })[m]);
+      }
+
+      function getInitial(name) {
+        if (!name) return '?';
+        return String(name).charAt(0).toUpperCase();
+      }
+
       function isAdmin() {
         if (!currentUser) return false;
         const username = currentUser.user_metadata?.username || '';
-        return username === ADMIN_USERNAME;
+        const luoguName = currentUser.user_metadata?.luogu_username || '';
+        if (username === ADMIN_USERNAME) return true;
+        if (luoguName && LUOGU_ADMINS.includes(luoguName)) return true;
+        return false;
+      }
+
+      function isUserAdmin(u) {
+        if (!u) return false;
+        if (u.username === ADMIN_USERNAME) return true;
+        if (u.luogu_username && LUOGU_ADMINS.includes(u.luogu_username)) return true;
+        return false;
+      }
+
+      function isOwnGame(game) {
+        if (!currentUser || !game) return false;
+        return game.uploader_id === currentUser.id;
+      }
+
+      function renderAvatar(user, size = 'sm', clickable = false, extraClass = '') {
+        const sizeClass = `avatar-${size}`;
+        const clickableClass = clickable ? 'avatar-clickable' : '';
+        const name = user?.username || '?';
+        const avatarUrl = user?.avatar_url;
+        const initial = getInitial(name);
+
+        if (avatarUrl) {
+          return `<span class="avatar ${sizeClass} ${clickableClass} ${extraClass}" title="${escapeHtml(name)}"><img src="${escapeHtml(avatarUrl)}" alt="${escapeHtml(name)}" onerror="this.style.display='none';this.parentElement.textContent='${escapeHtml(initial)}'"></span>`;
+        }
+        return `<span class="avatar ${sizeClass} ${clickableClass} ${extraClass}" title="${escapeHtml(name)}">${escapeHtml(initial)}</span>`;
       }
 
       function renderMarkdown(text) {
@@ -1325,6 +2265,35 @@
         html = html.replace(/\n/g, '<br>');
         return html;
       }
+
+      // ============ 学术伪装模式 ============
+      function toggleAcademicMode() {
+        isAcademicMode = !isAcademicMode;
+
+        if (isAcademicMode) {
+          document.body.classList.add('academic-mode');
+          academicIcon.textContent = '🌙';
+          academicText.textContent = '退出伪装';
+          siteTitle.textContent = 'C++模板大全';
+          siteSubtitle.textContent = 'ACM 算法竞赛模板库';
+          libraryTitle.textContent = '📂 C++模板';
+          document.title = 'C++模板大全 · ACM 算法竞赛模板库';
+        } else {
+          document.body.classList.remove('academic-mode');
+          academicIcon.textContent = '📚';
+          academicText.textContent = '学术模式';
+          siteTitle.textContent = 'C++小游戏大全';
+          siteSubtitle.textContent = 'luogu.com.cn/team/121453';
+          libraryTitle.textContent = '📂 游戏库';
+          document.title = 'C++小游戏大全 · 由Daniel_Chou_hn创立的C++小游戏社群';
+        }
+
+        // 重新渲染游戏列表（学术模式下显示模板名称）
+        renderGameList();
+        showToast(isAcademicMode ? '📚 已进入学术模式' : '🎮 已退出学术模式');
+      }
+
+      academicToggleBtn.addEventListener('click', toggleAcademicMode);
 
       // ============ 流式下载 ============
       async function downloadFileStream(url, fileName) {
@@ -1389,27 +2358,37 @@
         }
       }
 
-      // ============ 获取上传者用户名 ============
+      // ============ 获取上传者信息 ============
       async function fetchUploaderNames(gameList) {
-        const userIds = [...new Set(gameList.map(g => g.uploader_id).filter(id => id && !uploaderNames[id]))];
+        const userIds = [...new Set(gameList.map(g => g.uploader_id).filter(id => id && (!uploaderNames[id] || !uploaderAvatars[id])))];
         if (userIds.length === 0) return;
 
         try {
           const { data, error } = await supabase
             .from('profiles')
-            .select('id, username')
+            .select('id, username, avatar_url')
             .in('id', userIds);
 
           if (error) {
-            console.warn('获取上传者名称失败:', error);
+            console.warn('获取上传者信息失败:', error);
+            if (error.code === '42703') {
+              const { data: fallback } = await supabase
+                .from('profiles')
+                .select('id, username')
+                .in('id', userIds);
+              (fallback || []).forEach(p => {
+                uploaderNames[p.id] = p.username || '未知用户';
+              });
+            }
             return;
           }
 
           data.forEach(p => {
             uploaderNames[p.id] = p.username || '未知用户';
+            uploaderAvatars[p.id] = p.avatar_url || null;
           });
         } catch (err) {
-          console.warn('获取上传者名称异常:', err);
+          console.warn('获取上传者信息异常:', err);
         }
       }
 
@@ -1417,15 +2396,546 @@
         return uploaderNames[uploaderId] || '加载中...';
       }
 
-      // ============ 排行榜功能 ============
+      function getUploaderAvatar(uploaderId) {
+        return uploaderAvatars[uploaderId] || null;
+      }
+
+      // ============ 批量选择功能 ============
+      function updateBatchBar() {
+        const count = selectedForBatch.size;
+        batchInfo.textContent = `已选中 ${count} 个游戏`;
+        if (count > 0) {
+          batchBar.classList.add('show');
+        } else {
+          batchBar.classList.remove('show');
+        }
+      }
+
+      function toggleBatchSelection(gameId, checkboxEl) {
+        if (selectedForBatch.has(gameId)) {
+          selectedForBatch.delete(gameId);
+          checkboxEl.classList.remove('checked');
+        } else {
+          selectedForBatch.add(gameId);
+          checkboxEl.classList.add('checked');
+        }
+        updateBatchBar();
+      }
+
+      batchSelectAllBtn.addEventListener('click', () => {
+        const totalGames = games.length;
+        const start = (currentPage - 1) * PAGE_SIZE;
+        const end = Math.min(start + PAGE_SIZE, totalGames);
+        const pageGames = games.slice(start, end);
+
+        pageGames.forEach(g => selectedForBatch.add(g.id));
+
+        document.querySelectorAll('.game-checkbox').forEach(cb => cb.classList.add('checked'));
+        updateBatchBar();
+        showToast(`已选中本页 ${pageGames.length} 个游戏`);
+      });
+
+      batchClearBtn.addEventListener('click', () => {
+        selectedForBatch.clear();
+        document.querySelectorAll('.game-checkbox').forEach(cb => cb.classList.remove('checked'));
+        updateBatchBar();
+      });
+
+      batchDeleteBtn.addEventListener('click', () => {
+        if (!isAdmin()) { showToast('只有管理员可以批量删除'); return; }
+        if (selectedForBatch.size === 0) { showToast('请先选择要删除的游戏'); return; }
+
+        const gameIds = Array.from(selectedForBatch);
+        const gamesToDelete = games.filter(g => gameIds.includes(g.id));
+
+        batchDeleteCount.textContent = gamesToDelete.length;
+        batchDeleteList.innerHTML = gamesToDelete.map(g =>
+          `<li><span class="bullet">•</span> ${escapeHtml(g.title || '未命名')}</li>`
+        ).join('');
+
+        batchDeleteOverlay.classList.add('open');
+      });
+
+      cancelBatchDeleteBtn.addEventListener('click', () => {
+        batchDeleteOverlay.classList.remove('open');
+      });
+
+      batchDeleteOverlay.addEventListener('click', (e) => {
+        if (e.target === batchDeleteOverlay) batchDeleteOverlay.classList.remove('open');
+      });
+
+      confirmBatchDeleteBtn.addEventListener('click', async () => {
+        if (isBatchDeleting) return;
+        if (!isAdmin()) { showToast('只有管理员可以批量删除'); return; }
+
+        isBatchDeleting = true;
+        confirmBatchDeleteBtn.disabled = true;
+        confirmBatchDeleteBtn.textContent = '删除中...';
+
+        const gameIds = Array.from(selectedForBatch);
+        let successCount = 0;
+        let failCount = 0;
+
+        try {
+          for (const gameId of gameIds) {
+            const game = games.find(g => g.id === gameId);
+            if (!game) { failCount++; continue; }
+
+            let filePath = null;
+            if (game.file_url) {
+              try {
+                const url = new URL(game.file_url);
+                const pathParts = url.pathname.split('/').filter(Boolean);
+                const publicIndex = pathParts.indexOf('public');
+                if (publicIndex !== -1 && publicIndex + 2 <= pathParts.length) {
+                  const bucketName = pathParts[publicIndex + 1];
+                  filePath = pathParts.slice(publicIndex + 2).join('/');
+                  if (filePath.startsWith(bucketName + '/')) {
+                    filePath = filePath.substring(bucketName.length + 1);
+                  }
+                }
+              } catch (e) { console.warn('URL解析失败:', e); }
+            }
+
+            const { error: dbError } = await supabase.from('games').delete().eq('id', gameId);
+            if (dbError) {
+              console.warn(`删除游戏 ${gameId} 失败:`, dbError);
+              failCount++;
+              continue;
+            }
+
+            if (filePath) {
+              try {
+                await supabase.storage.from('games').remove([filePath]);
+              } catch (e) {
+                console.warn(`删除文件 ${filePath} 失败:`, e);
+              }
+            }
+            successCount++;
+          }
+
+          games = games.filter(g => !gameIds.includes(g.id));
+          selectedForBatch.clear();
+          uploaderNames = {};
+          uploaderAvatars = {};
+
+          if (failCount === 0) {
+            showToast(`✅ 成功删除 ${successCount} 个游戏`);
+          } else if (successCount === 0) {
+            showToast(`❌ 全部删除失败 (${failCount} 个)`);
+          } else {
+            showToast(`⚠️ 删除完成: 成功 ${successCount} 个，失败 ${failCount} 个`);
+          }
+
+          batchDeleteOverlay.classList.remove('open');
+          updateBatchBar();
+
+          await renderGameList();
+          await fetchRankData();
+          if (currentUser) await fetchUserGames();
+          if (selectedGameId && gameIds.includes(selectedGameId)) clearSelection();
+
+        } catch (err) {
+          console.error('批量删除失败:', err);
+          showToast('❌ 批量删除失败: ' + err.message);
+        } finally {
+          isBatchDeleting = false;
+          confirmBatchDeleteBtn.disabled = false;
+          confirmBatchDeleteBtn.textContent = '确认删除';
+        }
+      });
+
+      // ============ 头像上传功能 ============
+      function openAvatarModal() {
+        if (!currentUser) { showToast('请先登录'); return; }
+
+        const meta = currentUser.user_metadata || {};
+        const username = meta.username || '玩家';
+        const avatarUrl = meta.avatar_url;
+
+        if (avatarUrl) {
+          avatarPreviewImg.src = avatarUrl;
+          avatarPreviewImg.style.display = 'block';
+          avatarPreviewChar.style.display = 'none';
+        } else {
+          avatarPreviewImg.style.display = 'none';
+          avatarPreviewChar.style.display = 'block';
+          avatarPreviewChar.textContent = getInitial(username);
+        }
+
+        avatarModal.classList.add('open');
+      }
+
+      function closeAvatarModal() {
+        avatarModal.classList.remove('open');
+        avatarFileInput.value = '';
+      }
+
+      avatarDropZone.addEventListener('click', () => {
+        if (isUploadingAvatar) return;
+        avatarFileInput.click();
+      });
+
+      avatarDropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        avatarDropZone.classList.add('dragover');
+      });
+
+      avatarDropZone.addEventListener('dragleave', () => {
+        avatarDropZone.classList.remove('dragover');
+      });
+
+      avatarDropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        avatarDropZone.classList.remove('dragover');
+        if (isUploadingAvatar) return;
+        const files = e.dataTransfer.files;
+        if (files.length > 0) handleAvatarUpload(files[0]);
+      });
+
+      avatarFileInput.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) handleAvatarUpload(e.target.files[0]);
+      });
+
+      async function handleAvatarUpload(file) {
+        if (!currentUser) { showToast('请先登录'); return; }
+        if (!file.type.startsWith('image/')) { showToast('请选择图片文件'); return; }
+        if (file.size > MAX_AVATAR_SIZE) { showToast(`图片过大，最大 5MB`); return; }
+        if (isUploadingAvatar) return;
+
+        isUploadingAvatar = true;
+        avatarDropZone.style.opacity = '0.6';
+        avatarDropZone.style.pointerEvents = 'none';
+
+        avatarPreviewInModal.style.position = 'relative';
+        const spinner = document.createElement('div');
+        spinner.className = 'avatar-uploading';
+        avatarPreviewInModal.appendChild(spinner);
+
+        try {
+          const reader = new FileReader();
+          reader.onload = (ev) => {
+            avatarPreviewImg.src = ev.target.result;
+            avatarPreviewImg.style.display = 'block';
+            avatarPreviewChar.style.display = 'none';
+          };
+          reader.readAsDataURL(file);
+
+          const ext = file.name.includes('.') ? file.name.substring(file.name.lastIndexOf('.')) : '.png';
+          const timestamp = Date.now();
+          const random = Math.random().toString(36).substring(2, 8);
+          const fileName = `avatar_${currentUser.id}_${timestamp}_${random}${ext}`;
+
+          const { error: uploadError } = await imageSupabase.storage
+            .from(STORAGE_BUCKET)
+            .upload(fileName, file, { cacheControl: '3600', upsert: false });
+
+          if (uploadError) throw new Error('上传失败: ' + uploadError.message);
+
+          const { data: urlData } = imageSupabase.storage
+            .from(STORAGE_BUCKET)
+            .getPublicUrl(fileName);
+
+          const publicUrl = urlData?.publicUrl;
+          if (!publicUrl) throw new Error('获取图片链接失败');
+
+          const oldAvatarUrl = currentUser.user_metadata?.avatar_url;
+          if (oldAvatarUrl && oldAvatarUrl.includes(STORAGE_BUCKET)) {
+            try {
+              const oldPath = oldAvatarUrl.split(`/public/${STORAGE_BUCKET}/`)[1];
+              if (oldPath) {
+                await imageSupabase.storage.from(STORAGE_BUCKET).remove([oldPath]);
+              }
+            } catch (e) { console.warn('删除旧头像失败:', e); }
+          }
+
+          const { error: dbError } = await supabase
+            .from('profiles')
+            .update({ avatar_url: publicUrl })
+            .eq('id', currentUser.id);
+
+          if (dbError) {
+            if (dbError.code === '42703' || dbError.message?.includes('avatar_url')) {
+              throw new Error('请先在 profiles 表中添加 avatar_url 字段');
+            }
+            throw new Error('保存头像失败: ' + dbError.message);
+          }
+
+          currentUser.user_metadata = {
+            ...currentUser.user_metadata,
+            avatar_url: publicUrl
+          };
+
+          showToast('✅ 头像更新成功');
+          closeAvatarModal();
+          renderAuthArea();
+          renderUserPanel();
+          await fetchRankData();
+          await renderGameList();
+
+        } catch (err) {
+          console.error('头像上传失败:', err);
+          showToast('❌ ' + err.message);
+        } finally {
+          isUploadingAvatar = false;
+          avatarDropZone.style.opacity = '1';
+          avatarDropZone.style.pointerEvents = 'auto';
+          spinner.remove();
+        }
+      }
+
+      async function removeAvatar() {
+        if (!currentUser) return;
+        const oldAvatarUrl = currentUser.user_metadata?.avatar_url;
+        if (!oldAvatarUrl) { showToast('当前没有头像'); return; }
+        if (!confirm('确定要移除当前头像吗？')) return;
+
+        try {
+          if (oldAvatarUrl.includes(STORAGE_BUCKET)) {
+            try {
+              const oldPath = oldAvatarUrl.split(`/public/${STORAGE_BUCKET}/`)[1];
+              if (oldPath) {
+                await imageSupabase.storage.from(STORAGE_BUCKET).remove([oldPath]);
+              }
+            } catch (e) { console.warn('删除存储文件失败:', e); }
+          }
+
+          const { error } = await supabase
+            .from('profiles')
+            .update({ avatar_url: null })
+            .eq('id', currentUser.id);
+          if (error) throw new Error(error.message);
+
+          currentUser.user_metadata = {
+            ...currentUser.user_metadata,
+            avatar_url: null
+          };
+
+          showToast('✅ 头像已移除');
+          closeAvatarModal();
+          renderAuthArea();
+          renderUserPanel();
+          await fetchRankData();
+          await renderGameList();
+        } catch (err) {
+          showToast('❌ 移除失败: ' + err.message);
+        }
+      }
+
+      avatarRemoveBtn.addEventListener('click', removeAvatar);
+      avatarCancelBtn.addEventListener('click', closeAvatarModal);
+      avatarModal.addEventListener('click', (e) => {
+        if (e.target === avatarModal) closeAvatarModal();
+      });
+
+      // ============ 个人空间 ============
+      function openProfileModal() {
+        if (!currentUser) { showToast('请先登录'); return; }
+        updateProfileUI();
+        profileOverlay.classList.add('open');
+      }
+
+      function closeProfileModal() {
+        profileOverlay.classList.remove('open');
+        luoguUidInput.value = '';
+        luoguClientIdInput.value = '';
+      }
+
+      function updateProfileUI() {
+        const meta = currentUser?.user_metadata || {};
+
+        profileUsername.textContent = meta.username || '未知';
+        profileLevel.textContent = 'Lv.' + (meta.level || 1);
+        profileExp.textContent = (meta.exp || 0) + ' / 1000';
+
+        const admin = isAdmin();
+        if (admin) {
+          profileHonor.textContent = '👑 管理员';
+          profileHonor.style.color = '#f5d78a';
+        } else {
+          profileHonor.textContent = meta.honor || '玩家';
+          profileHonor.style.color = '#e6f0ff';
+        }
+
+        const luoguVerified = meta.luogu_verified;
+        const luoguName = meta.luogu_username;
+
+        if (luoguVerified && luoguName) {
+          const isLuoguAdmin = LUOGU_ADMINS.includes(luoguName);
+          luoguStatus.innerHTML = `
+            <span class="verified-badge">✅ 已认证</span>
+            <span class="luogu-name">${escapeHtml(luoguName)}</span>
+            ${isLuoguAdmin ? '<span class="admin-badge">👑 管理员</span>' : ''}
+          `;
+          luoguVerifyForm.style.display = 'none';
+          luoguVerifiedActions.style.display = 'block';
+        } else {
+          luoguStatus.innerHTML = `<span class="unverified-badge">未认证</span>`;
+          luoguVerifyForm.style.display = 'block';
+          luoguVerifiedActions.style.display = 'none';
+        }
+      }
+
+      // ============ 洛谷认证 ============
+      async function verifyLuoguAccount() {
+        if (!currentUser) { showToast('请先登录'); return; }
+        if (isVerifyingLuogu) return;
+
+        const uid = luoguUidInput.value.trim();
+        const clientId = luoguClientIdInput.value.trim();
+
+        if (!uid) { showToast('请输入洛谷 _uid'); luoguUidInput.focus(); return; }
+        if (!clientId) { showToast('请输入洛谷 __client_id'); luoguClientIdInput.focus(); return; }
+
+        isVerifyingLuogu = true;
+        verifyLuoguBtn.disabled = true;
+        verifyBtnText.textContent = '验证中...';
+
+        try {
+          const response = await fetch(LUOGU_PROXY_URL, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'apikey': SUPABASE_ANON_KEY,
+              'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+            },
+            body: JSON.stringify({ uid, clientId })
+          });
+
+          if (!response.ok) {
+            const errText = await response.text();
+            throw new Error(`代理请求失败 (${response.status}): ${errText}`);
+          }
+
+          const result = await response.json();
+          if (!result.success) throw new Error(result.error || '洛谷账号验证失败');
+
+          const luoguUsername = result.username;
+          if (!luoguUsername) throw new Error('未能获取洛谷用户名');
+
+          const isLuoguAdmin = LUOGU_ADMINS.includes(luoguUsername);
+
+          let updateData = {
+            luogu_verified: true,
+            luogu_username: luoguUsername,
+            luogu_verified_at: new Date().toISOString()
+          };
+          if (isLuoguAdmin) updateData.honor = '管理员';
+
+          let { error: dbError } = await supabase
+            .from('profiles')
+            .update(updateData)
+            .eq('id', currentUser.id);
+
+          if (dbError && (dbError.code === '42703' || dbError.message?.includes('luogu_'))) {
+            throw new Error('请先在 profiles 表中添加 luogu_verified、luogu_username、luogu_verified_at 字段');
+          }
+          if (dbError) throw new Error('保存认证信息失败: ' + dbError.message);
+
+          currentUser.user_metadata = {
+            ...currentUser.user_metadata,
+            luogu_verified: true,
+            luogu_username: luoguUsername,
+            luogu_verified_at: updateData.luogu_verified_at
+          };
+          if (isLuoguAdmin) currentUser.user_metadata.honor = '管理员';
+
+          showToast(isLuoguAdmin
+            ? `✅ 认证成功！欢迎管理员 ${luoguUsername}`
+            : `✅ 洛谷认证成功: ${luoguUsername}`, 3500);
+
+          luoguUidInput.value = '';
+          luoguClientIdInput.value = '';
+
+          updateProfileUI();
+          renderAuthArea();
+          renderUserPanel();
+          await fetchRankData();
+          await renderGameList();
+
+        } catch (err) {
+          console.error('洛谷认证失败:', err);
+          showToast('❌ ' + err.message, 4000);
+        } finally {
+          isVerifyingLuogu = false;
+          verifyLuoguBtn.disabled = false;
+          verifyBtnText.textContent = '验证洛谷账号';
+        }
+      }
+
+      verifyLuoguBtn.addEventListener('click', verifyLuoguAccount);
+
+      luoguUidInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') luoguClientIdInput.focus();
+      });
+      luoguClientIdInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') verifyLuoguAccount();
+      });
+
+      unverifyLuoguBtn.addEventListener('click', async () => {
+        if (!currentUser) return;
+        if (!confirm('确定要取消洛谷认证吗？取消后管理员权限也会一并移除。')) return;
+
+        try {
+          const { error } = await supabase
+            .from('profiles')
+            .update({
+              luogu_verified: false,
+              luogu_username: null,
+              luogu_verified_at: null
+            })
+            .eq('id', currentUser.id);
+
+          if (error) throw new Error(error.message);
+
+          const meta = currentUser.user_metadata || {};
+          if (meta.username !== ADMIN_USERNAME) {
+            await supabase.from('profiles').update({ honor: '玩家' }).eq('id', currentUser.id);
+            currentUser.user_metadata.honor = '玩家';
+          }
+
+          currentUser.user_metadata = {
+            ...currentUser.user_metadata,
+            luogu_verified: false,
+            luogu_username: null,
+            luogu_verified_at: null
+          };
+
+          showToast('✅ 已取消洛谷认证');
+          updateProfileUI();
+          renderAuthArea();
+          renderUserPanel();
+          await fetchRankData();
+          await renderGameList();
+        } catch (err) {
+          showToast('❌ 取消认证失败: ' + err.message);
+        }
+      });
+
+      closeProfileBtn.addEventListener('click', closeProfileModal);
+      profileOverlay.addEventListener('click', (e) => {
+        if (e.target === profileOverlay) closeProfileModal();
+      });
+
+      // ============ 排行榜 ============
       async function fetchRankData() {
         try {
           rankList.innerHTML = '<div class="rank-empty">⏳ 加载排行中...</div>';
 
-          // 获取所有用户资料
-          const { data: profiles, error: profilesError } = await supabase
+          let profiles, profilesError;
+          const res = await supabase
             .from('profiles')
-            .select('id, username, honor, level, exp');
+            .select('id, username, honor, level, exp, avatar_url, luogu_username');
+          profiles = res.data;
+          profilesError = res.error;
+
+          if (profilesError && profilesError.code === '42703') {
+            const fallback = await supabase
+              .from('profiles')
+              .select('id, username, honor, level, exp');
+            profiles = (fallback.data || []).map(p => ({ ...p, avatar_url: null, luogu_username: null }));
+            profilesError = fallback.error;
+          }
 
           if (profilesError) {
             console.warn('获取用户资料失败:', profilesError);
@@ -1438,47 +2948,42 @@
             return;
           }
 
-          // 获取每个用户的上传游戏数量
           const userIds = profiles.map(p => p.id);
           const { data: gameCounts, error: gameCountsError } = await supabase
             .from('games')
             .select('uploader_id')
             .in('uploader_id', userIds);
 
-          if (gameCountsError) {
-            console.warn('获取游戏数量失败:', gameCountsError);
-          }
+          if (gameCountsError) console.warn('获取游戏数量失败:', gameCountsError);
 
-          // 统计每个用户的上传数量
           const countMap = {};
           (gameCounts || []).forEach(g => {
             countMap[g.uploader_id] = (countMap[g.uploader_id] || 0) + 1;
           });
 
-          // 构建排行榜数据
           rankData = profiles.map(p => {
             const exp = p.exp || 0;
             const level = p.level || 1;
             return {
               id: p.id,
               username: p.username || '未知用户',
+              avatar_url: p.avatar_url || null,
+              luogu_username: p.luogu_username || null,
               honor: p.honor || '玩家',
               level: level,
               exp: exp,
               expToNext: 1000 - (exp % 1000),
               gameCount: countMap[p.id] || 0,
-              isAdmin: p.username === ADMIN_USERNAME
+              isAdmin: isUserAdmin({ username: p.username, luogu_username: p.luogu_username })
             };
           });
 
-          // 排序：按等级降序，经验降序
           rankData.sort((a, b) => {
             if (b.level !== a.level) return b.level - a.level;
             return b.exp - a.exp;
           });
 
           renderRankList();
-
         } catch (err) {
           console.error('获取排行榜失败:', err);
           rankList.innerHTML = '<div class="rank-empty">⚠️ 加载排行榜失败</div>';
@@ -1492,40 +2997,34 @@
         }
 
         const currentUserId = currentUser?.id;
-
         let html = '';
+
         rankData.forEach((user, index) => {
           const rank = index + 1;
           let rankClass = 'rank-number';
           let medal = '';
-          if (rank === 1) { rankClass += ' gold';
-            medal = '🥇'; } else if (rank === 2) { rankClass += ' silver';
-            medal = '🥈'; } else if (rank === 3) { rankClass += ' bronze';
-            medal = '🥉'; }
+          if (rank === 1) { rankClass += ' gold'; medal = '🥇'; }
+          else if (rank === 2) { rankClass += ' silver'; medal = '🥈'; }
+          else if (rank === 3) { rankClass += ' bronze'; medal = '🥉'; }
 
           const isCurrentUser = user.id === currentUserId;
           const expPercent = (user.exp % 1000) / 1000 * 100;
 
-          // 随机头像
-          const avatars = ['🧑‍💻', '👨‍💻', '👩‍💻', '🧙', '🦊', '🐱', '🐉', '⚡', '🌟', '🎮'];
-          const avatar = avatars[user.id.charCodeAt(user.id.length - 1) % avatars.length];
-
           html += `
             <div class="rank-item ${isCurrentUser ? 'current-user' : ''}">
               <span class="${rankClass}">${medal || rank}</span>
-              <span class="rank-avatar">${avatar}</span>
+              ${renderAvatar(user, 'sm')}
               <div class="rank-info">
                 <div class="rank-name">
-                  ${user.username}
+                  ${escapeHtml(user.username)}
                   ${user.isAdmin ? '<span class="admin-tag">👑 管理员</span>' : ''}
                   ${isCurrentUser ? '<span class="me-tag">我</span>' : ''}
+                  ${user.luogu_username ? `<span class="luogu-tag" title="洛谷认证: ${escapeHtml(user.luogu_username)}">洛谷✓</span>` : ''}
                   <span class="rank-level-badge">Lv.${user.level}</span>
                 </div>
                 <div class="rank-stats">
                   <span>⭐ ${user.exp % 1000}/1000</span>
-                  <span>
-                    <span class="rank-exp-bar"><span class="fill" style="width:${expPercent}%"></span></span>
-                  </span>
+                  <span><span class="rank-exp-bar"><span class="fill" style="width:${expPercent}%"></span></span></span>
                   <span>📦 ${user.gameCount} 个游戏</span>
                 </div>
               </div>
@@ -1536,7 +3035,7 @@
         rankList.innerHTML = html;
       }
 
-      // ============ 公告栏功能 ============
+      // ============ 公告栏 ============
       async function loadAnnouncement() {
         try {
           announcementContent.innerHTML = '<div class="empty">⏳ 加载公告中...</div>';
@@ -1559,7 +3058,7 @@
         }
       }
 
-      // ============ 认证相关 ============
+      // ============ 认证 ============
       async function checkAuth() {
         const { data: { session } } = await supabase.auth.getSession();
         if (session?.user) {
@@ -1574,12 +3073,30 @@
       }
 
       async function syncUserProfile(userId) {
-        const { data, error } = await supabase
+        let { data, error } = await supabase
           .from('profiles')
-          .select('username, honor, level, exp')
+          .select('username, honor, level, exp, avatar_url, luogu_verified, luogu_username, luogu_verified_at')
           .eq('id', userId)
           .maybeSingle();
+
+        if (error && error.code === '42703') {
+          const fallback = await supabase
+            .from('profiles')
+            .select('username, honor, level, exp')
+            .eq('id', userId)
+            .maybeSingle();
+          data = fallback.data ? {
+            ...fallback.data,
+            avatar_url: null,
+            luogu_verified: false,
+            luogu_username: null,
+            luogu_verified_at: null
+          } : null;
+          error = fallback.error;
+        }
+
         if (error) { console.warn('获取profile失败', error); return; }
+
         if (data) {
           currentUser.user_metadata = {
             ...currentUser.user_metadata,
@@ -1587,6 +3104,10 @@
             honor: data.honor || '玩家',
             level: data.level || 1,
             exp: data.exp || 0,
+            avatar_url: data.avatar_url || null,
+            luogu_verified: data.luogu_verified || false,
+            luogu_username: data.luogu_username || null,
+            luogu_verified_at: data.luogu_verified_at || null
           };
         } else {
           const fallbackUsername = currentUser.user_metadata?.username || '玩家';
@@ -1600,6 +3121,9 @@
             honor: '玩家',
             level: 1,
             exp: 0,
+            avatar_url: null,
+            luogu_verified: false,
+            luogu_username: null
           };
         }
       }
@@ -1613,8 +3137,7 @@
         if (error || !data) { showToast('更新经验失败'); return; }
         let newExp = data.exp + deltaExp;
         let newLevel = data.level;
-        while (newExp >= 1000) { newExp -= 1000;
-          newLevel += 1; }
+        while (newExp >= 1000) { newExp -= 1000; newLevel += 1; }
         const { error: updateErr } = await supabase
           .from('profiles')
           .update({ exp: newExp, level: newLevel })
@@ -1628,18 +3151,36 @@
 
       function renderAuthArea() {
         if (currentUser) {
-          const username = currentUser.user_metadata?.username || currentUser.email || '用户';
+          const meta = currentUser.user_metadata || {};
+          const username = meta.username || currentUser.email || '用户';
+          const avatarUrl = meta.avatar_url;
           const admin = isAdmin();
+          const initial = getInitial(username);
+          const luoguVerified = meta.luogu_verified;
+
           authArea.innerHTML = `
             <div class="user-badge">
-              <span>👤 ${username}${admin ? ' <span class="admin-badge">👑 管理员</span>' : ''}</span>
+              <span class="avatar avatar-sm avatar-clickable" id="headerAvatarBtn" title="点击修改头像">
+                ${avatarUrl
+                  ? `<img src="${escapeHtml(avatarUrl)}" alt="${escapeHtml(username)}" onerror="this.style.display='none';this.parentElement.textContent='${escapeHtml(initial)}'">`
+                  : escapeHtml(initial)
+                }
+                <div class="avatar-overlay" style="font-size:0.9rem;">🖼️</div>
+              </span>
+              <span id="profileBtn" title="点击进入个人空间">
+                ${escapeHtml(username)}${admin ? ' <span class="admin-badge">👑 管理员</span>' : ''}${luoguVerified ? ' <span class="luogu-verified-dot" title="洛谷已认证">✓</span>' : ''}
+              </span>
               <button id="logoutBtn">退出</button>
             </div>
           `;
+
+          document.getElementById('headerAvatarBtn')?.addEventListener('click', openAvatarModal);
+          document.getElementById('profileBtn')?.addEventListener('click', openProfileModal);
           document.getElementById('logoutBtn')?.addEventListener('click', async () => {
             await supabase.auth.signOut();
             currentUser = null;
             selectedGameId = null;
+            selectedForBatch.clear();
             renderAuthArea();
             renderUserPanel();
             fetchGames();
@@ -1661,11 +3202,8 @@
         selectedGameId = gameId;
         document.querySelectorAll('.game-item').forEach(item => {
           const id = item.dataset.gameId;
-          if (id === gameId) {
-            item.classList.add('selected');
-          } else {
-            item.classList.remove('selected');
-          }
+          if (id === gameId) item.classList.add('selected');
+          else item.classList.remove('selected');
         });
         if (selectedGameId) {
           const selectedGame = games.find(g => g.id === selectedGameId);
@@ -1681,39 +3219,53 @@
 
       function clearSelection() {
         selectedGameId = null;
-        document.querySelectorAll('.game-item').forEach(item => {
-          item.classList.remove('selected');
-        });
+        document.querySelectorAll('.game-item').forEach(item => item.classList.remove('selected'));
         selectedHint.style.display = 'none';
         updateWeeklySubmitBtn();
       }
 
       function updateWeeklySubmitBtn() {
         const btn = document.getElementById('weeklySubmitBtn');
+        const hintEl = document.getElementById('weeklyHint');
         if (!btn) return;
+
         if (!currentUser) {
           btn.disabled = true;
           btn.textContent = '🔒 请先登录';
+          if (hintEl) hintEl.style.display = 'none';
           return;
         }
+
         if (!selectedGameId) {
           btn.disabled = true;
           btn.textContent = '📮 请先选择一个游戏';
+          if (hintEl) hintEl.style.display = 'block';
           return;
         }
+
         const selectedGame = games.find(g => g.id === selectedGameId);
         if (!selectedGame) {
           btn.disabled = true;
           btn.textContent = '📮 请选择有效游戏';
           return;
         }
+
+        if (!isOwnGame(selectedGame)) {
+          btn.disabled = true;
+          btn.textContent = '🚫 只能投稿自己上传的游戏';
+          if (hintEl) hintEl.style.display = 'block';
+          return;
+        }
+
         if (weeklySubmissions.some(sub => sub.game_id === selectedGameId)) {
           btn.disabled = true;
           btn.textContent = `✅ 已投稿: ${selectedGame.title}`;
           return;
         }
+
         btn.disabled = false;
         btn.textContent = `📮 投稿 "${selectedGame.title}"`;
+        if (hintEl) hintEl.style.display = 'none';
       }
 
       // ============ 周赛投稿 ============
@@ -1725,46 +3277,37 @@
             .select('id, name, game_id, submitted_by, created_at')
             .eq('submitted_by', currentUser.id)
             .order('created_at', { ascending: false });
-          if (error) {
-            console.warn('获取投稿列表失败:', error);
-            return;
-          }
+          if (error) { console.warn('获取投稿列表失败:', error); return; }
           weeklySubmissions = data || [];
           localStorage.setItem(`weekly_${currentUser.id}`, JSON.stringify(weeklySubmissions));
           renderUserPanel();
           updateWeeklySubmitBtn();
-        } catch (err) {
-          console.warn('获取投稿列表异常:', err);
-        }
+        } catch (err) { console.warn('获取投稿列表异常:', err); }
       }
 
       async function submitToWeekCompetition(gameId, gameName) {
-        if (!currentUser) {
-          showToast('请先登录');
+        if (!currentUser) { showToast('请先登录'); return false; }
+
+        const game = games.find(g => g.id === gameId);
+        if (!game) { showToast('游戏不存在'); return false; }
+
+        if (!isOwnGame(game)) {
+          showToast('❌ 只能投稿自己上传的游戏');
           return false;
         }
+
         const { data: existing, error: checkError } = await supabase
           .from('weekcompetition')
           .select('id')
           .eq('game_id', gameId)
           .eq('submitted_by', currentUser.id)
           .maybeSingle();
-        if (checkError) {
-          console.warn('检查投稿状态失败:', checkError);
-        }
-        if (existing) {
-          showToast('该游戏已投稿');
-          return false;
-        }
+        if (checkError) console.warn('检查投稿状态失败:', checkError);
+        if (existing) { showToast('该游戏已投稿'); return false; }
+
         const { data, error } = await supabase
           .from('weekcompetition')
-          .insert([
-            {
-              game_id: gameId,
-              name: gameName,
-              submitted_by: currentUser.id
-            }
-          ])
+          .insert([{ game_id: gameId, name: gameName, submitted_by: currentUser.id }])
           .select()
           .single();
         if (error) {
@@ -1776,63 +3319,51 @@
         return true;
       }
 
-      // ============ 删除游戏 ============
+      // ============ 删除单个游戏 ============
       async function deleteGame(gameId) {
-        if (!isAdmin()) {
-          showToast('❌ 只有管理员可以删除游戏');
-          return false;
-        }
-
+        if (!isAdmin()) { showToast('❌ 只有管理员可以删除游戏'); return false; }
         try {
           const game = games.find(g => g.id === gameId);
-          if (!game) {
-            showToast('❌ 游戏不存在');
-            return false;
-          }
+          if (!game) { showToast('❌ 游戏不存在'); return false; }
 
           let filePath = null;
           if (game.file_url) {
             try {
               const url = new URL(game.file_url);
-              const pathParts = url.pathname.split('/');
-              const gamesIndex = pathParts.indexOf('games');
-              if (gamesIndex !== -1 && gamesIndex < pathParts.length - 1) {
-                filePath = pathParts.slice(gamesIndex).join('/');
+              const pathParts = url.pathname.split('/').filter(Boolean);
+              const publicIndex = pathParts.indexOf('public');
+              if (publicIndex !== -1 && publicIndex + 2 <= pathParts.length) {
+                const bucketName = pathParts[publicIndex + 1];
+                filePath = pathParts.slice(publicIndex + 2).join('/');
+                if (filePath.startsWith(bucketName + '/')) {
+                  filePath = filePath.substring(bucketName.length + 1);
+                }
               }
-            } catch (e) {
-              console.warn('解析文件URL失败:', e);
-            }
+            } catch (e) { console.warn('URL解析失败:', e); }
           }
 
-          const { error: dbError } = await supabase
-            .from('games')
-            .delete()
-            .eq('id', gameId);
+          const { error: dbError } = await supabase.from('games').delete().eq('id', gameId);
+          if (dbError) { showToast('❌ 删除失败: ' + dbError.message); return false; }
 
-          if (dbError) {
-            showToast('❌ 删除数据库记录失败: ' + dbError.message);
-            return false;
-          }
-
+          let storageDeleted = true;
           if (filePath) {
-            const { error: storageError } = await supabase.storage
-              .from('games')
-              .remove([filePath]);
-
+            const { data: removeData, error: storageError } = await supabase.storage.from('games').remove([filePath]);
             if (storageError) {
-              console.warn('删除存储文件失败（数据库已删除）:', storageError);
-              showToast('⚠️ 游戏已删除，但文件可能未完全清除');
-            } else {
-              showToast('✅ 游戏已成功删除');
+              console.warn('删除存储文件失败:', storageError);
+              storageDeleted = false;
             }
-          } else {
-            showToast('✅ 游戏已删除（无关联文件）');
-          }
+          } else { storageDeleted = false; }
 
-          await fetchGames();
-          if (selectedGameId === gameId) {
-            clearSelection();
-          }
+          games = games.filter(g => g.id !== gameId);
+          selectedForBatch.delete(gameId);
+          uploaderNames = {};
+          uploaderAvatars = {};
+
+          showToast(storageDeleted ? '✅ 游戏及文件已删除' : '⚠️ 游戏记录已删除（文件可能残留）');
+          await renderGameList();
+          await fetchRankData();
+          if (currentUser) await fetchUserGames();
+          if (selectedGameId === gameId) clearSelection();
           return true;
         } catch (err) {
           console.error('删除游戏失败:', err);
@@ -1841,7 +3372,7 @@
         }
       }
 
-      // ============ 游戏列表渲染 ============
+      // ============ 游戏列表渲染（含学术伪装） ============
       async function renderGameList() {
         const totalGames = games.length;
         totalPages = Math.max(1, Math.ceil(totalGames / PAGE_SIZE));
@@ -1855,7 +3386,8 @@
         await fetchUploaderNames(pageGames);
 
         if (!games.length) {
-          gameListContainer.innerHTML = `<div class="empty-state">✨ 暂无游戏，快来上传第一个吧</div>`;
+          const emptyMsg = isAcademicMode ? '📚 暂无模板' : '✨ 暂无游戏，快来上传第一个吧';
+          gameListContainer.innerHTML = `<div class="empty-state">${emptyMsg}</div>`;
           updatePagination();
           return;
         }
@@ -1863,24 +3395,73 @@
         const isAdminUser = isAdmin();
 
         let html = '';
-        pageGames.forEach(g => {
+        pageGames.forEach((g, idx) => {
+          // 学术伪装：显示模板名称
+          const displayTitle = isAcademicMode
+            ? ACADEMIC_TEMPLATES[(start + idx) % ACADEMIC_TEMPLATES.length]
+            : (g.title || '未命名');
+
+          const displayDesc = isAcademicMode
+            ? '标准的算法竞赛模板，可直接复制使用。'
+            : (g.description || '无介绍');
+
           const date = g.created_at ? new Date(g.created_at).toLocaleDateString('zh-CN') : '未知';
           const isSelected = g.id === selectedGameId;
+          const isBatchSelected = selectedForBatch.has(g.id);
           const uploaderName = getUploaderName(g.uploader_id);
+          const uploaderAvatar = getUploaderAvatar(g.uploader_id);
           const isAdminUploader = uploaderName === ADMIN_USERNAME;
+          const initial = getInitial(uploaderName);
+          const own = isOwnGame(g);
+
+          const avatarHtml = uploaderAvatar
+            ? `<span class="avatar avatar-sm"><img src="${escapeHtml(uploaderAvatar)}" alt="${escapeHtml(uploaderName)}" onerror="this.style.display='none';this.parentElement.textContent='${escapeHtml(initial)}'"></span>`
+            : `<span class="avatar avatar-sm">${escapeHtml(initial)}</span>`;
+
+          // 学术伪装：不显示上传者信息，改为显示"ACM模板"
+          const metaHtml = isAcademicMode
+            ? `
+              <span class="uploader">📄 ACM 模板</span>
+              <span class="date">📅 2024-01-01</span>
+            `
+            : `
+              <span class="uploader">${avatarHtml} ${escapeHtml(uploaderName)}${isAdminUploader ? ' <span class="admin-tag">👑</span>' : ''}</span>
+              <span class="date">📅 ${date}</span>
+            `;
+
+          // 学术伪装：下载按钮改为"复制模板"
+          const actionHtml = isAcademicMode
+            ? `
+              <button class="download-btn" data-id="${g.id}" data-url="${escapeHtml(g.file_url || '#')}" data-title="${escapeHtml(displayTitle)}">📋 复制模板</button>
+            `
+            : `
+              <button class="download-btn" data-id="${g.id}" data-url="${escapeHtml(g.file_url || '#')}" data-title="${escapeHtml(g.title || '未命名')}">⬇ 下载 (${g.download_count || 0})</button>
+              ${isAdminUser ? `<button class="delete-btn" data-id="${g.id}" data-title="${escapeHtml(g.title || '未命名')}">🗑️ 删除</button>` : ''}
+            `;
+
+          // 学术伪装：不显示复选框
+          const checkboxHtml = (!isAcademicMode && isAdminUser)
+            ? `<div class="game-checkbox ${isBatchSelected ? 'checked' : ''}" data-game-id="${g.id}" title="选中以批量删除"></div>`
+            : '';
+
+          // 学术伪装：不显示"我的"标记
+          const ownTag = (!isAcademicMode && own)
+            ? ' <span style="color:#66d0ff;font-size:0.7rem;font-weight:500;">（我的）</span>'
+            : '';
 
           html += `
             <div class="game-item ${isSelected ? 'selected' : ''}" data-game-id="${g.id}">
-              <div class="game-title">${g.title || '未命名'}</div>
-              <div class="game-desc">${g.description || '无介绍'}</div>
-              <div class="game-meta">
-                <div style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap;">
-                  <span class="uploader">👤 ${uploaderName}${isAdminUploader ? ' <span class="admin-tag">👑</span>' : ''}</span>
-                  <span class="date">📅 ${date}</span>
-                </div>
-                <div class="game-actions">
-                  <button class="download-btn" data-id="${g.id}" data-url="${g.file_url || '#'}" data-title="${g.title || '未命名'}">⬇ 下载 (${g.download_count || 0})</button>
-                  ${isAdminUser ? `<button class="delete-btn" data-id="${g.id}" data-title="${g.title || '未命名'}">🗑️ 删除</button>` : ''}
+              ${checkboxHtml}
+              <div class="game-content">
+                <div class="game-title">${escapeHtml(displayTitle)}${ownTag}</div>
+                <div class="game-desc">${escapeHtml(displayDesc)}</div>
+                <div class="game-meta">
+                  <div style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap;">
+                    ${metaHtml}
+                  </div>
+                  <div class="game-actions">
+                    ${actionHtml}
+                  </div>
                 </div>
               </div>
               <span class="select-indicator">✅</span>
@@ -1889,71 +3470,66 @@
         });
         gameListContainer.innerHTML = html;
 
-        document.querySelectorAll('.game-item').forEach(item => {
-          item.addEventListener('click', function(e) {
-            if (e.target.closest('.download-btn') || e.target.closest('.delete-btn')) return;
-            const gameId = this.dataset.gameId;
-            if (selectedGameId === gameId) {
-              clearSelection();
-            } else {
-              selectGame(gameId);
-            }
+        // 复选框事件（学术模式下不存在）
+        document.querySelectorAll('.game-checkbox').forEach(cb => {
+          cb.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const gameId = cb.dataset.gameId;
+            toggleBatchSelection(gameId, cb);
           });
         });
 
+        // 游戏项点击
+        document.querySelectorAll('.game-item').forEach(item => {
+          item.addEventListener('click', function(e) {
+            if (e.target.closest('.download-btn') || e.target.closest('.delete-btn') || e.target.closest('.game-checkbox')) return;
+            const gameId = this.dataset.gameId;
+            if (selectedGameId === gameId) clearSelection();
+            else selectGame(gameId);
+          });
+        });
+
+        // 下载按钮
         document.querySelectorAll('.download-btn').forEach(btn => {
           btn.addEventListener('click', async (e) => {
             e.stopPropagation();
-
             if (btn.classList.contains('downloading')) return;
 
             const url = btn.dataset.url;
             const id = btn.dataset.id;
             const title = btn.dataset.title || 'game';
 
-            if (!url || url === '#') {
-              showToast('文件链接无效');
-              return;
-            }
+            if (!url || url === '#') { showToast('文件链接无效'); return; }
 
             btn.classList.add('downloading');
             const originalText = btn.innerHTML;
-            btn.innerHTML = '⏳ 下载中...';
+            btn.innerHTML = isAcademicMode ? '⏳ 加载中...' : '⏳ 下载中...';
 
             try {
               const { data: gData } = await supabase
-                .from('games')
-                .select('download_count')
-                .eq('id', id)
-                .single();
+                .from('games').select('download_count').eq('id', id).single();
               if (gData) {
-                await supabase
-                  .from('games')
+                await supabase.from('games')
                   .update({ download_count: (gData.download_count || 0) + 1 })
                   .eq('id', id);
               }
-            } catch (err) {
-              console.warn('更新下载次数失败', err);
-            }
+            } catch (err) { console.warn('更新下载次数失败', err); }
 
             let fileName = title;
             if (!fileName.includes('.')) {
               const urlParts = url.split('/');
               const lastPart = urlParts[urlParts.length - 1];
-              if (lastPart.includes('.')) {
-                fileName = lastPart;
-              } else {
-                fileName = fileName + '.cpp';
-              }
+              if (lastPart.includes('.')) fileName = lastPart;
+              else fileName = fileName + (isAcademicMode ? '.txt' : '.cpp');
             }
 
             await downloadFileStream(url, fileName);
-
             btn.classList.remove('downloading');
             btn.innerHTML = originalText;
           });
         });
 
+        // 删除按钮（学术模式下不存在）
         document.querySelectorAll('.delete-btn').forEach(btn => {
           btn.addEventListener('click', function(e) {
             e.stopPropagation();
@@ -1978,9 +3554,9 @@
         }
 
         updatePagination();
+        updateBatchBar();
       }
 
-      // ============ 分页控制 ============
       function updatePagination() {
         const total = games.length;
         const totalPagesCalc = Math.max(1, Math.ceil(total / PAGE_SIZE));
@@ -2016,40 +3592,53 @@
         const honor = meta.honor || '玩家';
         const level = meta.level || 1;
         const exp = meta.exp || 0;
+        const avatarUrl = meta.avatar_url;
+        const luoguVerified = meta.luogu_verified;
+        const luoguName = meta.luogu_username;
         const expPercent = (exp / 1000) * 100;
         const totalGames = userGames.length;
         const isAdminUser = isAdmin();
+        const initial = getInitial(username);
 
         let hoverListHtml = '';
         if (userGames.length) {
-          hoverListHtml =
-            `<ul class="hover-game-list" id="hoverGameList">${userGames.map(g => `<li>${g.title}</li>`).join('')}</ul>`;
+          hoverListHtml = `<ul class="hover-game-list" id="hoverGameList">${userGames.map(g => `<li>${escapeHtml(g.title)}</li>`).join('')}</ul>`;
         } else {
-          hoverListHtml =
-            `<div class="hover-game-list" id="hoverGameList" style="display:block;color:#7f9bc0;text-align:center;padding:0.6rem;">暂无上传</div>`;
+          hoverListHtml = `<div class="hover-game-list" id="hoverGameList" style="display:block;color:#7f9bc0;text-align:center;padding:0.6rem;">暂无上传</div>`;
         }
 
         let submittedListHtml = '';
         if (weeklySubmissions.length) {
           submittedListHtml = weeklySubmissions.map(sub =>
-            `<div>📝 ${sub.name} (${sub.created_at ? new Date(sub.created_at).toLocaleDateString('zh-CN') : '未知'})</div>`
+            `<div>📝 ${escapeHtml(sub.name)} (${sub.created_at ? new Date(sub.created_at).toLocaleDateString('zh-CN') : '未知'})</div>`
           ).join('');
         } else {
           submittedListHtml = '<div style="color:#7f9bc0;">暂无投稿</div>';
         }
 
-        // 获取用户排名
         let userRank = '-';
         const rankIndex = rankData.findIndex(u => u.id === currentUser.id);
-        if (rankIndex !== -1) {
-          userRank = `#${rankIndex + 1}`;
-        }
+        if (rankIndex !== -1) userRank = `#${rankIndex + 1}`;
 
         userPanel.innerHTML = `
           <div class="user-info-block">
-            <div class="user-row">
-              <span class="username">${username}${isAdminUser ? ' 👑' : ''}</span>
-              <span class="honor-title">${isAdminUser ? '管理员' : honor}</span>
+            <div style="display:flex;align-items:center;gap:1rem;margin-bottom:0.4rem;">
+              <div class="avatar avatar-lg avatar-clickable" id="panelAvatarBtn" title="点击修改头像">
+                ${avatarUrl
+                  ? `<img src="${escapeHtml(avatarUrl)}" alt="${escapeHtml(username)}" onerror="this.style.display='none';this.parentElement.textContent='${escapeHtml(initial)}'">`
+                  : escapeHtml(initial)
+                }
+                <div class="avatar-overlay">🖼️</div>
+              </div>
+              <div style="flex:1;min-width:0;">
+                <div class="user-row" style="margin-bottom:0.4rem;">
+                  <span class="username" id="panelProfileBtn" style="cursor:pointer;" title="点击进入个人空间">${escapeHtml(username)}${isAdminUser ? ' 👑' : ''}</span>
+                </div>
+                <div style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap;">
+                  <span class="honor-title">${isAdminUser ? '管理员' : escapeHtml(honor)}</span>
+                  ${luoguVerified && luoguName ? `<span style="background:rgba(0,200,100,0.12);color:#66e8a0;font-size:0.7rem;padding:0.2rem 0.9rem;border-radius:40px;font-weight:600;border:1px solid rgba(0,200,100,0.2);">洛谷 ✓ ${escapeHtml(luoguName)}</span>` : ''}
+                </div>
+              </div>
             </div>
             <div class="user-row">
               <span class="level-badge">Lv.${level}</span>
@@ -2067,12 +3656,18 @@
           </div>
           <div class="weekly-area">
             <div class="weekly-title">🏆 周赛投稿</div>
+            <div class="weekly-hint" id="weeklyHint">
+              ⚠️ 只能投稿自己上传的游戏。请先在游戏库中点击选中你自己的游戏。
+            </div>
             <button class="weekly-submit-btn" id="weeklySubmitBtn">📮 请先选择一个游戏</button>
             <div class="submitted-list" id="submittedList">
               ${submittedListHtml}
             </div>
           </div>
         `;
+
+        document.getElementById('panelAvatarBtn')?.addEventListener('click', openAvatarModal);
+        document.getElementById('panelProfileBtn')?.addEventListener('click', openProfileModal);
 
         const badge = document.getElementById('gameCountBadge');
         const hoverList = document.getElementById('hoverGameList');
@@ -2083,19 +3678,21 @@
 
         document.getElementById('weeklySubmitBtn')?.addEventListener('click', async () => {
           if (!currentUser) { showToast('请先登录'); return; }
-          if (!selectedGameId) {
-            showToast('请先在游戏列表中点击选中一个游戏');
-            return;
-          }
+          if (!selectedGameId) { showToast('请先在游戏列表中点击选中一个游戏'); return; }
+
           const selectedGame = games.find(g => g.id === selectedGameId);
-          if (!selectedGame) {
-            showToast('选中的游戏不存在');
+          if (!selectedGame) { showToast('选中的游戏不存在'); return; }
+
+          if (!isOwnGame(selectedGame)) {
+            showToast('❌ 只能投稿自己上传的游戏');
             return;
           }
+
           if (weeklySubmissions.some(sub => sub.game_id === selectedGameId)) {
             showToast('该游戏已投稿');
             return;
           }
+
           const success = await submitToWeekCompetition(selectedGameId, selectedGame.title);
           if (success) {
             await fetchWeeklySubmissions();
@@ -2107,12 +3704,8 @@
         if (cached && weeklySubmissions.length === 0) {
           try {
             const parsed = JSON.parse(cached);
-            if (parsed.length > 0) {
-              weeklySubmissions = parsed;
-            }
-          } catch (e) {
-            weeklySubmissions = [];
-          }
+            if (parsed.length > 0) weeklySubmissions = parsed;
+          } catch (e) { weeklySubmissions = []; }
         }
         updateWeeklySubmitBtn();
       }
@@ -2120,9 +3713,7 @@
       // ============ 数据获取 ============
       async function fetchGames() {
         const { data, error } = await supabase
-          .from('games')
-          .select('*')
-          .order('created_at', { ascending: false });
+          .from('games').select('*').order('created_at', { ascending: false });
         if (error) { showToast('获取游戏列表失败'); return; }
         games = data || [];
         currentPage = 1;
@@ -2132,11 +3723,8 @@
       async function fetchUserGames() {
         if (!currentUser) { userGames = []; return; }
         const { data, error } = await supabase
-          .from('games')
-          .select('id, title')
-          .eq('uploader_id', currentUser.id);
-        if (error) { console.warn('获取用户游戏失败', error);
-          userGames = []; return; }
+          .from('games').select('id, title').eq('uploader_id', currentUser.id);
+        if (error) { console.warn('获取用户游戏失败', error); userGames = []; return; }
         userGames = data || [];
         renderUserPanel();
       }
@@ -2181,10 +3769,7 @@
             }
           } else {
             const { data: existingUser, error: checkError } = await supabase
-              .from('profiles')
-              .select('username')
-              .eq('username', username)
-              .maybeSingle();
+              .from('profiles').select('username').eq('username', username).maybeSingle();
             if (checkError) { showToast('验证用户名失败: ' + checkError.message); return; }
             if (existingUser) { showToast('❌ 用户名已被使用'); return; }
 
@@ -2192,28 +3777,15 @@
             const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
               email: email,
               password: password,
-              options: {
-                data: { username: username }
-              }
+              options: { data: { username: username } }
             });
 
-            if (signUpError) {
-              showToast('注册失败: ' + signUpError.message);
-              return;
-            }
+            if (signUpError) { showToast('注册失败: ' + signUpError.message); return; }
 
             if (signUpData.user) {
               const { error: profileError } = await supabase
                 .from('profiles')
-                .upsert([
-                  {
-                    id: signUpData.user.id,
-                    username: username,
-                    honor: '玩家',
-                    level: 1,
-                    exp: 0
-                  }
-                ], { onConflict: 'id' });
+                .upsert([{ id: signUpData.user.id, username: username, honor: '玩家', level: 1, exp: 0 }], { onConflict: 'id' });
 
               if (profileError) {
                 showToast('⚠️ 账号创建成功，但保存用户名失败: ' + profileError.message);
@@ -2226,12 +3798,14 @@
                 username: username,
                 honor: '玩家',
                 level: 1,
-                exp: 0
+                exp: 0,
+                avatar_url: null,
+                luogu_verified: false,
+                luogu_username: null
               };
 
               closeAuthModal();
               showToast('🎉 注册成功! 欢迎 ' + username);
-
               renderAuthArea();
               renderUserPanel();
               await fetchGames();
@@ -2240,9 +3814,8 @@
               await fetchRankData();
             }
           }
-        } catch (e) {
-          showToast('发生错误: ' + e.message);
-        } finally {
+        } catch (e) { showToast('发生错误: ' + e.message); }
+        finally {
           authConfirmBtn.disabled = false;
           authConfirmBtn.textContent = isAuthLoginMode ? '登录' : '注册';
         }
@@ -2255,8 +3828,7 @@
         if (isUploading) return;
         const desc = gameDescInput.value.trim() || '无介绍';
         const originalFileName = selectedFile.name;
-        const fileExtension = originalFileName.includes('.') ? originalFileName.substring(originalFileName.lastIndexOf(
-          '.')) : '.cpp';
+        const fileExtension = originalFileName.includes('.') ? originalFileName.substring(originalFileName.lastIndexOf('.')) : '.cpp';
         isUploading = true;
         confirmUploadBtn.disabled = true;
         confirmUploadBtn.innerHTML = '<span class="loading-spinner"></span>上传中...';
@@ -2264,32 +3836,28 @@
         try {
           const { data: insertedData, error: insertError } = await supabase
             .from('games')
-            .insert([{ title: originalFileName, description: desc, file_url: '', download_count: 0, uploader_id: currentUser
-                .id }])
+            .insert([{ title: originalFileName, description: desc, file_url: '', download_count: 0, uploader_id: currentUser.id }])
             .select()
             .single();
           if (insertError) throw new Error('保存失败: ' + insertError.message);
           const gameId = insertedData.id;
           const storageFileName = `${gameId}${fileExtension}`;
           const filePath = `games/${storageFileName}`;
-          const { error: uploadError } = await supabase.storage.from('games').upload(filePath, selectedFile, { cacheControl: '3600',
-            upsert: false });
-          if (uploadError) { await supabase.from('games').delete().eq('id', gameId); throw new Error('文件上传失败: ' +
-              uploadError.message); }
+          const { error: uploadError } = await supabase.storage.from('games').upload(filePath, selectedFile, { cacheControl: '3600', upsert: false });
+          if (uploadError) { await supabase.from('games').delete().eq('id', gameId); throw new Error('文件上传失败: ' + uploadError.message); }
           const { data: urlData } = supabase.storage.from('games').getPublicUrl(filePath);
           const fileUrl = urlData?.publicUrl || '';
-          if (!fileUrl) { await supabase.from('games').delete().eq('id', gameId); await supabase.storage.from('games')
-              .remove([filePath]); throw new Error('获取链接失败'); }
+          if (!fileUrl) { await supabase.from('games').delete().eq('id', gameId); await supabase.storage.from('games').remove([filePath]); throw new Error('获取链接失败'); }
           const { error: updateError } = await supabase.from('games').update({ file_url: fileUrl }).eq('id', gameId);
-          if (updateError) { await supabase.from('games').delete().eq('id', gameId); await supabase.storage.from('games')
-              .remove([filePath]); throw new Error('更新链接失败: ' + updateError.message); }
+          if (updateError) { await supabase.from('games').delete().eq('id', gameId); await supabase.storage.from('games').remove([filePath]); throw new Error('更新链接失败: ' + updateError.message); }
           await updateUserExp(currentUser.id, 100);
           await fetchGames();
           await fetchUserGames();
           await fetchRankData();
           closeUploadModal();
           showToast('✅ 上传成功！经验 +100');
-        } catch (error) { showToast('❌ ' + error.message); } finally {
+        } catch (error) { showToast('❌ ' + error.message); }
+        finally {
           isUploading = false;
           confirmUploadBtn.disabled = false;
           confirmUploadBtn.textContent = '确认上传';
@@ -2307,54 +3875,55 @@
         confirmUploadBtn.textContent = '确认上传';
       }
 
-      function closeUploadModal() { uploadOverlay.classList.remove('open');
-        isUploading = false; }
+      function closeUploadModal() { uploadOverlay.classList.remove('open'); isUploading = false; }
 
       document.getElementById('openUploadBtn')?.addEventListener('click', openUploadModal);
       document.getElementById('cancelUploadBtn')?.addEventListener('click', closeUploadModal);
       document.getElementById('confirmUploadBtn')?.addEventListener('click', handleUpload);
       document.getElementById('chooseFileBtn')?.addEventListener('click', () => fileInput.click());
       fileInput?.addEventListener('change', (e) => {
-        if (e.target.files.length) { selectedFile = e.target.files[0];
-          selectedFileNameEl.textContent = selectedFile.name; } else { selectedFile = null;
-          selectedFileNameEl.textContent = '未选择文件'; }
+        if (e.target.files.length) { selectedFile = e.target.files[0]; selectedFileNameEl.textContent = selectedFile.name; }
+        else { selectedFile = null; selectedFileNameEl.textContent = '未选择文件'; }
       });
       uploadOverlay?.addEventListener('click', (e) => { if (e.target === uploadOverlay) closeUploadModal(); });
 
-      // ============ 删除弹窗控制 ============
+      // ============ 单个删除弹窗控制 ============
       cancelDeleteBtn.addEventListener('click', () => {
         deleteOverlay.classList.remove('open');
         deleteTargetId = null;
       });
+
       deleteOverlay.addEventListener('click', (e) => {
         if (e.target === deleteOverlay) {
           deleteOverlay.classList.remove('open');
           deleteTargetId = null;
         }
       });
+
       confirmDeleteBtn.addEventListener('click', async () => {
         if (!deleteTargetId) return;
+        const targetId = deleteTargetId;
         confirmDeleteBtn.disabled = true;
         confirmDeleteBtn.textContent = '删除中...';
-        await deleteGame(deleteTargetId);
-        confirmDeleteBtn.disabled = false;
-        confirmDeleteBtn.textContent = '确认删除';
-        deleteOverlay.classList.remove('open');
-        deleteTargetId = null;
-        await fetchRankData();
+        try { await deleteGame(targetId); }
+        finally {
+          confirmDeleteBtn.disabled = false;
+          confirmDeleteBtn.textContent = '确认删除';
+          deleteOverlay.classList.remove('open');
+          deleteTargetId = null;
+        }
       });
 
-      // ============ 分页事件绑定 ============
+      // ============ 分页事件 ============
       prevPageBtn.addEventListener('click', () => goToPage(currentPage - 1));
       nextPageBtn.addEventListener('click', () => goToPage(currentPage + 1));
 
-      // ============ 公告刷新 ============
+      // ============ 刷新按钮 ============
       refreshAnnouncementBtn.addEventListener('click', () => {
         loadAnnouncement();
         showToast('🔄 公告已刷新');
       });
 
-      // ============ 排行榜刷新 ============
       refreshRankBtn.addEventListener('click', () => {
         fetchRankData();
         showToast('🔄 排行榜已刷新');
@@ -2386,6 +3955,7 @@
             userGames = [];
             weeklySubmissions = [];
             selectedGameId = null;
+            selectedForBatch.clear();
             renderAuthArea();
             renderUserPanel();
             fetchGames();

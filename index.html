@@ -424,6 +424,20 @@
       .main-tab { padding:.6rem .8rem; font-size:.85rem; }
       .post-editor-card,.post-detail-card { padding:1.8rem 1.3rem; }
     }
+        .post-action-btn {
+      padding: 0.25rem 0.8rem;
+      border-radius: 40px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: 0.2s;
+      font-family: inherit;
+      border: 1px solid transparent;
+    }
+    .pin-btn:hover {
+      background: rgba(255, 154, 42, 0.2) !important;
+      border-color: rgba(255, 154, 42, 0.4) !important;
+    }
   </style>
 </head>
 <body>
@@ -1070,10 +1084,18 @@
     }
 
     // ============ 讨论区 ============
+        // ============ 讨论区 ============
     async function loadPosts() {
       postListContainer.innerHTML = '<div class="discussion-empty">⏳ 加载帖子中...</div>';
       try {
-        const { data, error } = await supabase.from('posts').select('*').order('created_at', { ascending: false }).limit(50);
+        // ✅ 修改排序：先按置顶降序，再按时间降序
+        const { data, error } = await supabase
+          .from('posts')
+          .select('*')
+          .order('is_pinned', { ascending: false })
+          .order('created_at', { ascending: false })
+          .limit(50);
+
         if (error) {
           if (error.code === '42P01') {
             postListContainer.innerHTML = '<div class="discussion-empty">💬 讨论区还未初始化（请在 Supabase 中创建 posts 表）</div>';
@@ -1100,19 +1122,37 @@
       const currentUserId = currentUser?.id;
       const currentIsAdmin = isAdmin();
       let html = '<div class="post-list">';
+      
       posts.forEach(post => {
         const isOwn = post.author_id === currentUserId;
         const canDelete = isOwn || currentIsAdmin;
+        const canPin = currentIsAdmin; // ✅ 只有管理员可以置顶
         const authorName = post.author_name || '匿名';
         const initial = getInitial(authorName);
         const avatarUrl = post.author_avatar;
         const timeText = formatTime(post.created_at);
         const isPostAdmin = post.author_id && adminIdCache.has(post.author_id);
+        
+        // ✅ 如果是置顶帖，给卡片加个边框高亮，并显示置顶角标
+        const pinBadge = post.is_pinned ? '<span style="background:linear-gradient(135deg,#ff9a2a,#ff5e00);color:#fff;font-size:0.65rem;padding:0.15rem 0.6rem;border-radius:40px;font-weight:700;margin-left:0.5rem;">📌 置顶</span>' : '';
+        const cardStyle = post.is_pinned ? 'border-color: rgba(255, 154, 42, 0.4); background: rgba(255, 154, 42, 0.05);' : '';
+        
         const avatarHtml = avatarUrl
           ? `<span class="avatar avatar-sm"><img src="${escapeHtml(avatarUrl)}" alt="${escapeHtml(authorName)}" onerror="this.style.display='none';this.parentElement.textContent='${escapeHtml(initial)}'"></span>`
           : `<span class="avatar avatar-sm">${escapeHtml(initial)}</span>`;
+
+        // ✅ 管理员操作按钮组
+        let adminActions = '';
+        if (canPin) {
+          adminActions = `
+            <button class="post-action-btn pin-btn" data-post-id="${post.id}" data-pinned="${post.is_pinned}" style="background:rgba(255,154,42,0.1);color:#ff9a2a;border-color:rgba(255,154,42,0.2);">
+              ${post.is_pinned ? '📌 取消置顶' : '📌 置顶'}
+            </button>
+          `;
+        }
+
         html += `
-          <div class="post-card" data-post-id="${post.id}">
+          <div class="post-card" data-post-id="${post.id}" style="${cardStyle}">
             <div class="post-header">
               <div class="post-author">
                 ${avatarHtml}
@@ -1120,11 +1160,15 @@
                   <div class="post-author-name">
                     <span class="user-hover-target" data-hover-user="${post.author_id || ''}">${escapeHtml(authorName)}</span>
                     ${isPostAdmin ? '<span class="admin-tag">👑</span>' : ''}
+                    ${pinBadge}
                   </div>
                   <div class="post-time">${timeText}</div>
                 </div>
               </div>
-              ${canDelete ? `<button class="post-delete-btn" data-post-id="${post.id}">🗑️ 删除</button>` : ''}
+              <div style="display:flex;gap:0.5rem;align-items:center;">
+                ${adminActions}
+                ${canDelete ? `<button class="post-delete-btn" data-post-id="${post.id}">🗑️ 删除</button>` : ''}
+              </div>
             </div>
             <div class="post-title">${escapeHtml(post.title || '无标题')}</div>
             <div class="post-content markdown-body">${renderMarkdown(post.content || '')}</div>
@@ -1133,15 +1177,49 @@
       });
       html += '</div>';
       postListContainer.innerHTML = html;
+      
+      // 重新绑定 hover 事件
       bindAllUserHover();
+      
+      // 绑定点击查看详情
       document.querySelectorAll('.post-card').forEach(card => {
         card.addEventListener('click', (e) => {
-          if (e.target.closest('.post-delete-btn')) return;
+          if (e.target.closest('.post-delete-btn') || e.target.closest('.pin-btn')) return;
           const postId = card.dataset.postId;
           const post = posts.find(p => p.id === postId);
           if (post) openPostDetail(post);
         });
       });
+
+      // ✅ 绑定置顶按钮事件
+      document.querySelectorAll('.pin-btn').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+          e.stopPropagation();
+          const postId = btn.dataset.postId;
+          const isCurrentlyPinned = btn.dataset.pinned === 'true';
+          const newPinnedState = !isCurrentlyPinned;
+          
+          btn.disabled = true;
+          btn.textContent = '处理中...';
+          
+          try {
+            const { error } = await supabase
+              .from('posts')
+              .update({ is_pinned: newPinnedState })
+              .eq('id', postId);
+              
+            if (error) throw error;
+            showToast(newPinnedState ? '✅ 已置顶帖子' : '✅ 已取消置顶');
+            await loadPosts(); // 刷新列表
+          } catch (err) {
+            showToast('❌ 操作失败: ' + err.message);
+            btn.disabled = false;
+            btn.textContent = isCurrentlyPinned ? '📌 取消置顶' : '📌 置顶';
+          }
+        });
+      });
+
+      // 绑定删除按钮事件
       document.querySelectorAll('.post-delete-btn').forEach(btn => {
         btn.addEventListener('click', async (e) => {
           e.stopPropagation();
@@ -1156,7 +1234,6 @@
         });
       });
     }
-
     function formatTime(dateStr) {
       if (!dateStr) return '';
       const d = new Date(dateStr);

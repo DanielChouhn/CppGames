@@ -115,7 +115,7 @@
     .avatar-clickable:hover .avatar-overlay { opacity:1; }
     .avatar-uploading { position:absolute; inset:-3px; border-radius:50%; border:3px solid transparent; border-top-color:#66d0ff; border-right-color:#66d0ff; animation:spin .8s linear infinite; z-index:3; }
     @keyframes spin { 0%{transform:rotate(0deg)} 100%{transform:rotate(360deg)} }
-    /* 公告栏 */
+        /* 公告栏 */
     .announcement-section { background:rgba(18,30,50,.6); backdrop-filter:blur(8px); border-radius:28px; padding:1.8rem; border:1px solid rgba(255,255,255,.05); box-shadow:0 20px 40px -12px rgba(0,0,0,.6); margin-bottom:2rem; grid-column:1/-1; transition:opacity .5s ease,max-height .5s ease,padding .5s ease,margin .5s ease,transform .5s ease,background .5s ease; max-height:500px; opacity:1; }
     .announcement-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:.8rem; flex-wrap:wrap; gap:.5rem; }
     .announcement-header h2 { font-weight:600; font-size:1.2rem; color:#e6f0ff; display:flex; align-items:center; gap:.6rem; }
@@ -243,6 +243,7 @@
     .submitted-list { background:rgba(255,255,255,.02); border-radius:20px; padding:.6rem 1.2rem; font-size:.9rem; color:#b0cae5; max-height:120px; overflow-y:auto; border:1px solid rgba(255,255,255,.04); transition:background .5s ease,border-color .5s ease; }
     .submitted-list div { padding:.25rem 0; border-bottom:1px dashed rgba(255,255,255,.04); transition:border-color .5s ease; }
     .submitted-list div:last-child { border-bottom:none; }
+
     /* 讨论区 */
     .discussion-section { background:rgba(18,30,50,.6); backdrop-filter:blur(8px); border-radius:28px; padding:1.8rem; border:1px solid rgba(255,255,255,.05); box-shadow:0 20px 40px -12px rgba(0,0,0,.6); transition:background .5s ease,border-color .5s ease; }
     body.academic-mode .discussion-section { background:#fff; border-color:rgba(0,0,0,.06); box-shadow:0 4px 20px rgba(0,0,0,.06); }
@@ -265,12 +266,19 @@
     .post-author-name .admin-tag { background:linear-gradient(135deg,#f5a623,#f7c948); color:#1a1a2e; font-size:.55rem; padding:.05rem .5rem; border-radius:40px; font-weight:700; margin-left:.3rem; }
     .post-time { font-size:.8rem; color:#7f9bc0; transition:color .5s ease; }
     body.academic-mode .post-time { color:#8a9ab0; }
-    .post-delete-btn { background:rgba(255,50,50,.08); border:1px solid rgba(255,50,50,.15); color:#ff6b6b; padding:.25rem .8rem; border-radius:40px; font-size:.75rem; font-weight:500; cursor:pointer; transition:.2s; font-family:inherit; }
+    .post-delete-btn, .post-action-btn { background:rgba(255,50,50,.08); border:1px solid rgba(255,50,50,.15); color:#ff6b6b; padding:.25rem .8rem; border-radius:40px; font-size:.75rem; font-weight:500; cursor:pointer; transition:.2s; font-family:inherit; }
     .post-delete-btn:hover { background:rgba(255,50,50,.2); border-color:rgba(255,50,50,.35); }
+    .post-action-btn.pin-btn { background:rgba(255,154,42,.1); color:#ff9a2a; border-color:rgba(255,154,42,.2); }
+    .post-action-btn.pin-btn:hover { background:rgba(255,154,42,.2); border-color:rgba(255,154,42,.4); }
     .post-title { font-size:1.2rem; font-weight:700; color:#e6f0ff; margin-bottom:.6rem; word-break:break-word; transition:color .5s ease; }
     body.academic-mode .post-title { color:#1a2b4a; }
     .post-content { color:#b0cae5; font-size:.92rem; line-height:1.75; word-break:break-word; transition:color .5s ease; }
     body.academic-mode .post-content { color:#3a4a5f; }
+
+    /* @ 提及功能样式 */
+    .mention-link { color:#66d0ff; font-weight:600; cursor:pointer; text-decoration:none; background:rgba(102,208,255,.1); padding:.05rem .3rem; border-radius:4px; border:1px solid rgba(102,208,255,.2); transition:all .2s; display:inline-block; }
+    .mention-link:hover { background:rgba(102,208,255,.25); border-color:rgba(102,208,255,.5); transform:scale(1.05); }
+    body.academic-mode .mention-link { color:#2a5fcf; background:rgba(42,127,255,.1); border-color:rgba(42,127,255,.2); }
 
     /* Markdown */
     .markdown-body h1,.markdown-body h2,.markdown-body h3,.markdown-body h4 { color:#e6f0ff; margin:.8rem 0 .4rem; font-weight:700; line-height:1.3; }
@@ -324,6 +332,32 @@
     body.academic-mode .markdown-hint { color:#5a6a7f; }
     body.academic-mode .markdown-hint code { background:rgba(0,0,0,.06); }
     .post-editor-actions { display:flex; gap:.8rem; justify-content:flex-end; margin-top:1.5rem; }
+
+    /* 用户历史帖子弹窗 */
+    .user-posts-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,.6); backdrop-filter:blur(12px); justify-content:center; align-items:center; z-index:1000; padding:2rem 1rem; }
+    .user-posts-overlay.open { display:flex; }
+    .user-posts-card { background:rgba(16,28,48,.95); backdrop-filter:blur(16px); padding:2rem; border-radius:28px; max-width:680px; width:100%; max-height:85vh; display:flex; flex-direction:column; box-shadow:0 40px 80px rgba(0,0,0,.6); border:1px solid rgba(255,255,255,.06); color:#e6f0ff; }
+    body.academic-mode .user-posts-card { background:#fff; color:#1a2b4a; border-color:rgba(0,0,0,.08); }
+    .user-posts-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; padding-bottom:1rem; border-bottom:1px solid rgba(255,255,255,.08); }
+    body.academic-mode .user-posts-header { border-bottom-color:rgba(0,0,0,.08); }
+    .user-posts-header h3 { font-size:1.3rem; font-weight:700; color:#e6f0ff; display:flex; align-items:center; gap:.5rem; }
+    body.academic-mode .user-posts-header h3 { color:#1a2b4a; }
+    .user-posts-close { background:none; border:none; color:#7f9bc0; cursor:pointer; font-size:1.5rem; transition:.2s; }
+    .user-posts-close:hover { color:#ff6b6b; transform:rotate(90deg); }
+    .user-posts-list { flex:1; overflow-y:auto; display:flex; flex-direction:column; gap:.8rem; padding-right:.5rem; }
+    .mini-post-card { background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.06); border-radius:12px; padding:1rem; cursor:pointer; transition:.2s; }
+    body.academic-mode .mini-post-card { background:rgba(0,0,0,.02); border-color:rgba(0,0,0,.06); }
+    .mini-post-card:hover { background:rgba(42,127,255,.1); border-color:rgba(42,127,255,.3); transform:translateX(4px); }
+    .mini-post-title { font-weight:600; font-size:1rem; color:#e6f0ff; margin-bottom:.4rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    body.academic-mode .mini-post-title { color:#1a2b4a; }
+    .mini-post-time { font-size:.75rem; color:#7f9bc0; }
+
+    /* @ 提醒横幅 */
+    .mention-notification-banner { position:fixed; top:1rem; left:50%; transform:translateX(-50%) translateY(-100%); background:linear-gradient(135deg,#ff9a2a,#ff5e00); color:#fff; padding:.8rem 1.5rem; border-radius:60px; font-weight:600; font-size:.95rem; cursor:pointer; z-index:2000; box-shadow:0 8px 24px rgba(255,94,0,.4); display:flex; align-items:center; gap:.5rem; transition:transform .4s cubic-bezier(.175,.885,.32,1.275),opacity .3s; opacity:0; pointer-events:none; }
+    .mention-notification-banner.show { transform:translateX(-50%) translateY(0); opacity:1; pointer-events:auto; }
+    .mention-notification-banner:hover { transform:translateX(-50%) translateY(2px) scale(1.02); box-shadow:0 12px 32px rgba(255,94,0,.6); }
+    .mention-notification-banner .close-notice { font-size:.8rem; background:rgba(0,0,0,.2); padding:.1rem .5rem; border-radius:20px; margin-left:.5rem; }
+    .mention-notification-banner .close-notice:hover { background:rgba(0,0,0,.4); }
 
     /* 弹窗通用 */
     .auth-overlay,.upload-overlay,.delete-overlay,.avatar-overlay-modal,.profile-overlay,.batch-delete-overlay,.post-editor-overlay,.post-detail-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,.6); backdrop-filter:blur(12px); justify-content:center; align-items:center; z-index:1000; overflow-y:auto; padding:2rem 1rem; }
@@ -423,20 +457,6 @@
       .academic-toggle-btn { bottom:1.2rem; right:1.2rem; padding:.6rem 1.2rem; font-size:.8rem; }
       .main-tab { padding:.6rem .8rem; font-size:.85rem; }
       .post-editor-card,.post-detail-card { padding:1.8rem 1.3rem; }
-    }
-        .post-action-btn {
-      padding: 0.25rem 0.8rem;
-      border-radius: 40px;
-      font-size: 0.75rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: 0.2s;
-      font-family: inherit;
-      border: 1px solid transparent;
-    }
-    .pin-btn:hover {
-      background: rgba(255, 154, 42, 0.2) !important;
-      border-color: rgba(255, 154, 42, 0.4) !important;
     }
   </style>
 </head>
@@ -567,7 +587,7 @@
       <h3 class="post-editor-title">📝 发布新帖子</h3>
       <input type="text" class="post-editor-input" id="postTitleInput" placeholder="帖子标题" maxlength="100" autocomplete="off">
       <textarea class="post-editor-textarea" id="postContentInput" placeholder="使用 Markdown 编写内容..."></textarea>
-      <div class="markdown-hint">💡 支持 Markdown：<code># 标题</code> · <code>**粗体**</code> · <code>*斜体*</code> · <code>`代码`</code> · <code>```代码块```</code> · <code>[链接](url)</code> · <code>- 列表</code> · <code>> 引用</code></div>
+      <div class="markdown-hint">💡 支持 Markdown：<code># 标题</code> · <code>**粗体**</code> · <code>*斜体*</code> · <code>`代码`</code> · <code>```代码块```</code> · <code>[链接](url)</code> · <code>- 列表</code> · <code>> 引用</code> · <code>@用户名</code></div>
       <div class="post-editor-actions">
         <button class="btn-secondary" id="cancelPostBtn">取消</button>
         <button class="btn-primary" id="publishPostBtn">发布</button>
@@ -587,6 +607,19 @@
       <h2 class="post-detail-title" id="postDetailTitle"></h2>
       <div class="post-content markdown-body" id="postDetailContent"></div>
       <button class="post-detail-close" id="closePostDetailBtn">关闭</button>
+    </div>
+  </div>
+
+  <!-- 用户历史帖子弹窗 -->
+  <div class="user-posts-overlay" id="userPostsOverlay">
+    <div class="user-posts-card">
+      <div class="user-posts-header">
+        <h3>📚 <span id="userPostsName">用户的文章</span></h3>
+        <button class="user-posts-close" id="closeUserPostsBtn">&times;</button>
+      </div>
+      <div class="user-posts-list" id="userPostsListContainer">
+        <div class="discussion-empty">⏳ 加载中...</div>
+      </div>
     </div>
   </div>
 
@@ -647,9 +680,15 @@
     <span class="progress-text" id="progressText">0%</span>
   </div>
 
+  <!-- 被 @ 提示横幅 -->
+  <div class="mention-notification-banner" id="mentionBanner">
+    <span>🔔 有人 @ 了你！点击查看</span>
+    <span class="close-notice" id="closeMentionBanner">忽略</span>
+  </div>
+
   <div id="userHoverTooltip"></div>
   <div id="toast" class="toast-message"></div>
-  <script>
+    <script>
   (function() {
     // ============ Supabase 配置 ============
     const SUPABASE_URL = 'https://rihfowjielhukozkrzoq.supabase.co/';
@@ -701,8 +740,6 @@
     let isVerifyingLuogu = false;
     let isBatchDeleting = false;
     let isAcademicMode = false;
-
-    // ✅ 管理员缓存：id -> 是否管理员（来自 profiles.is_admin，用户无法伪造）
     let adminIdCache = new Set();
 
     // DOM 引用
@@ -815,7 +852,6 @@
       return String(name).charAt(0).toUpperCase();
     }
 
-    // ✅ 管理员判定：只信任 profiles.is_admin 缓存
     function isAdmin() {
       if (!currentUser) return false;
       return adminIdCache.has(currentUser.id);
@@ -956,6 +992,10 @@
       html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
       html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1">');
       html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+      
+      // ✅ @用户名
+      html = html.replace(/@([a-zA-Z0-9_\u4e00-\u9fa5]{1,20})/g, '<span class="mention-link" data-username="$1">@$1</span>');
+
       html = html.replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>');
       html = html.replace(/^---$/gm, '<hr>');
       html = html.replace(/^[\-\*] (.+)$/gm, '<li>$1</li>');
@@ -1084,11 +1124,9 @@
     }
 
     // ============ 讨论区 ============
-        // ============ 讨论区 ============
     async function loadPosts() {
       postListContainer.innerHTML = '<div class="discussion-empty">⏳ 加载帖子中...</div>';
       try {
-        // ✅ 修改排序：先按置顶降序，再按时间降序
         const { data, error } = await supabase
           .from('posts')
           .select('*')
@@ -1126,14 +1164,13 @@
       posts.forEach(post => {
         const isOwn = post.author_id === currentUserId;
         const canDelete = isOwn || currentIsAdmin;
-        const canPin = currentIsAdmin; // ✅ 只有管理员可以置顶
+        const canPin = currentIsAdmin;
         const authorName = post.author_name || '匿名';
         const initial = getInitial(authorName);
         const avatarUrl = post.author_avatar;
         const timeText = formatTime(post.created_at);
         const isPostAdmin = post.author_id && adminIdCache.has(post.author_id);
         
-        // ✅ 如果是置顶帖，给卡片加个边框高亮，并显示置顶角标
         const pinBadge = post.is_pinned ? '<span style="background:linear-gradient(135deg,#ff9a2a,#ff5e00);color:#fff;font-size:0.65rem;padding:0.15rem 0.6rem;border-radius:40px;font-weight:700;margin-left:0.5rem;">📌 置顶</span>' : '';
         const cardStyle = post.is_pinned ? 'border-color: rgba(255, 154, 42, 0.4); background: rgba(255, 154, 42, 0.05);' : '';
         
@@ -1141,7 +1178,6 @@
           ? `<span class="avatar avatar-sm"><img src="${escapeHtml(avatarUrl)}" alt="${escapeHtml(authorName)}" onerror="this.style.display='none';this.parentElement.textContent='${escapeHtml(initial)}'"></span>`
           : `<span class="avatar avatar-sm">${escapeHtml(initial)}</span>`;
 
-        // ✅ 管理员操作按钮组
         let adminActions = '';
         if (canPin) {
           adminActions = `
@@ -1178,20 +1214,28 @@
       html += '</div>';
       postListContainer.innerHTML = html;
       
-      // 重新绑定 hover 事件
       bindAllUserHover();
+
+      // 事件委托处理 @提及点击
+      postListContainer.addEventListener('click', (e) => {
+        const mentionEl = e.target.closest('.mention-link');
+        if (mentionEl) {
+          e.preventDefault();
+          e.stopPropagation();
+          const username = mentionEl.dataset.username;
+          openUserPostsModal(username);
+        }
+      });
       
-      // 绑定点击查看详情
       document.querySelectorAll('.post-card').forEach(card => {
         card.addEventListener('click', (e) => {
-          if (e.target.closest('.post-delete-btn') || e.target.closest('.pin-btn')) return;
+          if (e.target.closest('.post-delete-btn') || e.target.closest('.pin-btn') || e.target.closest('.mention-link')) return;
           const postId = card.dataset.postId;
           const post = posts.find(p => p.id === postId);
           if (post) openPostDetail(post);
         });
       });
 
-      // ✅ 绑定置顶按钮事件
       document.querySelectorAll('.pin-btn').forEach(btn => {
         btn.addEventListener('click', async (e) => {
           e.stopPropagation();
@@ -1210,7 +1254,7 @@
               
             if (error) throw error;
             showToast(newPinnedState ? '✅ 已置顶帖子' : '✅ 已取消置顶');
-            await loadPosts(); // 刷新列表
+            await loadPosts();
           } catch (err) {
             showToast('❌ 操作失败: ' + err.message);
             btn.disabled = false;
@@ -1219,7 +1263,6 @@
         });
       });
 
-      // 绑定删除按钮事件
       document.querySelectorAll('.post-delete-btn').forEach(btn => {
         btn.addEventListener('click', async (e) => {
           e.stopPropagation();
@@ -1234,6 +1277,7 @@
         });
       });
     }
+
     function formatTime(dateStr) {
       if (!dateStr) return '';
       const d = new Date(dateStr);
@@ -1294,6 +1338,72 @@
       }
     });
 
+    // ============ @提及：加载用户文章 ============
+    const userPostsOverlay = document.getElementById('userPostsOverlay');
+    const userPostsName = document.getElementById('userPostsName');
+    const userPostsListContainer = document.getElementById('userPostsListContainer');
+    const closeUserPostsBtn = document.getElementById('closeUserPostsBtn');
+
+    closeUserPostsBtn.addEventListener('click', () => userPostsOverlay.classList.remove('open'));
+    userPostsOverlay.addEventListener('click', (e) => {
+      if (e.target === userPostsOverlay) userPostsOverlay.classList.remove('open');
+    });
+
+    async function openUserPostsModal(username) {
+      userPostsName.textContent = `${username} 的文章`;
+      userPostsListContainer.innerHTML = '<div class="discussion-empty">⏳ 正在检索文章...</div>';
+      userPostsOverlay.classList.add('open');
+
+      try {
+        const { data, error } = await supabase
+          .from('posts')
+          .select('id, title, created_at')
+          .eq('author_name', username)
+          .order('created_at', { ascending: false })
+          .limit(30);
+
+        if (error) throw error;
+
+        if (!data || data.length === 0) {
+          userPostsListContainer.innerHTML = `<div class="discussion-empty">📭 ${username} 还没有发布过文章</div>`;
+          return;
+        }
+
+        let html = '';
+        data.forEach(post => {
+          const timeText = formatTime(post.created_at);
+          html += `
+            <div class="mini-post-card" data-post-id="${post.id}">
+              <div class="mini-post-title">📄 ${escapeHtml(post.title || '无标题')}</div>
+              <div class="mini-post-time">📅 ${timeText}</div>
+            </div>
+          `;
+        });
+        userPostsListContainer.innerHTML = html;
+
+        userPostsListContainer.querySelectorAll('.mini-post-card').forEach(card => {
+          card.addEventListener('click', async () => {
+            const postId = card.dataset.postId;
+            let post = posts.find(p => p.id === postId);
+            
+            if (!post) {
+              const { data: singlePost } = await supabase.from('posts').select('*').eq('id', postId).single();
+              if (singlePost) post = singlePost;
+            }
+
+            if (post) {
+              userPostsOverlay.classList.remove('open');
+              openPostDetail(post);
+            }
+          });
+        });
+
+      } catch (err) {
+        console.error('加载用户文章失败:', err);
+        userPostsListContainer.innerHTML = `<div class="discussion-empty">⚠️ 加载失败: ${escapeHtml(err.message)}</div>`;
+      }
+    }
+
     function openPostDetail(post) {
       const authorName = post.author_name || '匿名';
       const initial = getInitial(authorName);
@@ -1306,12 +1416,95 @@
       postDetailTime.textContent = formatTime(post.created_at);
       postDetailTitle.textContent = post.title || '无标题';
       postDetailContent.innerHTML = renderMarkdown(post.content || '');
+      
+      postDetailContent.querySelectorAll('.mention-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const username = link.dataset.username;
+          closePostDetail(); 
+          openUserPostsModal(username);
+        });
+      });
+
       postDetailOverlay.classList.add('open');
       bindAllUserHover();
     }
     function closePostDetail() { postDetailOverlay.classList.remove('open'); }
     closePostDetailBtn.addEventListener('click', closePostDetail);
     postDetailOverlay.addEventListener('click', e => { if (e.target === postDetailOverlay) closePostDetail(); });
+
+    // ============ @ 消息通知检测 ============
+    async function checkMentions() {
+      if (!currentUser) return;
+      const meta = currentUser.user_metadata || {};
+      const myUsername = meta.username;
+      if (!myUsername) return;
+
+      try {
+        const { data, error } = await supabase
+          .from('posts')
+          .select('id, title, author_name, author_avatar, content, created_at')
+          .order('created_at', { ascending: false })
+          .limit(20);
+
+        if (error || !data) return;
+
+        const readKey = `read_mentions_${currentUser.id}`;
+        const readPosts = JSON.parse(localStorage.getItem(readKey) || '[]');
+        const mentionRegex = new RegExp(`@${myUsername}(?![a-zA-Z0-9_\\u4e00-\\u9fa5])`);
+
+        const unreadPost = data.find(post => 
+          post.author_name !== myUsername && 
+          mentionRegex.test(post.content) &&
+          !readPosts.includes(post.id)
+        );
+
+        if (unreadPost) {
+          showMentionBanner(unreadPost);
+        }
+      } catch (err) {
+        console.warn('检查 @ 消息失败:', err);
+      }
+    }
+
+    let currentMentionPost = null;
+    function showMentionBanner(post) {
+      currentMentionPost = post;
+      const banner = document.getElementById('mentionBanner');
+      banner.innerHTML = `
+        <span>🔔 <b>${escapeHtml(post.author_name)}</b> 在帖子中 @ 了你</span>
+        <span class="close-notice" id="closeMentionBanner">忽略</span>
+      `;
+      banner.classList.add('show');
+
+      banner.onclick = (e) => {
+        if (e.target.id === 'closeMentionBanner') {
+          e.stopPropagation();
+          banner.classList.remove('show');
+          markMentionAsRead(post.id);
+        } else {
+          banner.classList.remove('show');
+          markMentionAsRead(post.id);
+          switchTab('discussion');
+          setTimeout(() => { openPostDetail(post); }, 300);
+        }
+      };
+
+      clearTimeout(window._mentionTimer);
+      window._mentionTimer = setTimeout(() => { banner.classList.remove('show'); }, 8000);
+    }
+
+    function markMentionAsRead(postId) {
+      if (!currentUser) return;
+      const readKey = `read_mentions_${currentUser.id}`;
+      let readPosts = JSON.parse(localStorage.getItem(readKey) || '[]');
+      if (!readPosts.includes(postId)) {
+        readPosts.push(postId);
+        if (readPosts.length > 100) readPosts = readPosts.slice(-100);
+        localStorage.setItem(readKey, JSON.stringify(readPosts));
+      }
+    }
 
     // ============ 上传者信息 ============
     async function fetchUploaderNames(gameList) {
@@ -1579,7 +1772,7 @@
       }
     }
 
-    // ============ 洛谷认证（信任服务端 is_admin） ============
+    // ============ 洛谷认证 ============
     async function verifyLuoguAccount() {
       if (!currentUser) { showToast('请先登录'); return; }
       if (isVerifyingLuogu) return;
@@ -1604,7 +1797,6 @@
         if (!result.success) throw new Error(result.error || '洛谷账号验证失败');
         const luoguUsername = result.username;
         if (!luoguUsername) throw new Error('未能获取洛谷用户名');
-        // ✅ 管理员身份由服务端代理判定并返回，前端不自行判断
         const serverIsAdmin = !!result.is_admin;
         const updateData = {
           luogu_verified: true,
@@ -1692,7 +1884,6 @@
         if (gcErr) console.warn('获取游戏数量失败:', gcErr);
         const countMap = {};
         (gameCounts || []).forEach(g => { countMap[g.uploader_id] = (countMap[g.uploader_id] || 0) + 1; });
-        // ✅ 同步刷新管理员缓存
         adminIdCache = new Set(profiles.filter(p => p.is_admin).map(p => p.id));
         rankData = profiles.map(p => ({
           id: p.id, username: p.username || '未知用户',
@@ -1773,6 +1964,7 @@
       if (session?.user) {
         currentUser = session.user;
         await syncUserProfile(currentUser.id);
+        setTimeout(checkMentions, 1000);
       } else currentUser = null;
       renderAuthArea();
       renderUserPanel();
@@ -2354,6 +2546,7 @@
             fetchGames();
             fetchWeeklySubmissions();
             fetchRankData();
+            setTimeout(checkMentions, 1000);
           });
         } else if (event === 'SIGNED_OUT') {
           currentUser = null;
